@@ -27,7 +27,7 @@ site/
 |---|---|
 | Vite + TypeScript，**不用框架**（vanilla） | 頁面以 D3／Leaflet 直接操作 DOM 為主，框架帶來的好處有限；少一層依賴，日後非前端專長的人也容易維護。 |
 | **hash 路由**（`#/t/S1/...`） | 靜態主機不需 SPA rewrite，任何網址重新整理都不會 404。 |
-| Leaflet 1.9 + CARTO 底圖 | 不需 API key；CARTO 有淺色／深色兩種底圖。 |
+| Leaflet 1.9 + OpenStreetMap 圖磚 | 不需 API key。原本規劃 CARTO，但 CARTO 底圖已要求 API key（圖磚出現浮水印），改用 OSM，並以 CSS 濾鏡做成低彩度／深色底圖。 |
 | D3 v7 | 時間軸泳道、力導向網絡圖、長條與熱圖都用同一套。 |
 | marked + DOMPurify | Markdown 轉 HTML 並消毒。 |
 | csv-parse | 標準 CSV（含引號、逗號）解析。 |
@@ -46,8 +46,8 @@ site/
 cd site
 npm install
 npm run dev        # 先跑資料管線，再開 http://localhost:5173
-npm run build      # 資料管線 → 輸出 site/dist/
-npm run typecheck  # TypeScript 型別檢查（暫未納入 build，見 STATUS.md）
+npm run build      # 資料管線 → 型別檢查 → 輸出 site/dist/
+npm run typecheck  # 只跑 TypeScript 型別檢查
 npm run preview    # 預覽 dist/
 npm run data       # 只重跑資料管線（更新 public/data/ 與 data-report.md）
 ```
@@ -72,6 +72,6 @@ npm run data       # 只重跑資料管線（更新 public/data/ 與 data-report
 
 ## 部署
 
-repo 根目錄的 `render.yaml`（Render Blueprint）定義一個 static site：從 repo 根目錄執行 `cd site && npm install && npm run build`，發佈 `site/dist`。不設 `rootDir`，否則讀不到 `topics/`。使用 hash 路由，所以不需 rewrite 規則。另加 `X-Robots-Tag: noindex` header 與 `public/robots.txt`。
+repo 根目錄的 `render.yaml`（Render Blueprint）定義一個 static site：從 repo 根目錄執行 `cd site && npm ci && npm run build`，發佈 `site/dist`。不設 `rootDir`，否則讀不到 `topics/`。使用 hash 路由，所以不需 rewrite 規則。另加 `X-Robots-Tag: noindex` header 與 `public/robots.txt`。
 
 由 SZ 負責 commit 與 push 到 `github.com/chiangsn/igs` 的 `main`；Render 由使用者操作。

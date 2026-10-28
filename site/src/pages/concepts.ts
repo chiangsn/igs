@@ -40,35 +40,49 @@ export function renderConcepts(root: HTMLElement, t: Topic) {
     (root.querySelector('#ccount') as HTMLElement).textContent = `${list.length} / ${t.concepts.length} 個概念`;
     host.innerHTML = '';
     const lanes = LANES.filter((r) => t.concepts.some((c) => c.regions.includes(r)));
-    const W = Math.max(host.clientWidth, 700); const laneH = 46; const M = { l: 140, r: 30, t: 10, b: 26 };
-    const H = M.t + M.b + laneH * lanes.length;
+    const W = Math.max(host.clientWidth, 700); const M = { l: 140, r: 150, t: 10, b: 26 };
     const years = t.concepts.map((c) => c.year).filter((y): y is number => y !== null);
     const x = d3.scaleLinear().domain([Math.floor((d3.min(years)! - 3) / 5) * 5, d3.max(years)! + 3]).range([0, W - M.l - M.r]);
-    const ly = (r: string) => lanes.indexOf(r) * laneH + laneH / 2;
+    // 標籤排版：每個泳道內分列放置，水平重疊就往下一列，避免文字互相覆蓋
+    const ROW = 15; const PAD = 8;
+    const textW = (s: string) => [...s].reduce((w, ch) => w + (/[⺀-￿]/.test(ch) ? 12 : 6.6), 0);
+    const sortedList = list.filter((c) => c.year !== null).sort((a, b) => a.year! - b.year! || a.id.localeCompare(b.id));
+    type Placed = { c: Concept; region: string; px: number; row: number; label: boolean };
+    const placed: Placed[] = [];
+    const rowEnds = new Map<string, number[]>();
+    for (const c of sortedList) {
+      c.regions.filter((r) => lanes.includes(r)).forEach((r, i) => {
+        const px = x(c.year!); const ends = rowEnds.get(r) ?? []; rowEnds.set(r, ends);
+        const w = i === 0 ? textW(labelOf(c)) + 12 : 12;
+        let row = ends.findIndex((end) => end + PAD < px - 6);
+        if (row === -1) { row = ends.length; ends.push(0); }
+        ends[row] = px + w;
+        placed.push({ c, region: r, px, row, label: i === 0 });
+      });
+    }
+    const laneTop = new Map<string, number>(); let acc = 0;
+    for (const r of lanes) { laneTop.set(r, acc); acc += Math.max(rowEnds.get(r)?.length ?? 1, 2) * ROW + 14; }
+    const H = M.t + M.b + acc;
+    const py = (p: Placed) => laneTop.get(p.region)! + 10 + p.row * ROW;
     const svg = d3.select(host).append('svg').attr('width', W).attr('height', H);
     const g = svg.append('g').attr('transform', `translate(${M.l},${M.t})`);
-    g.append('g').attr('class', 'axis grid').attr('transform', `translate(0,${laneH * lanes.length})`).call(d3.axisBottom(x).ticks(10).tickFormat(d3.format('d')).tickSize(-laneH * lanes.length));
+    g.append('g').attr('class', 'axis grid').attr('transform', `translate(0,${acc})`).call(d3.axisBottom(x).ticks(10).tickFormat(d3.format('d')).tickSize(-acc));
     lanes.forEach((r, i) => {
-      g.append('text').attr('x', -10).attr('y', ly(r) + 4).attr('text-anchor', 'end').attr('class', 'lane-label').text(regionZh(r));
-      if (i) g.append('line').attr('x1', -M.l).attr('x2', W - M.l - M.r).attr('y1', i * laneH).attr('y2', i * laneH).attr('class', 'lane-sep');
+      g.append('text').attr('x', -10).attr('y', laneTop.get(r)! + 14).attr('text-anchor', 'end').attr('class', 'lane-label').text(regionZh(r));
+      if (i) g.append('line').attr('x1', -M.l).attr('x2', W - M.l - M.r).attr('y1', laneTop.get(r)!).attr('y2', laneTop.get(r)!).attr('class', 'lane-sep');
     });
-    // 同區域同年附近的概念錯開
-    const slot = new Map<string, number>();
-    const off = (c: Concept, r: string) => {
-      const k = `${r}|${Math.round((c.year ?? 0) / 3)}`; const n = slot.get(k) ?? 0; slot.set(k, n + 1);
-      return (n % 3 - 1) * 12;
-    };
-    const sortedList = list.filter((c) => c.year !== null).sort((a, b) => a.year! - b.year!);
+    // 多起源概念：垂直虛線連接各區域的點
     for (const c of sortedList) {
-      const pts = c.regions.filter((r) => lanes.includes(r)).map((r) => [x(c.year!), ly(r) + off(c, r)] as const);
-      if (pts.length > 1) g.append('line').attr('x1', pts[0][0]).attr('x2', pts[0][0]).attr('y1', d3.min(pts, (p) => p[1])!).attr('y2', d3.max(pts, (p) => p[1])!).attr('class', 'concept-link');
-      pts.forEach(([px, py], i) => {
-        const node = g.append('g').attr('class', 'concept-node').attr('transform', `translate(${px},${py})`).style('cursor', 'pointer')
-          .on('mousemove', (e) => showTip(e, `<div class="tip-title">${esc(c.name)}</div><div>${esc(c.name_zh)}</div><div class="muted">${c.year} · ${esc(c.origin_raw)}</div>${c.pending ? '<div class="pending-text">⚠ 待查證</div>' : ''}`))
-          .on('mouseleave', hideTip).on('click', () => { hideTip(); showConcept(c); });
-        node.append('circle').attr('r', 6).attr('class', `concept-dot${c.pending ? ' ev-pending' : ''}`);
-        if (i === 0) node.append('text').attr('x', 9).attr('y', 4).attr('class', 'concept-label').text(c.name_zh || c.name);
-      });
+      const pts = placed.filter((p) => p.c === c);
+      if (pts.length > 1) g.append('line').attr('x1', pts[0].px).attr('x2', pts[0].px).attr('y1', d3.min(pts, py)!).attr('y2', d3.max(pts, py)!).attr('class', 'concept-link');
+    }
+    for (const p of placed) {
+      const c = p.c;
+      const node = g.append('g').attr('class', 'concept-node').attr('transform', `translate(${p.px},${py(p)})`).style('cursor', 'pointer')
+        .on('mousemove', (e) => showTip(e, `<div class="tip-title">${esc(c.name)}</div><div>${esc(c.name_zh)}</div><div class="muted">${c.year} · ${esc(c.origin_raw)}</div>${c.pending ? '<div class="pending-text">⚠ 待查證</div>' : ''}`))
+        .on('mouseleave', hideTip).on('click', () => { hideTip(); showConcept(c); });
+      node.append('circle').attr('r', 5.5).attr('class', `concept-dot${c.pending ? ' ev-pending' : ''}`);
+      if (p.label) node.append('text').attr('x', 9).attr('y', 4).attr('class', 'concept-label').text(labelOf(c));
     }
     (root.querySelector('#clist') as HTMLElement).innerHTML = `<ul class="clist">${list.slice().sort((a, b) => (a.year ?? 0) - (b.year ?? 0)).map((c) =>
       `<li><a href="#" data-c="${c.id}">${esc(c.name)}</a> <span class="muted small">${esc(c.name_zh)} · ${c.year ?? '?'} · ${esc(c.regions.map(regionZh).join('、'))}</span> ${pendingBadge(c.pending)}</li>`).join('')}</ul>`;
@@ -81,4 +95,12 @@ export function renderConcepts(root: HTMLElement, t: Topic) {
   (root.querySelector('#cpend') as HTMLInputElement).onchange = (e) => { pendingOnly = (e.target as HTMLInputElement).checked; draw(); };
   (root.querySelector('#cq') as HTMLInputElement).oninput = (e) => { q = (e.target as HTMLInputElement).value.trim().toLowerCase(); draw(); };
   draw();
+}
+
+/** 圖上標籤：優先用中文（概念欄位可能是「英文（中文）」或「中文（羅馬拼音）」） */
+function labelOf(c: Concept): string {
+  const cjk = /[㐀-鿿]/;
+  if (cjk.test(c.name_zh)) return c.name_zh;
+  if (cjk.test(c.name)) return c.name;
+  return c.name_zh || c.name;
 }

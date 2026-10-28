@@ -134,7 +134,7 @@ export function renderRegions(root: HTMLElement, t: Topic) {
     (root.querySelector('#heat') as HTMLElement).innerHTML = `<div class="table-wrap"><table class="heat"><thead><tr><th></th>${bins.map((b) => `<th>${esc(b.label)}<div class="muted small">${esc(b.sub)}</div></th>`).join('')}<th>合計</th></tr></thead><tbody>${
       sorted.map((r, i) => `<tr><th class="${r === FOCUS ? 'focus' : ''}">${esc(regionZh(r))}</th>${cells[i].map((v, j) => {
         const light = v && d3.hsl(color(v)).l < 0.55;
-        return `<td style="background:${v ? color(v) : 'transparent'};color:${light ? '#fff' : 'var(--text-primary)'}" title="${esc(regionZh(r))} · ${esc(bins[j].label)}：${v}">${v || ''}</td>`;
+        return `<td style="background:${v ? color(v) : 'transparent'};color:${light ? '#fff' : '#0b0b0b'}" title="${esc(regionZh(r))} · ${esc(bins[j].label)}：${v}">${v || ''}</td>`;
       }).join('')}<td class="total">${count(r)}</td></tr>`).join('')
     }</tbody></table></div>`;
   }

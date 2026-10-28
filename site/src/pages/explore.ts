@@ -32,10 +32,10 @@ export function renderExplore(root: HTMLElement, t: Topic) {
 
   // ---------- 地圖 ----------
   const map = L.map(root.querySelector('#map') as HTMLElement, { worldCopyJump: true, minZoom: 1 }).setView([20, 20], 2);
-  const dark = document.documentElement.dataset.theme === 'dark' || (!document.documentElement.dataset.theme && matchMedia('(prefers-color-scheme: dark)').matches);
-  L.tileLayer(`https://{s}.basemaps.cartocdn.com/${dark ? 'dark_all' : 'light_all'}/{z}/{x}/{y}{r}.png`, {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    subdomains: 'abcd', maxZoom: 12,
+  // OpenStreetMap 標準圖磚（不需 key）；以 CSS 濾鏡轉成低彩度底圖，深色模式再反相（見 style.css .osm-tiles）
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 12, className: 'osm-tiles',
   }).addTo(map);
   const layer = L.layerGroup().addTo(map);
 

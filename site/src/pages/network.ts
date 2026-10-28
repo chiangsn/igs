@@ -115,7 +115,7 @@ export function renderNetwork(root: HTMLElement, t: Topic) {
       lanes.map((a) => `<tr><th>${esc(regionZh(a))}</th>${lanes.map((b) => {
         const v = get(a, b);
         const bg = v ? color(v) : 'transparent'; const light = v && d3.hsl(color(v)).l < 0.55;
-        return `<td style="background:${bg};color:${light ? '#fff' : 'var(--text-primary)'}" class="${a === b ? 'diag' : ''}" title="${esc(regionZh(a))} — ${esc(regionZh(b))}：${v}">${v || ''}</td>`;
+        return `<td style="background:${bg};color:${light ? '#fff' : '#0b0b0b'}" class="${a === b ? 'diag' : ''}" title="${esc(regionZh(a))} — ${esc(regionZh(b))}：${v}">${v || ''}</td>`;
       }).join('')}</tr>`).join('')
     }</tbody></table></div>`;
 
