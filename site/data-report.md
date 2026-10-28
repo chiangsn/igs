@@ -1,12 +1,12 @@
 # 資料品質報告
 
-> 由 `site/scripts/build-data.mjs` 於 build 時自動產生（2026-10-28 15:28 UTC）。請勿手動編輯；資料問題請轉告對應的主題 session 修正 `topics/` 下的檔案。
+> 由 `site/scripts/build-data.mjs` 於 build 時自動產生（2026-10-28 16:05 UTC）。請勿手動編輯；資料問題請轉告對應的主題 session 修正 `topics/` 下的檔案。
 
 ## 總覽
 
 | 主題 | 事件 | 讀物 | 概念 | 文件 | 待查證（事件／讀物／概念） | 警告 |
 |---|---|---|---|---|---|---|
-| S1 History of Global Environmental Justice | 282 | 107 | 36 | 20 | 20／7／8 | 0 |
+| S1 History of Global Environmental Justice | 312 | 107 | 36 | 20 | 24／7／8 | 0 |
 
 ## S1：History of Global Environmental Justice
 
@@ -18,9 +18,9 @@
 
 ### 說明
 
-- concepts.csv 有 14 筆 `origin_region` 不是單一固定分類（含多區域或括號補充），網站以字串中出現的固定分類歸類。CLAUDE.md 未規範此欄，僅供參考。
+- concepts.csv 有 9 筆 `origin_region` 不是單一固定分類（含多區域或括號補充），網站以字串中出現的固定分類歸類。CLAUDE.md 未規範此欄，僅供參考。
 - 歷史分期：名稱取自 `overview.md` 的「第 N 期」標題，年份邊界取自 `data/README.md` 的分期分布（6 期）。
-- linked_ids 有 174 條只單向記錄；網絡圖一律合併為無向邊。
+- linked_ids 有 228 條只單向記錄；網絡圖一律合併為無向邊。
 
 ### 待查證項目
 
@@ -44,6 +44,10 @@
 - 事件 `S1-T279` Bisri 水壩與世界銀行撤回貸款
 - 事件 `S1-T281` FSO Safer 油輪危機
 - 事件 `S1-T282` Derna 水壩潰堤（Storm Daniel）
+- 事件 `S1-T299` Cabinda 海岸漏油與漁民
+- 事件 `S1-T303` Rogun 水壩與中亞上下游水權爭端
+- 事件 `S1-T308` 牙買加 Cockpit Country 反鋁土礦運動
+- 事件 `S1-T311` 蓋亞那 Stabroek 石油許可訴訟
 - 讀物 `S1-019` Environmental justice and the global South
 - 讀物 `S1-060` The Greater Common Good
 - 讀物 `S1-069` 公害原論

@@ -12,6 +12,13 @@
 - **氣候訴訟與運動**：Urgenda（T194）、Ende Gelände 與 Hambach（T195）、KlimaSeniorinnen（T198）。
 - **程序權**：Aarhus 公約（T187）。
 
+### 中亞（前蘇聯，第五輪補入）
+本專案的 `region` 欄位沒有獨立的中亞分類，中亞事件依前蘇聯脈絡歸在 Europe，以 `country` 篩選。
+- **蘇聯遺產**：鹹海（T177）、塞米巴拉金斯克（T178）、Mailuu-Suu 鈾礦尾礦的跨境風險（T301）。
+- **跨國礦業與油氣**：吉爾吉斯 Barskoon 氰化物外洩（Kumtor 金礦，T300）、哈薩克 Berezovka 村與 Karachaganak 氣田（T302）。
+- **水與棉花**：塔吉克 Rogun 水壩與上下游爭端（T303）、烏茲別克棉花強迫勞動與 Cotton Campaign（T304）。
+- **反鈾礦運動**：吉爾吉斯 2019 年抗議促成禁令，2024 年禁令被廢除（T305）。
+
 ## 行動者
 公民倡議（Bürgerinitiativen）、農民、綠黨、異議知識分子（多瑙圈、Ecoglasnost）、母親與婦女團體（Ruse、火之地、KlimaSeniorinnen）、羅姆人權利團體、法律倡議組織（Urgenda、ClientEarth）、氣候直接行動網絡。
 
@@ -52,15 +59,21 @@
 | S1-T193 | 1990–2025 | Italy | 「火之地」(Terra dei Fuochi) 非法有毒廢棄物 | disaster | toxic waste; organized crime; health |
 | S1-T186 | 1998 | Spain | Aznalcóllar 尾礦壩潰堤（Doñana） | disaster | mining; wetland |
 | S1-T187 | 1998–2001 | Denmark | Aarhus 公約 | treaty | access to information; participation; access to justice |
+| S1-T300 | 1998–2022 | Kyrgyzstan;Canada | Barskoon 氰化物外洩（Kumtor 金礦） | disaster | cyanide; mining; water; transnational corporation |
 | S1-T188 | 1999–2016 | Kosovo | Mitrovica 羅姆人鉛污染難民營 | disaster | lead; racism; refugees |
 | S1-T189 | 2000 | Romania;Hungary;Serbia | Baia Mare 氰化物外洩 | disaster | mining; cyanide; transboundary |
 | S1-T190 | 2002–2013 | Romania | Roșia Montană 反金礦運動 (Salvați Roșia Montană) | movement | mining; cultural heritage |
 | S1-T191 | 2002 | Spain | Prestige 油輪漏油與「Nunca Máis」運動 | disaster | oil spill; fisheries |
+| S1-T301 | 2004–2013 | Kyrgyzstan;Uzbekistan | Mailuu-Suu 蘇聯鈾礦尾礦 | disaster | uranium; radioactive waste; landslide; transboundary |
+| S1-T304 | 2009–2022 | Uzbekistan | 烏茲別克棉花強迫勞動與 Cotton Campaign 抵制 | movement | cotton; forced labor; child labor; supply chain |
 | S1-T192 | 2010 | Hungary | Ajka 赤泥災難 | disaster | aluminium; toxic waste |
+| S1-T303 | 2011–2017 | Tajikistan;Uzbekistan | Rogun 水壩與中亞上下游水權爭端 | policy | dam; water; transboundary; cotton |
 | S1-T194 | 2013–2019 | Netherlands | Urgenda 氣候訴訟 | lawsuit | climate; human rights |
+| S1-T302 | 2014–2016 | Kazakhstan | Berezovka 村與 Karachaganak 氣田硫化氫事件 | movement | gas; air pollution; children; relocation |
 | S1-T195 | 2015–2018 | Germany | Ende Gelände 與 Hambach 森林占領 | movement | coal; climate |
 | S1-T198 | 2016–2024 | Switzerland | KlimaSeniorinnen 訴瑞士案（歐洲人權法院） | lawsuit | climate; human rights; elderly women |
+| S1-T305 | 2019–2024 | Kyrgyzstan | 吉爾吉斯反鈾礦運動與禁令 | movement | uranium; lake; biosphere reserve |
 | S1-T196 | 2020 | United Kingdom | Ella Kissi-Debrah 死因調查認定空污致死 | lawsuit | air pollution; racism; children |
 | S1-T197 | 2021–2025 | Serbia | Jadar 河谷反 Rio Tinto 鋰礦運動 | movement | mining; energy transition; water |
 
-共 23 筆。行動者、結果與來源詳見 `data/timeline.csv`。
+共 29 筆。行動者、結果與來源詳見 `data/timeline.csv`。

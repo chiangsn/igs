@@ -11,6 +11,11 @@
 - **氣候、高溫與勞動**：敘利亞大旱與「氣候—衝突」辯論（T275）、卡達移工高溫死亡（T280）。
 - **核試**：阿爾及利亞撒哈拉（T061）。
 - **全球治理**：COP27 損失與損害基金（T074）。
+- **跨境水權**：衣索比亞復興大壩（GERD）與尼羅河爭端（T283）、約旦河西岸水資源分配（T284）。
+- **戰爭、佔領與資源**：UNEP 加薩戰爭環境評估（T285）、西撒哈拉磷礦與 NM Cherry Blossom 扣船案（T289）。
+- **大型開發與遷離**：沙烏地 NEOM 新城與 Huwaitat 部落（T286）。
+- **石油與健康**：巴斯拉油田燃氣與兒童白血病（T287）。
+- **廢棄物與生計**：開羅 Zabbaleen 拾荒者（T288）。
 
 ## 行動者
 農民與村落社群（Bergama、Imider 的阿瑪齊格村民）、少數族群（努比亞人、庫德族、沼澤阿拉伯人、Khuzestan 阿拉伯裔）、都市青年與公民運動（You Stink、Gezi）、工會與失業者運動（Gabès、Gafsa 磷礦區）。
@@ -31,7 +36,7 @@
 - 待補：Arab Reform Initiative、Tunisian Forum for Economic and Social Rights（FTDES）的研究報告。
 
 ## 資料缺口
-已由 15 筆補到 26 筆。仍缺：以色列—巴勒斯坦的水資源與土地（目前只有一份聯合國報告）、伊朗的乾旱與 Khuzestan 抗爭細節、尼羅河大衣索比亞復興大壩（GERD）爭端、海灣國家的石化與海水淡化，以及敘利亞與葉門戰爭的其他環境後果。阿拉伯文學術文獻仍未收錄。
+已由 15 筆補到 33 筆（第五輪補入 GERD、西岸水資源、加薩環境評估、NEOM、巴斯拉燃氣、Zabbaleen、西撒哈拉磷礦）。仍缺：伊朗的乾旱與 Khuzestan 抗爭細節、海灣國家的石化與海水淡化、敘利亞戰爭的其他環境後果。阿拉伯文學術文獻仍未收錄。
 
 ## 事件清單（自 `data/timeline.csv` 產生）
 | id | 年代 | 國家 | 事件 | 類型 | 議題 |
@@ -41,6 +46,8 @@
 | S1-T062 | 1989–2017 | Turkey | Bergama 反氰化物金礦運動 | movement | mining; agriculture; water |
 | S1-T063 | 1991 | Kuwait | 波斯灣戰爭油井大火 | disaster | oil; war; air pollution |
 | S1-T064 | 1991–2016 | Iraq | 美索不達米亞沼澤排乾與沼澤阿拉伯人 | disaster | water; displacement; war |
+| S1-T284 | 1995–2009 | Palestine;Israel | 約旦河西岸水資源分配不平等（Oslo II 第 40 條） | policy | water; occupation; discrimination |
+| S1-T288 | 2003–2009 | Egypt | 開羅 Zabbaleen 拾荒者與廢棄物私有化、宰豬令 | movement | waste; livelihood; religious minority; privatization |
 | S1-T072 | 2006–2020 | Turkey | Ilısu 水壩與 Hasankeyf 淹沒 | policy | dam; cultural heritage; transboundary; Kurdish |
 | S1-T272 | 2006 | Lebanon | Jiyeh 電廠漏油（以黎戰爭） | disaster | oil spill; war; coastal ecology |
 | S1-T275 | 2006–2017 | Syria | 敘利亞大旱與「氣候—衝突」辯論 | publication | drought; climate; migration; conflict |
@@ -48,6 +55,7 @@
 | S1-T274 | 2008–2020 | Egypt;Canada | Damietta 反 Agrium 化肥廠運動 | movement | petrochemical; fertilizer; fisheries; transnational corporation |
 | S1-T067 | 2011–2019 | Morocco | Imider 反銀礦取水靜坐 | movement | mining; water; indigenous |
 | S1-T073 | 2011–2021 | Iran | 烏爾米耶湖乾涸與伊朗水抗爭 | movement | water; drought |
+| S1-T283 | 2011–2021 | Ethiopia;Egypt;Sudan | 衣索比亞復興大壩（GERD）與尼羅河水權爭端 | policy | dam; water; transboundary; colonial treaties |
 | S1-T065 | 2012 | Palestine | 聯合國報告《Gaza in 2020: A liveable place?》 | publication | water; occupation; health |
 | S1-T066 | 2012–2026 | Tunisia | Gabès 磷酸鹽工業污染抗爭 (Stop Pollution) | movement | industrial pollution; water; health |
 | S1-T068 | 2013 | Turkey | Gezi 公園抗爭 | movement | urban green space; democracy |
@@ -57,10 +65,14 @@
 | S1-T279 | 2015–2020 | Lebanon | Bisri 水壩與世界銀行撤回貸款 | policy | dam; development finance; biodiversity |
 | S1-T281 | 2015–2023 | Yemen | FSO Safer 油輪危機 | disaster | oil; war; marine ecology |
 | S1-T276 | 2016–2025 | Morocco | Noor Ouarzazate 太陽能電廠與「綠色掠奪」爭議 | movement | energy transition; land; indigenous; pastoralism |
+| S1-T289 | 2017–2018 | Western Sahara;Morocco;South Africa | 西撒哈拉 Bou Craa 磷礦與 NM Cherry Blossom 扣船案 | lawsuit | phosphate; occupation; self-determination |
 | S1-T277 | 2018–2019 | Iraq | 巴斯拉水危機 | disaster | water; health; governance |
 | S1-T278 | 2019–2020 | Turkey | Kaz 山（Ida 山）「水與良知守夜」反金礦運動 | movement | mining; forest; water; transnational corporation |
+| S1-T286 | 2020–2023 | Saudi Arabia | NEOM 新城與 Huwaitat 部落強制遷離 | movement | land; displacement; megaproject; defenders |
 | S1-T280 | 2021 | Qatar | 國際特赦組織報告：卡達移工高溫死亡未獲調查 | publication | heat; labor; migration; climate |
 | S1-T074 | 2022 | Egypt | COP27（Sharm el-Sheikh）通過損失與損害基金 | conference | climate; loss and damage |
+| S1-T287 | 2022 | Iraq | BBC《Under Poisoned Skies》：巴斯拉油田燃氣與兒童白血病 | publication | gas flaring; oil; health; children |
 | S1-T282 | 2023 | Libya | Derna 水壩潰堤（Storm Daniel） | disaster | dam; flood; climate; governance |
+| S1-T285 | 2023–2024 | Palestine | UNEP 加薩戰爭環境影響初步評估 | publication | war; water; waste; debris |
 
-共 26 筆。行動者、結果與來源詳見 `data/timeline.csv`。
+共 33 筆。行動者、結果與來源詳見 `data/timeline.csv`。

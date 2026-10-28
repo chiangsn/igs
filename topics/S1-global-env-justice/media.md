@@ -60,5 +60,5 @@
 | 台灣環境保護聯盟 | 反核運動史料 | https://www.tepu.org.tw/ （待查證：網站檢測時連線逾時） |
 
 ## 五、本主題自製資料（給 VZ）
-- `data/timeline.csv`：282 筆事件，含座標，可做時間軸、地圖與網絡圖（`linked_ids`）。
+- `data/timeline.csv`：312 筆事件，含座標，可做時間軸、地圖與網絡圖（`linked_ids`）。
 - `data/concepts.csv`：36 個概念，含起源區域與年代，可做概念系譜圖。

@@ -11,6 +11,19 @@
 - **礦業與跨國訴訟**：尚比亞 Lungowe v Vedanta（T056）、剛果鈷（T054）。
 - **水壩與開發融資**：衣索比亞 Gibe III（T051）、查德—喀麥隆管線（T049）。
 
+### 法語非洲（第五輪補入）
+- **法國核子產業鏈的非洲端**：尼日 Arlit 與 Akokan 鈾礦（T290）、加彭 Mounana 鈾礦前工人（T291）。與阿爾及利亞核試（T061）、玻里尼西亞核試（T204）同屬法國核子體系。
+- **開發融資與在地生計**：塞內加爾 Bargny 燃煤電廠與漁獲加工婦女（T292）。
+- **礦業**：幾內亞 Boké 鋁土礦（T293）。
+- **石油與保育**：剛果民主共和國 Virunga 國家公園（T297）。
+- **土地掠奪**：馬達加斯加大宇租地案（T294）。
+
+### 葡語非洲（第五輪補入）
+- **南南合作的爭議**：莫三比克 ProSavana（T295），巴西、日本與莫三比克三方計畫在小農反對下於 2020 年終止。
+- **煤礦與安置**：莫三比克 Tete 的 Vale 與 Rio Tinto 安置村（T296）。
+- **天然氣與衝突**：莫三比克 Cabo Delgado（T298）。
+- **石油**：安哥拉 Cabinda 漏油與漁民（T299）。
+
 ## 行動者
 少數族群運動（MOSOP、Ijaw Youth Council）、婦女組織、工會（南非 COSATU 等）、社區環境聯盟（SDCEA）、環境權利團體（Environmental Rights Action / 奈及利亞地球之友、groundWork）、教會、學生運動（烏干達反 EACOP）。
 
@@ -28,7 +41,8 @@
 - 一手：Maathai（S1-043）、Saro-Wiwa（S1-044）
 - 研究：Okonta & Douglas（S1-045）、Watts & Kashi（S1-046）、McDonald（S1-048）、Cock & Koch（S1-049）、Hecht（S1-050、S1-051）、Nixon（S1-005）、Bond（S1-098）
 - 報告：UNEP（S1-047）、Amnesty（S1-052）
-- 法文非洲文獻：待補（見 STATUS.md 資料缺口）
+- 法文與葡文來源（第五輪，見 timeline 各筆 `sources`）：Gabon Review、Reporterre（Mounana）、SenePlus、AllAfrica 法文版（Bargny）、Ver Angola（Cabinda）、Foncier & Développement、farmlandgrab（ProSavana）。
+- 法語與葡語非洲的學術文獻仍待補。
 
 ## 與其他區域的連結
 - Oilwatch 與厄瓜多（T044↔T011）；Shell 案與 Texaco 案的跨國訴訟比較（T045↔T009）。
@@ -41,6 +55,8 @@
 | S1-T035 | 1885–1908 | Democratic Republic of the Congo | 剛果自由邦紅橡膠暴行 (Congo Free State) | disaster | rubber; forced labor; colonialism |
 | S1-T036 | 1913 | South Africa | 南非《原住民土地法》(Natives Land Act) | policy | land; colonialism; racism |
 | S1-T037 | 1952–1960 | Kenya | 茅茅起義（土地與自由軍）(Mau Mau uprising) | movement | land; colonialism |
+| S1-T291 | 1958–2017 | Gabon;France | Mounana 鈾礦前工人求償 | movement | uranium; occupational disease; transnational corporation |
+| S1-T290 | 1971–2010 | Niger;France | Arlit 與 Akokan 鈾礦污染（Areva／Orano） | disaster | uranium; radiation; water; transnational corporation |
 | S1-T038 | 1977–2004 | Kenya | 綠帶運動 (Green Belt Movement) | movement | forest; women; democracy |
 | S1-T040 | 1988 | Nigeria | Koko 有毒廢棄物事件 | disaster | toxic waste; waste trade |
 | S1-T041 | 1988–1994 | South Africa | 南非環境正義網絡的形成 (Earthlife Africa / EJNF) | movement | toxic waste; apartheid; labor |
@@ -58,10 +74,18 @@
 | S1-T051 | 2006–2016 | Ethiopia;Kenya | Gibe III 水壩與 Omo 河—Turkana 湖衝突 | policy | dam; indigenous; water; transboundary |
 | S1-T055 | 2007–2019 | South Africa | Xolobeni Amadiba 反鈦礦運動 | movement | mining; land; defenders |
 | S1-T059 | 2008–2022 | Nigeria;Netherlands | Oruma、Goi、Ikot Ada Udo 農民與荷蘭地球之友訴 Shell（海牙） | lawsuit | oil; transnational corporation |
+| S1-T294 | 2008–2010 | Madagascar;South Korea | 大宇物流馬達加斯加 130 萬公頃租地案 | movement | land grabbing; food; transnational corporation |
+| S1-T295 | 2009–2020 | Mozambique;Brazil;Japan | ProSavana 計畫與「Não ao ProSavana」運動 | movement | agribusiness; land; South-South cooperation |
+| S1-T296 | 2009–2013 | Mozambique;Brazil | Tete 煤礦與 Cateme 等安置村 | publication | coal; resettlement; food; transnational corporation |
+| S1-T297 | 2010–2025 | Mozambique;France | Cabo Delgado 液化天然氣開發與武裝衝突 | movement | gas; displacement; conflict; climate |
+| S1-T298 | 2010–2014 | Democratic Republic of the Congo;United Kingdom | Virunga 國家公園石油探勘爭議 | movement | oil; biodiversity; World Heritage; defenders |
 | S1-T052 | 2011 | Nigeria | UNEP《Ogoniland 環境評估報告》 | publication | oil; water; remediation |
 | S1-T053 | 2012 | South Africa | Marikana 礦工屠殺 | disaster | mining; labor |
 | S1-T056 | 2015–2019 | Zambia;United Kingdom | Lungowe v Vedanta（尚比亞村民在英國起訴） | lawsuit | mining; water; transnational corporation |
+| S1-T293 | 2015–2018 | Guinea | 幾內亞 Boké 鋁土礦熱潮 | publication | bauxite; mining; water; land |
+| S1-T299 | 2015–2025 | Angola | Cabinda 海岸漏油與漁民 | disaster | oil spill; fisheries; transnational corporation |
 | S1-T054 | 2016–2025 | Democratic Republic of the Congo | 剛果手工鈷礦與能源轉型供應鏈 | movement | mining; child labor; energy transition |
+| S1-T292 | 2016–2025 | Senegal | Bargny–Sendou 燃煤電廠抗爭 | movement | coal; fisheries; women; development finance |
 | S1-T058 | 2019–2025 | Uganda;Tanzania | 反東非原油管線運動 (#StopEACOP) | movement | oil; climate; land |
 
-共 25 筆。行動者、結果與來源詳見 `data/timeline.csv`。
+共 35 筆。行動者、結果與來源詳見 `data/timeline.csv`。

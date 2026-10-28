@@ -12,6 +12,15 @@
 - **廢棄物與軍事**：海地 Khian Sea（T008）、波多黎各 Vieques（T012）、智利 Quintero–Puchuncaví「犧牲區」（T033）。
 - **制度創新**：厄瓜多自然權利入憲（T019）、玻利維亞地球母親法（T022）、哥倫比亞 Atrato 河判決（T031）、Escazú 協定（T032）。
 
+### 加勒比海與中美洲（第五輪補入）
+- **殖民與種植園的化學遺緒**：瓜德羅普與馬丁尼克的十氯酮（T307），香蕉種植園農藥造成的長期污染，2026 年法院維持不起訴，同時立法承認國家責任。
+- **國際組織的責任**：海地霍亂與聯合國維和部隊（T306）。
+- **採礦與保育**：牙買加 Cockpit Country 反鋁土礦（T308）。
+- **有毒廢棄物與殖民地位**：波多黎各 AES 煤灰（T309），與 Vieques（T012）同屬美國屬地的環境不正義。
+- **氣候金融**：巴貝多 Bridgetown 倡議（T310）。
+- **新興產油國**：蓋亞那 Stabroek 石油許可訴訟（T311）。
+- **原住民族土地**：貝里斯 Maya 習慣土地權（加勒比法院，T312）。
+
 ## 行動者
 原住民族組織（CONAIE、AIDESEP、COPINH、Kayapó）、農民與橡膠工人工會、非裔社群（哥倫比亞太平洋岸）、解放神學與天主教土地牧靈委員會（CPT）、受水壩影響者運動（MAB）、城市居民的「自主召集公民大會」（asambleas autoconvocadas）、法律與研究團體（Acción Ecológica、CELS、Tierra Digna）。
 
@@ -46,6 +55,7 @@
 |---|---|---|---|---|---|
 | S1-T001 | 1879–1912 | Peru;Colombia | 普圖馬約橡膠暴行 (Putumayo genocide) | disaster | rubber; land; indigenous; forced labor |
 | S1-T009 | 1964–2011 | Ecuador | Texaco/Chevron 亞馬遜石油污染與 Lago Agrio 訴訟 | lawsuit | oil; indigenous; water; transnational corporation |
+| S1-T307 | 1972–2026 | Guadeloupe;Martinique;France | 瓜德羅普與馬丁尼克的十氯酮污染 | lawsuit | pesticides; banana plantations; colonialism; health |
 | S1-T002 | 1976–1988 | Brazil | Acre 橡膠採集工人「empate」封鎖行動 (Empates of Xapuri and Brasiléia) | movement | forest; land; livelihood |
 | S1-T004 | 1980–1991 | Brazil | Cubatão「死亡之谷」工業污染 (Vale da Morte) | disaster | air pollution; industrial pollution; health |
 | S1-T003 | 1985 | Brazil | 全國橡膠採集工人委員會成立 (Conselho Nacional dos Seringueiros) | movement | forest; land; livelihood |
@@ -63,12 +73,15 @@
 | S1-T016 | 2005 | Brazil | Dorothy Stang 修女遇害 (Anapu, Pará) | movement | land; forest; defenders |
 | S1-T017 | 2005–2010 | Argentina;Uruguay | Gualeguaychú 反紙漿廠運動與國際法院案 (Pulp Mills on the River Uruguay) | lawsuit | water; industrial pollution; transboundary |
 | S1-T027 | 2006–2014 | Chile | 「無水壩巴塔哥尼亞」運動 (Patagonia sin Represas / HidroAysén) | movement | dam; biodiversity |
+| S1-T308 | 2006–2022 | Jamaica | 牙買加 Cockpit Country 反鋁土礦運動 | movement | bauxite; biodiversity; water; Maroon |
 | S1-T018 | 2007–2023 | Ecuador | Yasuní-ITT 倡議與 2023 年公投 | policy | oil; biodiversity; indigenous; climate |
+| S1-T312 | 2007–2015 | Belize | Maya Leaders Alliance 訴貝里斯（加勒比法院） | lawsuit | indigenous; land; oil; logging |
 | S1-T019 | 2008 | Ecuador | 厄瓜多憲法納入自然權利 (Derechos de la Naturaleza, Pachamama) | policy | rights of nature; indigenous |
 | S1-T020 | 2009 | Peru | Bagua 衝突 (Baguazo) | movement | oil; land; indigenous; free trade |
 | S1-T021 | 2010 | Bolivia | 世界人民氣候變遷與地球母親權利大會 (Tiquipaya/Cochabamba) | conference | climate; rights of nature |
 | S1-T022 | 2010–2012 | Bolivia | 玻利維亞《地球母親權利法》 (Ley 071 / Ley 300) | policy | rights of nature |
 | S1-T034 | 2010–2025 | Chile;Argentina;Bolivia | 「鋰三角」能源轉型礦產衝突 | movement | mining; water; energy transition; indigenous |
+| S1-T306 | 2010–2016 | Haiti;Nepal | 海地霍亂疫情與聯合國維和部隊 | disaster | water; sanitation; health; UN accountability |
 | S1-T023 | 2011 | Bolivia | TIPNIS 原住民族保留區公路抗爭 | movement | road; indigenous; forest |
 | S1-T024 | 2011–2019 | Brazil | Belo Monte 水壩興建與抗爭 | policy | dam; indigenous; land |
 | S1-T025 | 2011–2012 | Peru | Conga 金礦抗爭 (Cajamarca) | movement | mining; water |
@@ -76,7 +89,10 @@
 | S1-T029 | 2015–2019 | Brazil | Mariana（Fundão）與 Brumadinho 尾礦壩災難 | disaster | mining; water; toxic waste |
 | S1-T030 | 2016 | Honduras | Berta Cáceres 遇害（Agua Zarca 水壩） | movement | dam; indigenous; defenders |
 | S1-T031 | 2016 | Colombia | 哥倫比亞憲法法院承認 Atrato 河為權利主體 (Sentencia T-622/16) | lawsuit | rights of nature; mining; water; Afro-descendant |
+| S1-T309 | 2016–2018 | Puerto Rico | 波多黎各 AES 煤灰傾倒抗爭（Peñuelas、Guayama） | movement | coal ash; toxic waste; colonial status |
 | S1-T032 | 2018–2021 | Costa Rica | Escazú 協定 (Acuerdo de Escazú) | treaty | access to information; participation; defenders |
 | S1-T033 | 2018–2019 | Chile | Quintero–Puchuncaví「犧牲區」中毒事件 | disaster | industrial pollution; air pollution; health |
+| S1-T311 | 2019–2024 | Guyana;United States | 蓋亞那 Stabroek 石油許可訴訟 | lawsuit | oil; climate; financial liability |
+| S1-T310 | 2022–2024 | Barbados | Bridgetown 倡議（氣候金融改革） | policy | climate finance; debt; loss and damage |
 
-共 34 筆。行動者、結果與來源詳見 `data/timeline.csv`。
+共 41 筆。行動者、結果與來源詳見 `data/timeline.csv`。
