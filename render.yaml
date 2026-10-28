@@ -1,0 +1,21 @@
+# Render Blueprint：IGS 課程發展視覺化網站（純靜態）
+# build 從 repo 根目錄執行，才能讀到 topics/；因此不設 rootDir。
+# 待 site/package-lock.json 加入 repo 後，改用 `npm ci`。
+services:
+  - type: web
+    name: igs-site
+    runtime: static
+    branch: main
+    buildCommand: cd site && npm install --no-audit --no-fund && npm run build
+    staticPublishPath: site/dist
+    pullRequestPreviewsEnabled: false
+    headers:
+      - path: /*
+        name: X-Robots-Tag
+        value: noindex, nofollow
+      - path: /data/*
+        name: Cache-Control
+        value: no-cache
+    envVars:
+      - key: NODE_VERSION
+        value: 22.11.0
