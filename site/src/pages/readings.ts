@@ -1,17 +1,19 @@
 // 讀物資料庫：搜尋與多重篩選
-import type { Reading, Topic } from '../data';
+import type { Reading, ReadingFacet, Topic } from '../data';
 import { ACCESS_ZH, LANG_ZH, LEVEL_ZH, regionZh, TYPE_ZH } from '../data';
 import { esc, pendingBadge } from '../ui';
 
-interface RF { q: string; language: string; level: string; access: string; type: string; tag: string; region: string; pendingOnly: boolean; sort: string }
+interface RF { q: string; language: string; level: string; access: string; type: string; tag: string; region: string; pendingOnly: boolean; sort: string;
+  /** topic-config.json 的 readingFacets：facet 索引 → 選取的標籤 */
+  facets: Record<string, string> }
 const store = new Map<string, RF>();
 
 export function renderReadings(root: HTMLElement, t: Topic, params: URLSearchParams) {
   if (!t.readings.length) { root.innerHTML = '<p class="empty">此主題沒有 readings.csv。</p>'; return; }
-  if (!store.has(t.code)) store.set(t.code, { q: '', language: '', level: '', access: '', type: '', tag: '', region: '', pendingOnly: false, sort: 'year-desc' });
+  if (!store.has(t.code)) store.set(t.code, { q: '', language: '', level: '', access: '', type: '', tag: '', region: '', pendingOnly: false, sort: 'year-desc', facets: {} });
   const f = store.get(t.code)!;
   const focus = params.get('id');
-  if (focus) Object.assign(f, { q: '', language: '', level: '', access: '', type: '', tag: '', region: '', pendingOnly: false });
+  if (focus) Object.assign(f, { q: '', language: '', level: '', access: '', type: '', tag: '', region: '', pendingOnly: false, facets: {} });
 
   const uniq = (fn: (r: Reading) => string[]) => {
     const c = new Map<string, number>();
@@ -21,6 +23,9 @@ export function renderReadings(root: HTMLElement, t: Topic, params: URLSearchPar
   const opt = (k: keyof RF, label: string, items: [string, number][], name: (v: string) => string = (v) => v) =>
     `<select data-k="${k}" aria-label="${label}"><option value="">${label}：全部</option>${items.map(([v, n]) => `<option value="${esc(v)}" ${f[k] === v ? 'selected' : ''}>${esc(name(v))}（${n}）</option>`).join('')}</select>`;
 
+  const facets = t.config.readingFacets;
+  const facetRes = facets.map((fc) => new RegExp(fc.pattern));
+  const facetOf = (tag: string) => facetRes.findIndex((re) => re.test(tag));
   root.innerHTML = `
     <div class="filterbar"><div class="frow wrap">
       <input type="search" data-k="q" class="search wide" placeholder="搜尋書名、作者、摘要、出處…" value="${esc(f.q)}">
@@ -29,6 +34,10 @@ export function renderReadings(root: HTMLElement, t: Topic, params: URLSearchPar
       ${opt('access', '取得方式', uniq((r) => [r.access]), (v) => ACCESS_ZH[v] ?? v)}
       ${opt('type', '類型', uniq((r) => [r.type]), (v) => TYPE_ZH[v] ?? v)}
       ${opt('region', '區域', uniq((r) => r.regions), regionZh)}
+      ${facets.map((fc, i) => {
+        const n = (v: string) => t.readings.filter((r) => r.tags.includes(v)).length;
+        return `<select data-facet="${i}" aria-label="${esc(fc.label)}"><option value="">${esc(fc.label)}：全部</option>${fc.values.map((v) => `<option value="${esc(v)}" ${f.facets[i] === v ? 'selected' : ''}>${esc(facetName(fc, v))}（${n(v)}）</option>`).join('')}</select>`;
+      }).join('')}
       ${opt('tag', 'Tag', uniq((r) => r.tags))}
       <label class="check"><input type="checkbox" data-k="pendingOnly" ${f.pendingOnly ? 'checked' : ''}> 只看待查證</label>
       <select data-k="sort" aria-label="排序">
@@ -49,7 +58,7 @@ export function renderReadings(root: HTMLElement, t: Topic, params: URLSearchPar
     const rows = t.readings.filter((r) =>
       (!f.language || r.language === f.language) && (!f.level || r.level === f.level) && (!f.access || r.access === f.access) &&
       (!f.type || r.type === f.type) && (!f.tag || r.tags.includes(f.tag)) && (!f.region || r.regions.includes(f.region)) &&
-      (!f.pendingOnly || r.pending) &&
+      (!f.pendingOnly || r.pending) && facets.every((_fc, i) => !f.facets[i] || r.tags.includes(f.facets[i])) &&
       (!q || [r.id, r.title, r.authors.join(' '), r.summary, r.source, r.tags.join(' ')].join(' ').toLowerCase().includes(q)));
     const cmp: Record<string, (a: Reading, b: Reading) => number> = {
       'year-desc': (a, b) => (b.year ?? 0) - (a.year ?? 0), 'year-asc': (a, b) => (a.year ?? 0) - (b.year ?? 0),
@@ -71,13 +80,21 @@ export function renderReadings(root: HTMLElement, t: Topic, params: URLSearchPar
         <h3 class="reading-title">${href ? `<a href="${esc(href)}" target="_blank" rel="noopener">${esc(r.title)}</a>` : esc(r.title)}</h3>
         <div class="reading-meta">${esc(r.authors.join('、'))}${r.year ? ` · ${r.year}` : ''}${r.source ? ` · <i>${esc(r.source)}</i>` : ''}</div>
         <p>${esc(r.summary).replace(/待查證/g, '<span class="pending-text">待查證</span>')}</p>
-        <div class="chips">${r.tags.map((g) => `<button class="chip ghost tag" data-tag="${esc(g)}">${esc(g)}</button>`).join('')}</div>
+        <div class="chips">${r.tags.map((g) => {
+          const fi = facetOf(g);
+          if (fi < 0) return `<button class="chip ghost tag" data-tag="${esc(g)}">${esc(g)}</button>`;
+          const name = facets[fi].names[g] ?? '';
+          // 有中文名稱且不以代號開頭（例如 hist:envhist → 環境史）時顯示名稱；單元代號照原樣顯示，名稱放在提示
+          const label = name && !name.startsWith(g) ? name : g;
+          return `<button class="chip tag facet" data-facet-tag="${fi}|${esc(g)}" title="${esc(name || g)}">${esc(label)}</button>`;
+        }).join('')}</div>
       </article>`;
     }).join('') || '<p class="empty">沒有符合條件的讀物。</p>';
   };
 
   root.oninput = (e) => {
     const i = e.target as HTMLInputElement; const k = i.dataset.k as keyof RF | undefined;
+    if (i.dataset.facet !== undefined) { f.facets[i.dataset.facet] = i.value; draw(); return; }
     if (!k) return;
     if (k === 'pendingOnly') f.pendingOnly = i.checked;
     else (f as unknown as Record<string, string>)[k] = k === 'q' ? i.value.trim() : i.value;
@@ -86,9 +103,14 @@ export function renderReadings(root: HTMLElement, t: Topic, params: URLSearchPar
   root.onclick = (e) => {
     const b = (e.target as HTMLElement).closest('button') as HTMLButtonElement | null;
     if (!b) return;
+    if (b.dataset.facetTag) {
+      const [i, v] = [b.dataset.facetTag.split('|')[0], b.dataset.facetTag.slice(b.dataset.facetTag.indexOf('|') + 1)];
+      f.facets[i] = v; (root.querySelector(`[data-facet="${i}"]`) as HTMLSelectElement).value = v; draw(); return;
+    }
     if (b.dataset.tag) { f.tag = b.dataset.tag; (root.querySelector('[data-k="tag"]') as HTMLSelectElement).value = f.tag; draw(); }
     if (b.hasAttribute('data-reset')) {
-      Object.assign(f, { q: '', language: '', level: '', access: '', type: '', tag: '', region: '', pendingOnly: false });
+      Object.assign(f, { q: '', language: '', level: '', access: '', type: '', tag: '', region: '', pendingOnly: false, facets: {} });
+      root.querySelectorAll<HTMLSelectElement>('[data-facet]').forEach((x) => { x.value = ''; });
       root.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[data-k]').forEach((x) => {
         if (x.dataset.k === 'sort') return;
         if (x instanceof HTMLInputElement && x.type === 'checkbox') x.checked = false; else x.value = '';
@@ -98,4 +120,11 @@ export function renderReadings(root: HTMLElement, t: Topic, params: URLSearchPar
   };
   draw();
   if (focus) requestAnimationFrame(() => document.getElementById(`r-${focus}`)?.scrollIntoView({ block: 'center' }));
+}
+
+/** 標籤的顯示名稱：有中文名稱時顯示「代號 名稱」（名稱已含代號時不重複），過長截斷 */
+export function facetName(fc: ReadingFacet, v: string): string {
+  const name = fc.names[v];
+  const s = !name ? v : name.startsWith(v) ? name : `${v} ${name}`;
+  return s.length > 34 ? s.slice(0, 33) + '…' : s;
 }

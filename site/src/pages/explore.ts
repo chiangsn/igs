@@ -5,13 +5,22 @@ import 'leaflet/dist/leaflet.css';
 import type { EventItem, Topic } from '../data';
 import { regionZh, TYPE_ZH } from '../data';
 import { filterEvents, getFilters, renderFilterBar } from '../filters';
-import { esc, eventTip, hideTip, legendHtml, palette, pendingBadge, showEvent, showTip, slotHex, slotVar, yearText } from '../ui';
+import { esc, EVENT_TYPES, eventTip, hideTip, legendHtml, palette, pendingBadge, showEvent, showTip, slotHex, slotVar, yearText } from '../ui';
 
 const LANES = ['East Asia', 'Southeast Asia', 'South Asia', 'Middle East & North Africa', 'Sub-Saharan Africa', 'Europe', 'North America', 'Latin America & Caribbean', 'Oceania & Pacific', 'Arctic', 'Global'];
 const RECENT = 5; // 播放時，近 N 年內開始的事件強調顯示
 
+type LaneMode = 'region' | 'type' | 'group';
+/** 時間軸泳道的分法（每個主題記住自己的選擇；預設取 topic-config.json 的 timelineLanes） */
+const laneStore = new Map<string, LaneMode>();
+const LANE_ZH: Record<LaneMode, string> = { region: '區域', type: '類型', group: '議題群組' };
+
 export function renderExplore(root: HTMLElement, t: Topic) {
   if (!t.events.length) { root.innerHTML = '<p class="empty">此主題沒有 timeline.csv，無法顯示時間軸與地圖。</p>'; return; }
+  const groups = t.config.issueGroups;
+  const laneModes: LaneMode[] = groups.length ? ['region', 'type', 'group'] : ['region', 'type'];
+  if (!laneStore.has(t.code)) laneStore.set(t.code, laneModes.includes(t.config.timelineLanes) ? t.config.timelineLanes : 'region');
+  let lanesBy = laneStore.get(t.code)!;
   root.innerHTML = `
     <div id="fb"></div>
     <div class="play card">
@@ -23,7 +32,9 @@ export function renderExplore(root: HTMLElement, t: Topic) {
     </div>
     <div class="card"><div class="card-head"><h3>地圖</h3><span id="count" class="muted"></span></div><div id="legendMap"></div><div id="map" class="map"></div>
       <p class="muted small">座標為事件代表地點的近似位置（城市或區域中心）。全球／跨國事件標在會議或公約通過地。</p></div>
-    <div class="card"><div class="card-head"><h3>時間軸</h3><span class="muted small">依區域分泳道；色帶為 ${esc(t.code)} 的歷史分期；1950 年前比例壓縮；橙色外框＝待查證</span></div><div id="legendTl"></div><div id="timeline" class="timeline"></div></div>
+    <div class="card"><div class="card-head"><h3>時間軸</h3>
+      <span class="lane-switch"><span class="muted small">泳道</span><span class="seg" id="laneSeg">${laneModes.map((m) => `<button data-v="${m}" class="${m === lanesBy ? 'on' : ''}">${LANE_ZH[m]}</button>`).join('')}</span></span></div>
+      <p class="muted small" id="tlNote"></p><div id="legendTl"></div><div id="timeline" class="timeline"></div></div>
     <details class="card"><summary>事件列表（表格檢視）</summary><div id="table"></div></details>
   `;
   const f = getFilters(t.code);
@@ -74,22 +85,33 @@ export function renderExplore(root: HTMLElement, t: Topic) {
     const x = brk
       ? d3.scaleLinear().domain([yMin, brk, yMax]).range([0, iw * 0.14, iw])
       : d3.scaleLinear().domain([yMin, yMax]).range([0, iw]);
-    const lanes = LANES.filter((r) => t.events.some((e) => e.region === r))
-      .concat([...new Set(t.events.map((e) => e.region))].filter((r) => !LANES.includes(r)));
+    // 泳道：依區域、類型或議題群組。議題群組下一個事件可能出現在多條泳道
+    const laneOf = (e: EventItem): string[] => {
+      if (lanesBy === 'type') return [e.type];
+      if (lanesBy === 'group') {
+        const ks = groups.filter((g) => e.issues.some((i) => g.keywords.includes(i))).map((g) => g.key);
+        return ks.length ? ks : ['其他'];
+      }
+      return [e.region];
+    };
+    const order = lanesBy === 'type' ? EVENT_TYPES : lanesBy === 'group' ? [...groups.map((g) => g.key), '其他'] : LANES;
+    const present = new Set(t.events.flatMap(laneOf));
+    const lanes = order.filter((r) => present.has(r)).concat([...present].filter((r) => !order.includes(r)));
+    const laneLabel = (k: string) => (lanesBy === 'type' ? TYPE_ZH[k] ?? k : lanesBy === 'group' ? groups.find((g) => g.key === k)?.label ?? k : regionZh(k));
 
     // 泳道內排列：避免重疊
     const R = 4; const rowH = 10;
     const pos = new Map<string, { row: number; x0: number; x1: number }>();
     const laneRows = new Map<string, number>();
     for (const lane of lanes) {
-      const items = events.filter((e) => e.region === lane && e.year_start !== null).sort((a, b) => a.year_start! - b.year_start! || a.id.localeCompare(b.id));
+      const items = events.filter((e) => laneOf(e).includes(lane) && e.year_start !== null).sort((a, b) => a.year_start! - b.year_start! || a.id.localeCompare(b.id));
       const ends: number[] = [];
       for (const e of items) {
         const x0 = x(e.year_start!); const x1 = Math.max(x(e.year_end ?? e.year_start!), x0);
         let row = ends.findIndex((end) => end + 3 < x0 - R);
         if (row === -1) { row = ends.length; ends.push(0); }
         ends[row] = x1 + R;
-        pos.set(e.id, { row, x0, x1 });
+        pos.set(`${lane}|${e.id}`, { row, x0, x1 });
       }
       laneRows.set(lane, Math.max(ends.length, 1));
     }
@@ -115,8 +137,8 @@ export function renderExplore(root: HTMLElement, t: Topic) {
     for (const lane of lanes) {
       const y0 = laneY.get(lane)!; const h = laneRows.get(lane)! * rowH;
       g.append('line').attr('x1', -M.left).attr('x2', iw).attr('y1', y0 + h + 6).attr('y2', y0 + h + 6).attr('class', 'lane-sep');
-      const n = events.filter((e) => e.region === lane).length;
-      g.append('text').attr('x', -8).attr('y', y0 + Math.min(h, 24) / 2 + 4).attr('text-anchor', 'end').attr('class', 'lane-label').text(`${regionZh(lane)}`);
+      const n = events.filter((e) => laneOf(e).includes(lane)).length;
+      g.append('text').attr('x', -8).attr('y', y0 + Math.min(h, 24) / 2 + 4).attr('text-anchor', 'end').attr('class', 'lane-label').text(laneLabel(lane));
       g.append('text').attr('x', -8).attr('y', y0 + Math.min(h, 24) / 2 + 16).attr('text-anchor', 'end').attr('class', 'lane-count').text(`${n} 筆`);
     }
 
@@ -128,9 +150,10 @@ export function renderExplore(root: HTMLElement, t: Topic) {
 
     // 事件
     const marks = g.append('g');
-    for (const e of events) {
-      const ps = pos.get(e.id); if (!ps) continue;
-      const cy = laneY.get(e.region)! + ps.row * rowH + rowH / 2;
+    for (const [key, ps] of pos) {
+      const [lane, id] = [key.slice(0, key.lastIndexOf('|')), key.slice(key.lastIndexOf('|') + 1)];
+      const e = events.find((x) => x.id === id)!;
+      const cy = laneY.get(lane)! + ps.row * rowH + rowH / 2;
       const after = cursor !== null && (e.year_start ?? 0) > cursor;
       const node = (ps.x1 - ps.x0 > 2
         ? marks.append('rect').attr('x', ps.x0 - R).attr('y', cy - 3.5).attr('width', ps.x1 - ps.x0 + 2 * R).attr('height', 7).attr('rx', 3.5)
@@ -194,6 +217,18 @@ export function renderExplore(root: HTMLElement, t: Topic) {
     }, 260);
   };
 
+  const laneSeg = root.querySelector('#laneSeg') as HTMLElement;
+  const noteEl = root.querySelector('#tlNote') as HTMLElement;
+  const setNote = () => {
+    noteEl.textContent = `依${LANE_ZH[lanesBy]}分泳道${lanesBy === 'group' ? '（一筆事件標了多個群組的關鍵字時，會出現在多條泳道）' : ''}；色帶為 ${t.code} 的歷史分期；1950 年前比例壓縮；橙色外框＝待查證。`;
+  };
+  setNote();
+  laneSeg.onclick = (ev) => {
+    const b = (ev.target as HTMLElement).closest('button'); if (!b) return;
+    lanesBy = b.dataset.v as LaneMode; laneStore.set(t.code, lanesBy);
+    laneSeg.querySelectorAll('button').forEach((x) => x.classList.toggle('on', x === b));
+    setNote(); drawTimeline(filterEvents(t, f));
+  };
   renderFilterBar(root.querySelector('#fb') as HTMLElement, t, update, { colorBy: true });
   update();
   let lastW = tlHost.clientWidth;

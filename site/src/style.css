@@ -289,3 +289,21 @@ table.heat tr.col-n td { text-align: center; border: 0; }
 .grid2 > * { min-width: 0; }
 .md :not(pre) > code { overflow-wrap: anywhere; }
 label.check { flex-wrap: wrap; white-space: normal; }
+
+/* ---------- 子資料夾文件的「本篇引用」 ---------- */
+.refs-panel { border: 1px solid var(--border); background: var(--surface-2); border-radius: 8px; padding: 8px 12px; margin: 6px 0 14px; font-size: 0.92em; }
+.refs-title { font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; }
+.refs-grid { display: flex; flex-wrap: wrap; gap: 4px 18px; }
+.refs-grid details { min-width: 0; }
+.refs-grid details[open] { flex-basis: 100%; }
+.refs-grid summary { cursor: pointer; }
+.refs-list { margin: 4px 0 6px; padding-left: 18px; max-height: 260px; overflow-y: auto; }
+.refs-list li { margin: 2px 0; }
+.chip.facet { border-style: dashed; }
+.claim-note { margin-top: 8px !important; font-size: 0.85em !important; }
+.pointable { pointer-events: all; cursor: default; }
+table.heat tr.sum-row th, table.heat tr.sum-row td { font-weight: 600; background: var(--surface-2); text-align: center; border: 1px solid var(--border); }
+table.heat tr.sum-row th { text-align: left; }
+.lane-switch { display: inline-flex; align-items: center; gap: 6px; }
+.filterbar select { max-width: 100%; min-width: 0; text-overflow: ellipsis; }
+.filterbar > * { min-width: 0; }

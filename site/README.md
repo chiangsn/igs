@@ -62,7 +62,8 @@ npm run data       # 只重跑資料管線（更新 public/data/ 與 data-report
 1. 讀 `REGISTRY.md` 的主題表，取得編號與名稱；掃描 `topics/*/` 找出所有主題資料夾（未登記的主題改用資料夾名稱，並在報告註記）。
 2. 每個主題讀取（缺檔就略過該部分，網站其他部分照常顯示）：
    - `data/timeline.csv`、`data/concepts.csv`、`readings.csv`
-   - `data/documents.csv`（選用，一手文件；欄位見 S4 交接檔，有這個檔才顯示「一手文件」分頁）
+   - `data/documents.csv`（選用，一手文件；欄位見 S4 交接檔，有這個檔才顯示「一手文件」分頁；`doc_type` 與 `module` 的實際值寫進報告）
+   - `concepts.csv` 的選用欄位 `module`、`timeline_ids`（S4）：概念詳情顯示所屬單元與相關事件
    - `overview.md`、`historiography.md`、`cases.md`、`activities.md`、`media.md`、其他頂層 `.md`
    - 子資料夾中的 `.md`（`data/` 以外的任何子資料夾，例如 `regions/`、`impacts/`、`modules/`），每個子資料夾一組
    - `site/topic-config.json` 中設定的統計 CSV（只取設定用到的欄位）
@@ -82,11 +83,14 @@ npm run data       # 只重跑資料管線（更新 public/data/ 與 data-report
 
 | 欄位 | 說明 |
 |---|---|
-| `view` | `regions`：區域比較（S1）；`issues`：issue 關鍵字分組比較（S2） |
+| `view` | `regions`：區域比較（S1）；`issues`：issue 關鍵字分組比較（S2、S4） |
 | `label` | 分頁名稱，例如「區域比較」「延伸影響」 |
 | `focusRegion` | `regions` 用：要強調的區域（固定分類之一），例如 S1 的 `North America`；不設就不強調 |
 | `claim` | `issues` 用：放在頁首的一句論點 |
-| `compare` | `issues` 用：要比較的兩個群組 key，`[A, B]`，頁首顯示「標了 B 的事件數 vs 標了 A 的事件數」與 A 最常見關鍵字的名次 |
+| `compare` | `issues` 用：要比較的兩個群組 key，`[A, B]`，頁首顯示「標了 B 的事件數 vs 標了 A 的事件數」與 A 最常見關鍵字的名次；`[]` 不顯示 |
+| `note` | 放在論點下方的提醒，例如「分組由 SZ 擬定，待確認」；有設定時也會列出目前的分組 |
+| `groupTrend` | `issues` 用：`true` 時加一張「各群組在各期的比重」折線圖 |
+| `regionHeat` | `issues` 用：`true` 時加一張「區域 × 分期」熱圖（含 Global 與非 Global 比例），用來呈現不是 issue 詞彙的區域論點（S4 的「南方的回應」） |
 
 ### `issueGroups`：issue 關鍵字的群組
 
@@ -96,9 +100,30 @@ npm run data       # 只重跑資料管線（更新 public/data/ 與 data-report
 - `filter: true` 的群組會在時間軸、地圖、網絡圖的篩選列多一排按鈕（例如 S2 的戰爭類型），顏色選單也多一個依該群組上色的選項。
 - issue 欄位中不屬於任何群組的關鍵字、群組中沒有出現在 timeline 的關鍵字，會列在 `data-report.md` 的「說明」。
 
+### `timelineLanes`：時間軸泳道
+
+`region`（預設）、`type` 或 `group`（依 `issueGroups`，一筆事件可能出現在多條泳道）。時間軸上方有切換按鈕，這裡只決定預設值。Global 事件很多的主題（S4）建議用 `type`。
+
+### `readingFacets`：讀物標籤篩選
+
+讀物資料庫依 `readings.csv` 的 `tags` 多出幾個下拉選單。規則是通用的：每個 facet 用正規式挑出符合的標籤。
+
+```json
+"readingFacets": [
+  { "label": "專題單元", "pattern": "^M\\d{2}$", "namesFrom": "modules" },
+  { "label": "學術傳統", "pattern": "^hist:", "names": { "hist:envhist": "環境史" } }
+]
+```
+
+- `pattern`：正規式（JSON 中反斜線要寫兩次），例如 `^M\d{2}$` 只挑 `M01`–`M99`（不會挑到 `MDGs`）。
+- `names`：標籤的顯示名稱。
+- `namesFrom`：從子資料夾取名稱：標籤 `M05` 對應 `modules/M05-….md` 的標題。找不到對應檔案時寫進 `data-report.md`。
+- 讀物卡片上屬於 facet 的標籤以虛線框顯示（有中文名稱就顯示名稱），點擊會套用該篩選。
+- 每個 facet 的值與涵蓋的讀物數會寫進 `data-report.md` 的「說明」。
+
 ### `subdirs`：子資料夾文件
 
-`{ "impacts": { "label": "影響面向報告", "tab": true } }`。子資料夾（`data/` 以外）一律會被讀取；`tab: true` 時成為主題頁的獨立分頁，否則放在「文件」分頁中，以 `label` 為分組名稱（未設定時：`regions` → 區域報告、`impacts` → 影響面向、`modules` → 模組、其他用資料夾名稱）。
+`{ "impacts": { "label": "影響面向報告", "tab": true } }`。子資料夾（`data/` 以外）一律會被讀取，依檔名排序；`tab: true` 時成為主題頁的獨立分頁，否則放在「文件」分頁中，以 `label` 為分組名稱（未設定時：`regions` → 區域報告、`impacts` → 影響面向、`modules` → 模組、其他用資料夾名稱）。獨立分頁的文件開頭有「本篇引用」，列出文中引用的事件、一手文件、讀物與其他主題事件（含計數），首頁與主題總覽也會顯示篇數。
 
 ### `stats`：統計趨勢圖
 
@@ -119,11 +144,31 @@ npm run data       # 只重跑資料管線（更新 public/data/ 與 data-report
 
 統計 CSV 應是主題 session 整理好的小型摘要（不是原始資料庫）。網站只把設定用到的欄位放進 JSON。
 
-### 給 S3、S4 的建議
+### 範例：S4 的設定
+
+```json
+"S4": {
+  "thesis": { "view": "issues", "label": "三條線索", "claim": "…", "note": "issue 詞彙的分組由 SZ 依 overview.md 第三節擬定…",
+              "compare": [], "groupTrend": true, "regionHeat": true },
+  "issueGroups": [ { "key": "env", "label": "人口—資源—環境", "keywords": ["population", "resources", "…"] }, … ],
+  "subdirs": { "modules": { "label": "專題單元", "tab": true } },
+  "timelineLanes": "type",
+  "readingFacets": [ … ]
+}
+```
+
+完整內容見 `topic-config.json`。
+
+### 文字中的 id
+
+Markdown、事件 `outcome`、概念定義中的 id 會自動變成連結：`S4-T012`／`T012`（事件）、`S4-D005`（一手文件）、`S4-012`（讀物）、`S1-T092`（其他主題的事件，連到該主題）。主題編號限 1–2 位數，所以 ISSN（如 `S0016-3287`）不會被誤認。列表中沒有前綴的 id 緊接在另一個事件 id 後、中間只有標點（`、`、`，`、`／`、`;`）時，沿用前一個的主題：「S1-T242、T243」的 T243 是 S1 的。
+
+### 給 S3 的建議
 
 - 有自己的論點時，在 `data/README.md` 把 issue 關鍵字分組（例如 S2 的「戰爭類型／影響面向／貫穿性」），網站就能用 `issues` 視圖呈現。
 - 統計資料照 S2 的做法：小型摘要 CSV ＋ `data/sources-stats.md`（來源、版本、授權、引用格式）。
-- 子資料夾（例如 S4 的 `modules/`）不需設定就會出現在「文件」；要獨立分頁時告訴 SZ。
+- 子資料夾不需設定就會出現在「文件」；要獨立分頁時告訴 SZ。
+- 讀物若有自己的分類標籤，用固定前綴（例如 S4 的 `hist:`）或固定格式（`M01`），網站就能做成篩選。
 
 ## 新增主題
 

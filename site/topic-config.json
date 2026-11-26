@@ -3,6 +3,35 @@
   "S1": {
     "thesis": { "view": "regions", "label": "區域比較", "focusRegion": "North America" }
   },
+  "S4": {
+    "thesis": {
+      "view": "issues",
+      "label": "三條線索",
+      "claim": "S4 的三條貫穿線索（overview.md 第三節）：人口—環境—發展的組合如何重組、知識工具（模型、指標、目標）如何演變，以及南方如何回應全球框架。前兩條以 timeline 的 issue 詞彙分組呈現，第三條以區域 × 分期呈現。",
+      "note": "issue 詞彙的分組由 SZ 依 overview.md 第三節擬定（S4 的 data/README.md 只列 22 個詞彙，沒有分組），待使用者確認。",
+      "compare": [],
+      "groupTrend": true,
+      "regionHeat": true
+    },
+    "issueGroups": [
+      { "key": "env", "label": "人口—資源—環境",
+        "keywords": ["population", "resources", "environment", "conservation", "climate", "biodiversity", "energy", "water", "food"] },
+      { "key": "social", "label": "發展與社會",
+        "keywords": ["development", "poverty", "health", "gender", "rights", "education", "urban"] },
+      { "key": "knowledge", "label": "知識工具",
+        "keywords": ["indicators", "science", "innovation"] },
+      { "key": "finance", "label": "財務與南北",
+        "keywords": ["finance", "debt", "trade"] }
+    ],
+    "subdirs": { "modules": { "label": "專題單元", "tab": true } },
+    "timelineLanes": "type",
+    "readingFacets": [
+      { "label": "專題單元", "pattern": "^M\\d{2}$", "namesFrom": "modules" },
+      { "label": "學術傳統", "pattern": "^hist:",
+        "names": { "hist:devstudies": "發展研究", "hist:postdev": "後發展理論", "hist:envhist": "環境史",
+          "hist:govstudies": "全球治理研究", "hist:indicators": "知識與指標的政治", "hist:population": "人口史" } }
+    ]
+  },
   "S2": {
     "thesis": {
       "view": "issues",

@@ -93,25 +93,54 @@ export function sourceHtml(s: string): string {
   return `<a href="${esc(m[0])}" target="_blank" rel="noopener">${esc(host)}</a>${rest ? ` <span class="${rest.includes('待查證') ? 'pending-text' : 'muted'}">${esc(rest)}</span>` : ''}`;
 }
 
-/** 把文字中的 T###、S1-T###、S1-### 轉成可點擊的引用 */
-/** 文字中的 id：「S1-T092」或「T092」（事件）、「S1-012」（讀物）、「S4-D001」（一手文件） */
-export const ID_RE = String.raw`(?<![\w-])(?:(S\d+)-)?T(\d{3,})\b|\b(S\d+-\d{3,})\b|\b(S\d+-D\d{3,})\b`;
+/** 文字中的 id：「S1-T092」或「T092」（事件）、「S1-012」（讀物）、「S4-D001」（一手文件）。
+ *  主題編號限 1–2 位數，避免把 ISSN（如 S0016-3287）當成讀物 id。 */
+const ID_RE = String.raw`(?<![\w-])(?:(S\d{1,2})-)?T(\d{3,})\b|(?<![\w-])(S\d{1,2}-\d{3,})\b|(?<![\w-])(S\d{1,2}-D\d{3,})\b`;
+/** 列表中前一個事件 id 與這一個之間只有標點時，沒有前綴的 id 沿用前一個的主題（「S1-T242、T243」的 T243 是 S1 的） */
+const LIST_GAP = /^[\s、，,／/;；]*$/;
+
+export interface IdHit { start: number; end: number; text: string; kind: 'event' | 'reading' | 'document'; id: string; code: string }
+
+export function scanIds(text: string, code: string): IdHit[] {
+  const hits: IdHit[] = [];
+  let prev: IdHit | null = null;
+  for (const m of text.matchAll(new RegExp(ID_RE, 'g'))) {
+    const start = m.index!; const end = start + m[0].length;
+    let hit: IdHit;
+    if (m[2]) {
+      const c = m[1] ?? (prev?.kind === 'event' && LIST_GAP.test(text.slice(prev.end, start)) ? prev.code : code);
+      hit = { start, end, text: m[0], kind: 'event', id: `${c}-T${m[2]}`, code: c };
+    } else if (m[3]) hit = { start, end, text: m[0], kind: 'reading', id: m[3], code: m[3].split('-')[0] };
+    else hit = { start, end, text: m[0], kind: 'document', id: m[4], code: m[4].split('-')[0] };
+    hits.push(hit); prev = hit;
+  }
+  return hits;
+}
+
 /** 事件在其所屬主題的網址（打開時間軸與地圖並顯示詳情） */
 export const eventHref = (id: string) => `#/t/${id.split('-')[0]}/explore?event=${encodeURIComponent(id)}`;
 
+/** id 的連結：本主題只連到存在的 id；其他主題的 id 直接連過去（是否存在由 build 的資料品質報告檢查）。不連結時回傳 null */
+export function idLink(h: IdHit, t: Topic): { href: string; cls: string; event?: string } | null {
+  const own = h.code === t.code;
+  if (h.kind === 'event') {
+    if (!own) return { href: eventHref(h.id), cls: 'ref-event ext' };
+    return t.events.some((e) => e.id === h.id) ? { href: '#', cls: 'ref-event', event: h.id } : null;
+  }
+  const tab = h.kind === 'reading' ? 'readings' : 'documents';
+  const list: { id: string }[] = h.kind === 'reading' ? t.readings : t.documents;
+  if (own && !list.some((x) => x.id === h.id)) return null;
+  return { href: `#/t/${h.code}/${tab}?id=${h.id}`, cls: own ? 'ref-reading' : 'ref-reading ext' };
+}
+
 export function linkifyIds(text: string, t: Topic): string {
-  const ev = new Set(t.events.map((e) => e.id));
-  const rd = new Set(t.readings.map((r) => r.id));
-  const dc = new Set(t.documents.map((d) => d.id));
-  return text.replace(new RegExp(ID_RE, 'g'), (m, code, num, rid, did) => {
-    if (num) {
-      const id = `${code ?? t.code}-T${num}`;
-      if (code && code !== t.code) return `<a href="${eventHref(id)}" class="ref-event ext">${m}</a>`;
-      return ev.has(id) ? `<a href="#" class="ref-event" data-event="${id}">${m}</a>` : m;
-    }
-    if (did) return dc.has(did) ? `<a href="#/t/${t.code}/documents?id=${did}" class="ref-reading">${m}</a>` : m;
-    return rd.has(rid) ? `<a href="#/t/${t.code}/readings?id=${rid}" class="ref-reading">${m}</a>` : m;
-  });
+  let out = ''; let last = 0;
+  for (const h of scanIds(text, t.code)) {
+    const l = idLink(h, t);
+    out += text.slice(last, h.start) + (l ? `<a href="${l.href}" class="${l.cls}"${l.event ? ` data-event="${l.event}"` : ''}>${h.text}</a>` : h.text);
+    last = h.end;
+  }
+  return out + text.slice(last);
 }
 
 /** 在容器內處理 .ref-event 點擊 → 開啟事件詳情 */

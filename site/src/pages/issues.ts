@@ -35,16 +35,23 @@ export function renderIssues(root: HTMLElement, t: Topic) {
   }
 
   root.innerHTML = `
-    ${t.config.thesis.claim ? `<div class="card claim"><p>${esc(t.config.thesis.claim)}</p></div>` : ''}
-    <div class="stat-row">${tiles.join('')}</div>
+    ${t.config.thesis.claim ? `<div class="card claim"><p>${esc(t.config.thesis.claim)}</p>${t.config.thesis.note ? `<p class="muted small claim-note">⚠ ${esc(t.config.thesis.note)}<br>目前分組：${groups.map((g) => `<b>${esc(g.label)}</b>（${esc(g.keywords.join('、'))}）`).join('；')}</p>` : ''}</div>` : ''}
+    ${tiles.length ? `<div class="stat-row">${tiles.join('')}</div>` : ''}
     <div class="card"><h3>關鍵字出現次數</h3>
-      <p class="muted small">每個事件可以有多個 issue 關鍵字，這裡計算每個關鍵字出現在幾筆事件（共 ${ev.length} 筆）。顏色代表關鍵字群組，群組依 <code>site/topic-config.json</code> 的設定（取自主題 <code>data/README.md</code> 的分類）。</p>
+      <p class="muted small">每個事件可以有多個 issue 關鍵字，這裡計算每個關鍵字出現在幾筆事件（共 ${ev.length} 筆）。顏色代表關鍵字群組，群組依 <code>site/topic-config.json</code> 的設定${t.config.thesis.note ? '（見頁首說明）' : '（取自主題 <code>data/README.md</code> 的分類）'}。</p>
       <div class="legend">${groups.map((g, i) => `<span class="legend-item"><i style="background:${slotVar(i)}"></i>${esc(g.label)}</span>`).join('')}</div>
       <div id="kwbars"></div></div>
+    ${t.config.thesis.groupTrend ? `<div class="card"><h3>各群組在各期的比重</h3>
+      <p class="muted small">每一期開始的事件中，至少標了該群組一個關鍵字的比例（一筆事件可同時屬於多個群組，所以各線相加會超過 100%）。滑過看筆數。</p>
+      <div class="legend">${groups.map((g, i) => `<span class="legend-item"><i style="background:${slotVar(i)}"></i>${esc(g.label)}</span>`).join('')}</div>
+      <div id="trend" class="chart-svg"></div></div>` : ''}
     <div class="card"><div class="card-head"><h3>關鍵字 × ${t.periods.some((p) => p.start !== null || p.end !== null) ? '歷史分期' : '年代'}</h3>
       <div class="seg" id="mode"><button class="on" data-v="n">件數</button><button data-v="pct">占該欄事件比例</button></div></div>
       <p class="muted small">格子＝該時期開始的事件中，標了這個關鍵字的筆數。各時期事件數不同，切換成「比例」可以比較各期的重心。</p><div id="heatP"></div></div>
-    <div class="card"><h3>關鍵字 × 區域</h3><p class="muted small">區域為本專案 timeline 的固定分類。切換方式與上圖同步。</p><div id="heatR"></div></div>`;
+    <div class="card"><h3>關鍵字 × 區域</h3><p class="muted small">區域為本專案 timeline 的固定分類。切換方式與上圖同步。</p><div id="heatR"></div></div>
+    ${t.config.thesis.regionHeat ? `<div class="card"><h3>南方的回應：區域 × 分期</h3>
+      <p class="muted small">「南方的回應」不是 issue 詞彙，這裡改看事件發生在哪裡：格子＝該區域在該期開始的事件數。選這張熱圖而不是只算「非 Global 事件的比例」，是因為非 Global 也包括歐洲、北美，單一比例分不出南方與北方；熱圖保留各區域，可以看出拉美、非洲、南亞、東南亞、中東北非各在哪一期出現。最後兩列是 Global（聯合國會議、公約與全球報告）與非 Global 事件占該期的比例。</p>
+      <div id="heatRP"></div></div>` : ''}`;
 
   // ---- 1. 長條 ----
   {
@@ -110,4 +117,50 @@ export function renderIssues(root: HTMLElement, t: Topic) {
     seg.querySelectorAll('button').forEach((x) => x.classList.toggle('on', x === b));
     draw(b.dataset.v!);
   };
+
+  // ---- 群組在各期的比重（折線，x 為分期）----
+  const trendHost = root.querySelector('#trend') as HTMLElement | null;
+  if (trendHost) {
+    const colEv = periodCols.map((c) => ev.filter(c.test));
+    const W = Math.max(trendHost.clientWidth, 300); const H = 240; const M = { l: 44, r: 16, t: 10, b: 36 };
+    const x = d3.scalePoint<number>().domain(periodCols.map((_c, j) => j)).range([M.l, W - M.r]).padding(0.3);
+    const share = (g: IssueGroup, j: number) => (colEv[j].length ? colEv[j].filter((e) => has(e, g)).length / colEv[j].length : 0);
+    const y = d3.scaleLinear().domain([0, 1]).range([H - M.b, M.t]);
+    const svg = d3.select(trendHost).append('svg').attr('width', W).attr('height', H).attr('role', 'img').attr('aria-label', '各群組在各期的比重');
+    svg.append('g').attr('class', 'axis grid').attr('transform', `translate(${M.l},0)`).call(d3.axisLeft(y).ticks(5).tickSize(-(W - M.l - M.r)).tickFormat(d3.format('.0%')));
+    svg.append('g').attr('class', 'axis').attr('transform', `translate(0,${H - M.b})`)
+      .call(d3.axisBottom(x).tickFormat((j) => periodCols[+j].label));
+    svg.append('g').selectAll('text.sub').data(periodCols).join('text').attr('class', 'axis-note').attr('text-anchor', 'middle')
+      .attr('x', (_c, j) => x(j)!).attr('y', H - 6).text((c) => c.sub);
+    groups.forEach((g, gi) => {
+      const pts = periodCols.map((_c, j) => [x(j)!, y(share(g, j))] as [number, number]);
+      svg.append('path').attr('d', d3.line()(pts)).style('stroke', slotVar(gi)).attr('class', 'series-line');
+      periodCols.forEach((c, j) => {
+        const n = colEv[j].filter((e) => has(e, g)).length;
+        svg.append('circle').attr('cx', pts[j][0]).attr('cy', pts[j][1]).attr('r', 4.5).style('fill', slotVar(gi)).attr('class', 'hover-dot pointable')
+          .on('mousemove', (e) => showTip(e, `<div class="tip-title">${esc(g.label)} · ${esc(c.label)}（${esc(c.sub)}）</div>${n} / ${colEv[j].length} 筆（${Math.round(share(g, j) * 100)}%）`))
+          .on('mouseleave', hideTip);
+      });
+    });
+  }
+
+  // ---- 南方的回應：區域 × 分期 ----
+  const rpHost = root.querySelector('#heatRP') as HTMLElement | null;
+  if (rpHost) {
+    const regs = LANES.filter((r) => r !== 'Global' && ev.some((e) => e.region === r));
+    const colEv = periodCols.map((c) => ev.filter(c.test));
+    const cell = (r: string, j: number) => colEv[j].filter((e) => e.region === r).length;
+    const max = Math.max(1, ...regs.flatMap((r) => periodCols.map((_c, j) => cell(r, j))));
+    const color = d3.scaleSequential(d3.interpolateRgb('#cde2fb', '#104281')).domain([0, max]);
+    const td = (v: number, title: string) => {
+      const dark = v && d3.hsl(color(v)).l < 0.55;
+      return `<td style="background:${v ? color(v) : 'transparent'};color:${dark ? '#fff' : '#0b0b0b'}" title="${esc(title)}">${v || ''}</td>`;
+    };
+    const pct = (n: number, d: number) => (d ? `${Math.round((n / d) * 100)}%` : '');
+    rpHost.innerHTML = `<div class="table-wrap"><table class="heat"><thead><tr><th></th>${periodCols.map((c) => `<th title="${esc(c.title)}">${esc(c.label)}<div class="muted small">${esc(c.sub)}</div></th>`).join('')}<th>合計</th></tr></thead><tbody>${
+      regs.map((r) => `<tr><th>${esc(regionZh(r))}</th>${periodCols.map((c, j) => td(cell(r, j), `${regionZh(r)} · ${c.title}：${cell(r, j)} 筆`)).join('')}<td class="total">${ev.filter((e) => e.region === r).length}</td></tr>`).join('')
+    }<tr class="sum-row"><th>全球／跨國（Global）</th>${colEv.map((x) => `<td>${x.filter((e) => e.region === 'Global').length}</td>`).join('')}<td class="total">${ev.filter((e) => e.region === 'Global').length}</td></tr>
+    <tr class="sum-row"><th>非 Global 占該期</th>${colEv.map((x) => `<td>${pct(x.filter((e) => e.region !== 'Global').length, x.length)}</td>`).join('')}<td class="total">${pct(ev.filter((e) => e.region !== 'Global').length, ev.length)}</td></tr>
+    </tbody></table></div>`;
+  }
 }

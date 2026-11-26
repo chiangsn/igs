@@ -12,3 +12,6 @@ desktop.ini
 .vscode/
 .idea/
 .claude/launch.json
+
+# 主題 session 查資料時存下的網頁（有版權，不進 repo）
+topics/**/*.html

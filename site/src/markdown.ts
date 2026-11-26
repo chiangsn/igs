@@ -2,7 +2,7 @@
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 import type { Topic } from './data';
-import { bindEventRefs, esc, eventHref, ID_RE } from './ui';
+import { bindEventRefs, esc, idLink, scanIds } from './ui';
 
 marked.setOptions({ gfm: true });
 
@@ -20,10 +20,6 @@ export function renderMarkdown(container: HTMLElement, md: string, t?: Topic) {
 }
 
 function decorateText(root: HTMLElement, t?: Topic) {
-  const ev = new Set(t?.events.map((e) => e.id) ?? []);
-  const rd = new Set(t?.readings.map((r) => r.id) ?? []);
-  const dc = new Set(t?.documents.map((d) => d.id) ?? []);
-  const re = t ? new RegExp(`${ID_RE}|待查證`, 'g') : /待查證/g;
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
     acceptNode: (n) => (n.parentElement?.closest('a, pre') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT),
   });
@@ -31,29 +27,29 @@ function decorateText(root: HTMLElement, t?: Topic) {
   while (walker.nextNode()) nodes.push(walker.currentNode as Text);
   for (const node of nodes) {
     const text = node.data;
-    re.lastIndex = 0;
-    if (!re.test(text)) continue;
-    re.lastIndex = 0;
+    // id 與「待查證」依位置合併處理
+    const marks: { start: number; end: number; make: () => Node }[] = t
+      ? scanIds(text, t.code).map((h) => ({
+        start: h.start, end: h.end, make: () => {
+          const l = idLink(h, t);
+          if (!l) return document.createTextNode(h.text);
+          const a = document.createElement('a'); a.href = l.href; a.className = l.cls; a.textContent = h.text;
+          if (l.event) a.dataset.event = l.event;
+          return a;
+        },
+      }))
+      : [];
+    for (const m of text.matchAll(/待查證/g)) {
+      marks.push({ start: m.index!, end: m.index! + 3, make: () => { const s = document.createElement('span'); s.className = 'pending-text'; s.textContent = '待查證'; return s; } });
+    }
+    if (!marks.length) continue;
+    marks.sort((a, b) => a.start - b.start);
     const frag = document.createDocumentFragment();
-    let last = 0; let m: RegExpExecArray | null;
-    while ((m = re.exec(text))) {
-      frag.append(text.slice(last, m.index));
-      let out: Node = document.createTextNode(m[0]);
-      if (m[0] === '待查證') {
-        const s = document.createElement('span'); s.className = 'pending-text'; s.textContent = m[0]; out = s;
-      } else if (t && m[2] && m[1] && m[1] !== t.code) {
-        // 其他主題的事件：連到該主題（id 是否存在由 build 的資料品質報告檢查）
-        const a = document.createElement('a'); a.href = eventHref(`${m[1]}-T${m[2]}`); a.className = 'ref-event ext'; a.textContent = m[0]; out = a;
-      } else if (t && m[2]) {
-        const id = `${t.code}-T${m[2]}`;
-        if (ev.has(id)) { const a = document.createElement('a'); a.href = '#'; a.dataset.event = id; a.className = 'ref-event'; a.textContent = m[0]; out = a; }
-      } else if (t && m[3] && rd.has(m[3])) {
-        const a = document.createElement('a'); a.href = `#/t/${t.code}/readings?id=${m[3]}`; a.className = 'ref-reading'; a.textContent = m[0]; out = a;
-      } else if (t && m[4] && dc.has(m[4])) {
-        const a = document.createElement('a'); a.href = `#/t/${t.code}/documents?id=${m[4]}`; a.className = 'ref-reading'; a.textContent = m[0]; out = a;
-      }
-      frag.append(out);
-      last = m.index + m[0].length;
+    let last = 0;
+    for (const m of marks) {
+      if (m.start < last) continue;
+      frag.append(text.slice(last, m.start), m.make());
+      last = m.end;
     }
     frag.append(text.slice(last));
     node.replaceWith(frag);

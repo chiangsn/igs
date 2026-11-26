@@ -2,7 +2,8 @@
 import type { Topic } from '../data';
 import { renderChart } from '../charts';
 import { bindToc, renderMarkdown, tocHtml } from '../markdown';
-import { esc, showEvent } from '../ui';
+import { esc, eventHref, scanIds, showEvent, yearText } from '../ui';
+import { regionZh } from '../data';
 import { renderConcepts } from './concepts';
 import { renderDocuments } from './documents';
 import { renderExplore } from './explore';
@@ -43,7 +44,7 @@ export function renderTopic(root: HTMLElement, t: Topic, tab: string, rest: stri
     if (e) requestAnimationFrame(() => showEvent(e, t));
   }
   const sub = t.config.subdirs.find((d) => d.tab && d.dir === tab);
-  if (sub) { renderDocs(host, t, rest[0], [[sub.dir, sub.label]], `#/t/${t.code}/${sub.dir}`); return undefined; }
+  if (sub) { renderDocs(host, t, rest[0], [[sub.dir, sub.label]], `#/t/${t.code}/${sub.dir}`, true); return undefined; }
   switch (tab) {
     case 'explore': return renderExplore(host, t);
     case 'network': return renderNetwork(host, t);
@@ -73,6 +74,7 @@ function renderOverview(root: HTMLElement, t: Topic) {
       <a class="stat" href="#/t/${t.code}/readings"><div class="stat-num">${s.readings}</div><div class="stat-label">讀物</div></a>
       <a class="stat" href="#/t/${t.code}/concepts"><div class="stat-num">${s.concepts}</div><div class="stat-label">概念</div></a>
       ${s.documents ? `<a class="stat" href="#/t/${t.code}/documents"><div class="stat-num">${s.documents}</div><div class="stat-label">一手文件</div></a>` : ''}
+      ${s.subdirTabs.map((d) => `<a class="stat" href="#/t/${t.code}/${esc(d.dir)}"><div class="stat-num">${d.n}</div><div class="stat-label">${esc(d.label)}</div></a>`).join('')}
       <a class="stat" href="#/t/${t.code}/${thesisKey(t)}"><div class="stat-num">${Object.values(s.regionCounts).filter((n) => n).length}</div><div class="stat-label">區域有事件</div></a>
       <div class="stat"><div class="stat-num pending-text">⚠ ${s.pending.events + s.pending.readings + s.pending.concepts + s.pending.documents}</div><div class="stat-label">待查證（事件 ${s.pending.events}／讀物 ${s.pending.readings}／概念 ${s.pending.concepts}${s.documents ? `／一手文件 ${s.pending.documents}` : ''}）</div></div>
     </div>
@@ -88,7 +90,7 @@ function renderOverview(root: HTMLElement, t: Topic) {
   }
 }
 
-function renderDocs(root: HTMLElement, t: Topic, slug: string | undefined, groups: [string, string][], base: string) {
+function renderDocs(root: HTMLElement, t: Topic, slug: string | undefined, groups: [string, string][], base: string, refs = false) {
   const inGroups = t.docs.filter((d) => groups.some(([g]) => g === d.group));
   if (!inGroups.length) { root.innerHTML = '<p class="empty">此主題沒有 Markdown 文件。</p>'; return; }
   const doc = inGroups.find((d) => d.slug === slug) ?? inGroups[0];
@@ -107,7 +109,27 @@ function renderDocs(root: HTMLElement, t: Topic, slug: string | undefined, group
     </div>`;
   const art = root.querySelector('#md') as HTMLElement;
   renderMarkdown(art, doc.md, t);
-  art.insertAdjacentHTML('afterbegin', `<div class="muted small doc-file">topics/${esc(t.folder)}/${esc(doc.file)}</div>`);
+  art.insertAdjacentHTML('afterbegin', `<div class="muted small doc-file">topics/${esc(t.folder)}/${esc(doc.file)}</div>${refs ? refsPanel(doc.md, t) : ''}`);
   (root.querySelector('#toc') as HTMLElement).innerHTML = tocHtml(art);
   bindToc(root);
+}
+
+/** 子資料夾文件（專題單元、影響面向報告）開頭的「本篇引用」：依出現順序列出不重複的 id，附計數 */
+function refsPanel(md: string, t: Topic): string {
+  const seen = new Set<string>();
+  const hits = scanIds(md, t.code).filter((h) => !seen.has(h.id) && seen.add(h.id));
+  const ev = hits.filter((h) => h.kind === 'event' && h.code === t.code).map((h) => t.events.find((e) => e.id === h.id)).filter((e) => e !== undefined)
+    .sort((a, b) => (a.year_start ?? 0) - (b.year_start ?? 0));
+  const ext = hits.filter((h) => h.kind === 'event' && h.code !== t.code).map((h) => h.id);
+  const dc = hits.filter((h) => h.kind === 'document' && h.code === t.code).map((h) => t.documents.find((d) => d.id === h.id)).filter((d) => d !== undefined)
+    .sort((a, b) => (a.year ?? 0) - (b.year ?? 0));
+  const rd = hits.filter((h) => h.kind === 'reading' && h.code === t.code).map((h) => t.readings.find((r) => r.id === h.id)).filter((r) => r !== undefined);
+  if (!ev.length && !dc.length && !rd.length && !ext.length) return '';
+  const block = (label: string, n: number, items: string) => (n ? `<details><summary><b>${n}</b> ${label}</summary><ul class="refs-list">${items}</ul></details>` : '');
+  return `<div class="refs-panel"><div class="refs-title">本篇引用</div><div class="refs-grid">
+    ${block('個事件', ev.length, ev.map((e) => `<li><span class="mono muted small">${esc(e.id)}</span> <a href="#" data-event="${e.id}">${esc(e.name)}</a> <span class="muted small">${yearText(e)} · ${esc(regionZh(e.region))}</span></li>`).join(''))}
+    ${block('份一手文件', dc.length, dc.map((d) => `<li><span class="mono muted small">${esc(d.id)}</span> <a href="#/t/${t.code}/documents?id=${d.id}">${esc(d.title)}</a> <span class="muted small">${d.year ?? ''}</span></li>`).join(''))}
+    ${block('筆讀物', rd.length, rd.map((r) => `<li><span class="mono muted small">${esc(r.id)}</span> <a href="#/t/${t.code}/readings?id=${r.id}">${esc(r.title)}</a> <span class="muted small">${r.year ?? ''}</span></li>`).join(''))}
+    ${block('個其他主題事件', ext.length, ext.map((id) => { const x = t.external[id]; return `<li><span class="topic-chip">${esc(id.split('-')[0])}</span> <a href="${eventHref(id)}">${esc(x?.name ?? id)}</a></li>`; }).join(''))}
+  </div></div>`;
 }

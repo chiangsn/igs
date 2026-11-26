@@ -2,7 +2,7 @@
 import * as d3 from 'd3';
 import type { Concept, Topic } from '../data';
 import { regionZh } from '../data';
-import { esc, hideTip, linkifyIds, pendingBadge, showTip, sourceHtml } from '../ui';
+import { bindEventRefs, esc, hideTip, linkifyIds, pendingBadge, showTip, sourceHtml, yearText } from '../ui';
 
 const LANES = ['East Asia', 'Southeast Asia', 'South Asia', 'Middle East & North Africa', 'Sub-Saharan Africa', 'Europe', 'North America', 'Latin America & Caribbean', 'Oceania & Pacific', 'Arctic', 'Global'];
 
@@ -24,12 +24,23 @@ export function renderConcepts(root: HTMLElement, t: Topic) {
     </div>`;
 
   const detail = root.querySelector('#cdetail') as HTMLElement;
+  bindEventRefs(detail, t);
   const showConcept = (c: Concept) => {
     detail.innerHTML = `
       <div class="muted small">${c.year ?? '年份不明'} · ${esc(c.origin_raw)}</div>
       <h2>${esc(c.name)} ${c.name_zh ? `<span class="muted">${esc(c.name_zh)}</span>` : ''} ${pendingBadge(c.pending)}</h2>
       ${c.authors.length ? `<h4>主要提出者／推動者</h4><p>${esc(c.authors.join('、'))}</p>` : ''}
       <h4>定義</h4><p>${linkifyIds(esc(c.definition).replace(/待查證/g, '<span class="pending-text">待查證</span>'), t)}</p>
+      ${c.modules.length ? `<h4>所屬單元</h4><p>${c.modules.map((m) => {
+        const d = t.docs.find((x) => x.group !== 'main' && x.group !== 'work' && x.file.split('/').pop()!.startsWith(m));
+        if (!d) return esc(m);
+        const tab = t.config.subdirs.some((x) => x.tab && x.dir === d.group) ? d.group : 'docs';
+        return `<a href="#/t/${t.code}/${esc(tab)}/${esc(d.slug)}">${esc(d.title)}</a>`;
+      }).join('<br>')}</p>` : ''}
+      ${c.timeline_ids.length ? `<h4>相關事件（${c.timeline_ids.length}）</h4><ul class="linked">${c.timeline_ids.map((id) => {
+        const e = t.events.find((x) => x.id === id);
+        return e ? `<li><a href="#" data-event="${e.id}">${esc(e.name)}</a> <span class="muted small">${yearText(e)}</span></li>` : `<li class="muted">${esc(id)}</li>`;
+      }).join('')}</ul>` : ''}
       <h4>來源</h4><ul class="sources">${c.sources.map((s) => `<li>${/^S\d+-\d+/.test(s) ? linkifyIds(esc(s), t) : sourceHtml(s)}</li>`).join('')}</ul>`;
     detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   };

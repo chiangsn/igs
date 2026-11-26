@@ -23,7 +23,9 @@ export interface Reading {
 
 export interface Concept {
   id: string; concept: string; name: string; name_zh: string; origin_raw: string; regions: string[];
-  year: number | null; authors: string[]; definition: string; sources: string[]; pending: boolean;
+  year: number | null; authors: string[]; definition: string; sources: string[];
+  /** 選用欄位（S4）：所屬單元、相關事件 */
+  modules: string[]; timeline_ids: string[]; pending: boolean;
 }
 
 export interface PrimaryDoc {
@@ -37,11 +39,20 @@ export interface Doc { slug: string; file: string; group: string; title: string;
 export interface IssueGroup { key: string; label: string; filter: boolean; keywords: string[] }
 
 export interface TopicConfig {
-  thesis: { view: 'regions' | 'issues'; label: string; focusRegion: string | null; claim: string; compare: string[] };
+  thesis: {
+    view: 'regions' | 'issues'; label: string; focusRegion: string | null; claim: string; note: string; compare: string[];
+    /** issues 視圖：加「群組 × 分期」與「區域 × 分期」 */
+    groupTrend: boolean; regionHeat: boolean;
+  };
   issueGroups: IssueGroup[];
   subdirs: { dir: string; label: string; tab: boolean }[];
   overviewStats: string[];
+  timelineLanes: 'region' | 'type' | 'group';
+  readingFacets: ReadingFacet[];
 }
+
+/** 讀物標籤篩選：pattern 挑出 tags，values 為實際出現的值，names 為顯示名稱 */
+export interface ReadingFacet { label: string; pattern: string; values: string[]; names: Record<string, string> }
 
 export interface ChartSeries { col: string; label: string; low?: string; high?: string }
 export interface ChartExtra { col: string; label: string; suffix?: string }
@@ -56,6 +67,7 @@ export interface StatChart {
 export interface TopicStats {
   events: number; readings: number; concepts: number; docs: number; documents: number; regionCounts: Record<string, number>;
   pending: { events: number; readings: number; concepts: number; documents: number };
+  subdirTabs: { dir: string; label: string; n: number }[];
   yearMin: number | null; yearMax: number | null; warnings: number;
 }
 

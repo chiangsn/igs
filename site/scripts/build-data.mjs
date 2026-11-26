@@ -39,6 +39,8 @@ const SCHEMAS = {
     file: 'data/concepts.csv',
     columns: ['concept', 'origin_region', 'year', 'key_authors', 'definition_zh', 'sources'],
     required: ['concept', 'origin_region', 'year'],
+    // 主題自訂、網站會使用的選用欄位（S4）：沒有不警告，有就讀
+    optional: ['module', 'timeline_ids'],
   },
   // 一手文件（S4 交接檔規定的欄位；其他主題若有同名檔也適用）
   documents: {
@@ -111,7 +113,7 @@ function readCsv(code, dir, kind) {
     return null;
   }
   if (missing.length) warn(code, schema.file, `檔頭缺少欄位：${missing.join(', ')}`);
-  const extra = header.filter((h) => !schema.columns.includes(h));
+  const extra = header.filter((h) => !schema.columns.includes(h) && !(schema.optional ?? []).includes(h));
   if (extra.length) warn(code, schema.file, `檔頭有規格外的欄位：${extra.join(', ')}`);
   const records = [];
   rows.slice(1).forEach((r, i) => {
@@ -239,7 +241,7 @@ function loadConfig() {
 
 function resolveConfig(code, raw, subdirs, events) {
   const c = raw ?? {};
-  const thesis = { view: 'regions', label: '區域比較', focusRegion: null, claim: '', compare: [], ...(c.thesis ?? {}) };
+  const thesis = { view: 'regions', label: '區域比較', focusRegion: null, claim: '', note: '', compare: [], groupTrend: false, regionHeat: false, ...(c.thesis ?? {}) };
   if (!['regions', 'issues'].includes(thesis.view)) {
     warn(code, 'site/topic-config.json', `thesis.view「${thesis.view}」不是 regions 或 issues，改用 regions`);
     thesis.view = 'regions';
@@ -261,7 +263,33 @@ function resolveConfig(code, raw, subdirs, events) {
   const subCfg = c.subdirs ?? {};
   const groups = subdirs.map((d) => ({ dir: d, label: subCfg[d]?.label ?? SUBDIR_LABELS[d] ?? d, tab: !!subCfg[d]?.tab }));
   for (const d of Object.keys(subCfg)) if (!subdirs.includes(d)) warn(code, 'site/topic-config.json', `subdirs 設定了 \`${d}/\`，但主題資料夾中沒有這個子資料夾或其中沒有 .md`);
-  return { thesis, issueGroups, subdirs: groups, overviewStats: c.overviewStats ?? [] };
+  const lanes = c.timelineLanes ?? 'region';
+  if (!['region', 'type', 'group'].includes(lanes)) warn(code, 'site/topic-config.json', `timelineLanes「${lanes}」不是 region、type 或 group`);
+  return { thesis, issueGroups, subdirs: groups, overviewStats: c.overviewStats ?? [], timelineLanes: lanes, readingFacets: c.readingFacets ?? [] };
+}
+
+// ---------- 讀物標籤篩選（readingFacets）----------
+// 每個 facet 用正規式挑出 tags 中符合的標籤；names 給中文名稱，namesFrom 從子資料夾檔名（例如 modules/M05-….md）取標題
+function resolveFacets(code, facets, readings, docs) {
+  return facets.map((f) => {
+    let re;
+    try { re = new RegExp(f.pattern); } catch (e) {
+      warn(code, 'site/topic-config.json', `readingFacets「${f.label}」的 pattern 不是有效的正規式：${f.pattern}`); return null;
+    }
+    const counts = new Map();
+    for (const r of readings) for (const tag of r.tags) if (re.test(tag)) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+    const names = { ...(f.names ?? {}) };
+    if (f.namesFrom) {
+      for (const tag of counts.keys()) {
+        const d = docs.find((x) => x.group === f.namesFrom && x.file.split('/').pop().startsWith(tag));
+        if (d) names[tag] = d.title;
+        else warn(code, 'readings.csv', `tag「${tag}」在 \`${f.namesFrom}/\` 中找不到對應檔案`);
+      }
+    }
+    const values = [...counts.keys()].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+    note(code, `讀物標籤篩選「${f.label}」：${values.length} 個值，${readings.filter((r) => r.tags.some((t) => re.test(t))).length} / ${readings.length} 筆讀物至少有一個（${values.map((v) => `${v} ${counts.get(v)}`).join('、')}）。`);
+    return { label: f.label, pattern: f.pattern, values, names };
+  }).filter(Boolean);
 }
 
 // ---------- 統計 CSV（依設定只取需要的欄位）----------
@@ -356,9 +384,10 @@ function buildTopic(folder, registry, config) {
       name: m ? m[1] : r.concept, name_zh: m ? m[2] : '',
       origin_raw: r.origin_region, regions: regions.length ? regions : ['Global'], year: toInt(r.year),
       authors: splitList(r.key_authors), definition: r.definition_zh, sources: splitSources(r.sources),
-      pending: hasPending(r),
+      modules: splitList(r.module ?? ''), timeline_ids: splitList(r.timeline_ids ?? ''), pending: hasPending(r),
     };
   });
+  for (const c of concepts) for (const id of c.timeline_ids) if (!events.some((e) => e.id === id)) warn(code, `concepts.csv（${c.name}）`, `timeline_ids 指向不存在的事件：${id}`);
   const nonStd = concepts.filter((c) => c.origin_raw && !REGIONS.includes(c.origin_raw)).length;
   if (nonStd) note(code, `concepts.csv 有 ${nonStd} 筆 \`origin_region\` 不是單一固定分類（含多區域或括號補充），網站以字串中出現的固定分類歸類。CLAUDE.md 未規範此欄，僅供參考。`);
 
@@ -378,10 +407,18 @@ function buildTopic(folder, registry, config) {
     };
   });
   for (const d of new Set(dup(documents.map((e) => e.id)))) warn(code, 'documents.csv', `id 重複：${d}`);
+  if (documents.length) {
+    const tally = (vals) => [...vals.reduce((m, v) => m.set(v, (m.get(v) ?? 0) + 1), new Map())]
+      .sort((a, b) => b[1] - a[1] || String(a[0]).localeCompare(String(b[0]), undefined, { numeric: true })).map(([k, n]) => `${k || '（空白）'} ${n}`).join('、');
+    note(code, `documents.csv 的 \`doc_type\` 實際值（CLAUDE.md 未規範，網站照原值顯示）：${tally(documents.map((d) => d.doc_type))}。`);
+    const mods = documents.flatMap((d) => d.modules);
+    note(code, `documents.csv 的 \`module\` 實際值（一份文件可屬多個單元，共 ${mods.length} 次）：${tally(mods).replace(/、/g, '、')}；沒有標單元的文件 ${documents.filter((d) => !d.modules.length).length} 份。`);
+  }
 
   const { docs, subdirs } = readDocs(code, dir);
   const periods = parsePeriods(code, dir);
   const cfg = resolveConfig(code, config[code], subdirs, events);
+  cfg.readingFacets = resolveFacets(code, cfg.readingFacets, readings, docs);
   const stats = readStats(code, dir, config[code]?.stats);
   for (const id of cfg.overviewStats) if (!stats.some((s) => s.id === id)) warn(code, 'site/topic-config.json', `overviewStats 指向不存在的圖：${id}`);
 
@@ -418,19 +455,12 @@ function crossChecks(topics) {
       }
     }
     if (asym) note(t.code, `linked_ids 有 ${asym} 條只單向記錄；網絡圖一律合併為無向邊。`);
-    // 文件中的 T### / S1-### / S4-D### 引用
+    // 文件中的 T### / S1-T### / S1-### / S4-D### 引用
     const missing = new Map();
     for (const d of t.docs) {
-      // 「S1-T092」是其他主題的事件；沒有前綴的「T092」才算本主題
-      for (const m of d.md.matchAll(/(?<![\w-])(?:(S\d+)-)?T(\d{3,})\b/g)) {
-        const id = `${m[1] ?? t.code}-T${m[2]}`;
-        if (!eventIds.has(id)) missing.set(`${d.file}: ${id}`, true);
-      }
-      for (const m of d.md.matchAll(/\b(S\d+-\d{3,})\b/g)) {
-        if (!readingIds.has(m[1])) missing.set(`${d.file}: ${m[1]}`, true);
-      }
-      for (const m of d.md.matchAll(/\b(S\d+-D\d{3,})\b/g)) {
-        if (!documentIds.has(m[1])) missing.set(`${d.file}: ${m[1]}`, true);
+      for (const h of scanIds(d.md, t.code)) {
+        const known = h.kind === 'event' ? eventIds : h.kind === 'reading' ? readingIds : documentIds;
+        if (!known.has(h.id)) missing.set(`${d.file}: ${h.id}`, true);
       }
     }
     for (const k of missing.keys()) warn(t.code, k.split(':')[0], `文件引用了不存在的 id：${k.split(': ')[1]}`);
@@ -441,6 +471,26 @@ function crossChecks(topics) {
       }
     }
   }
+}
+
+// ---------- 文字中的 id（與 src/ui.ts 的 scanIds 規則相同）----------
+// 「S1-T092」是 S1 的事件；沒有前綴的「T092」是本主題的，但緊接在另一個事件 id 後、中間只有標點時
+// 沿用前一個的主題（「S1-T242、T243」的 T243 是 S1 的）。主題編號限 1–2 位數，避免把 ISSN 當成 id。
+const ID_RE = /(?<![\w-])(?:(S\d{1,2})-)?T(\d{3,})\b|(?<![\w-])(S\d{1,2}-\d{3,})\b|(?<![\w-])(S\d{1,2}-D\d{3,})\b/g;
+const LIST_GAP = /^[\s、，,／/;；]*$/;
+function scanIds(text, code) {
+  const hits = []; let prev = null;
+  for (const m of text.matchAll(ID_RE)) {
+    const start = m.index; const end = start + m[0].length;
+    let hit;
+    if (m[2]) {
+      const c = m[1] ?? (prev?.kind === 'event' && LIST_GAP.test(text.slice(prev.end, start)) ? prev.code : code);
+      hit = { start, end, kind: 'event', id: `${c}-T${m[2]}`, code: c };
+    } else if (m[3]) hit = { start, end, kind: 'reading', id: m[3], code: m[3].split('-')[0] };
+    else hit = { start, end, kind: 'document', id: m[4], code: m[4].split('-')[0] };
+    hits.push(hit); prev = hit;
+  }
+  return hits;
 }
 
 // ---------- 跨主題連結 ----------
@@ -481,6 +531,7 @@ function stats(t) {
   return {
     events: t.events.length, readings: t.readings.length, concepts: t.concepts.length, docs: t.docs.length,
     documents: t.documents.length, regionCounts,
+    subdirTabs: t.config.subdirs.filter((d) => d.tab).map((d) => ({ dir: d.dir, label: d.label, n: t.docs.filter((x) => x.group === d.dir).length })),
     pending: {
       events: t.events.filter((e) => e.pending).length,
       readings: t.readings.filter((r) => r.pending).length,

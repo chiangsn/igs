@@ -1,6 +1,6 @@
 # 資料品質報告
 
-> 由 `site/scripts/build-data.mjs` 於 build 時自動產生（2026-11-26 14:25 UTC）。請勿手動編輯；資料問題請轉告對應的主題 session 修正 `topics/` 下的檔案。
+> 由 `site/scripts/build-data.mjs` 於 build 時自動產生（2026-11-26 14:43 UTC）。請勿手動編輯；資料問題請轉告對應的主題 session 修正 `topics/` 下的檔案。
 
 ## 總覽
 
@@ -8,6 +8,7 @@
 |---|---|---|---|---|---|---|---|
 | S1 History of Global Environmental Justice | 312 | 107 | 36 | 0 | 20 | 24／7／8／0 | 0 |
 | S2 戰爭與其延伸影響 | 249 | 174 | 34 | 0 | 20 | 0／0／0／0 | 0 |
+| S4 永續發展的全球治理史 | 248 | 148 | 40 | 55 | 21 | 0／0／0／0 | 0 |
 
 ## S1：History of Global Environmental Justice
 
@@ -78,6 +79,27 @@
 - concepts.csv 有 2 筆 `origin_region` 不是單一固定分類（含多區域或括號補充），網站以字串中出現的固定分類歸類。CLAUDE.md 未規範此欄，僅供參考。
 - 歷史分期：名稱取自 `overview.md` 的「第 N 期」標題，年份邊界取自 `data/README.md` 的分期分布（6 期）。
 - linked_ids 有 36 條只單向記錄；網絡圖一律合併為無向邊。
+
+### 待查證項目
+
+- （無）
+
+## S4：永續發展的全球治理史
+
+資料夾：`topics/S4-sustainable-development-governance`
+
+### 警告（0）
+
+沒有發現格式問題。
+
+### 說明
+
+- concepts.csv 有 26 筆 `origin_region` 不是單一固定分類（含多區域或括號補充），網站以字串中出現的固定分類歸類。CLAUDE.md 未規範此欄，僅供參考。
+- documents.csv 的 `doc_type` 實際值（CLAUDE.md 未規範，網站照原值顯示）：declaration 12、report 12、programme 7、resolution 7、goal-framework 5、other 5、treaty 4、model 2、speech 1。
+- documents.csv 的 `module` 實際值（一份文件可屬多個單元，共 77 次）：M06 12、M09 8、M13 8、M14 7、M03 6、M07 6、M04 5、M10 5、M05 4、M12 4、M01 3、M02 3、M08 3、M11 3；沒有標單元的文件 0 份。
+- 歷史分期：名稱取自 `overview.md` 的「第 N 期」標題，年份邊界取自 `data/README.md` 的分期分布（7 期）。
+- 讀物標籤篩選「專題單元」：14 個值，148 / 148 筆讀物至少有一個（M01 12、M02 14、M03 26、M04 17、M05 16、M06 22、M07 10、M08 8、M09 13、M10 12、M11 10、M12 17、M13 23、M14 20）。
+- 讀物標籤篩選「學術傳統」：6 個值，55 / 148 筆讀物至少有一個（hist:devstudies 13、hist:envhist 8、hist:govstudies 9、hist:indicators 9、hist:population 9、hist:postdev 7）。
 
 ### 待查證項目
 

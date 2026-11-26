@@ -26,6 +26,7 @@ export function renderHome(root: HTMLElement, idx: SiteIndex) {
           <div><b>${s.readings}</b><span>讀物</span></div>
           <div><b>${s.concepts}</b><span>概念</span></div>
           ${s.documents ? `<div><b>${s.documents}</b><span>一手文件</span></div>` : ''}
+          ${(s.subdirTabs ?? []).map((d) => `<div><b>${d.n}</b><span>${esc(d.label)}</span></div>`).join('')}
           <div><b class="${pend ? 'pending-text' : ''}">${pend}</b><span>待查證</span></div>
         </div>
         ${s.yearMin !== null ? `<p class="muted small">涵蓋 ${s.yearMin}–${s.yearMax} 年</p>` : ''}
