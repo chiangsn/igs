@@ -28,7 +28,8 @@ export const slotHex = (i: number) => cssVar(i >= 0 && i < SLOT_COUNT ? `--serie
 export const EVENT_TYPES = ['movement', 'disaster', 'lawsuit', 'policy', 'treaty', 'conference', 'publication',
   'war', 'institution', 'program', 'technology', 'other'];
 
-export type ColorBy = 'type' | 'issue';
+/** group:<key> 依 issueGroups 某一群組的關鍵字上色 */
+export type ColorBy = 'type' | 'issue' | `group:${string}`;
 
 /** 主題內出現最多的 7 個 issue（以全部事件計，固定不隨篩選變動），其餘歸「其他」 */
 export function topIssues(t: Topic, n = 7): string[] {
@@ -52,6 +53,14 @@ export function palette(t: Topic, by: ColorBy): Palette {
       return { keys: [...keys, '其他'], labels: [...keys.map((k) => TYPE_ZH[k] ?? k), '其他'], slot: (e) => keys.indexOf(e.type) };
     }
     return { keys, labels: keys.map((k) => TYPE_ZH[k] ?? k), slot: (e) => keys.indexOf(e.type) };
+  }
+  if (by.startsWith('group:')) {
+    const g = t.config.issueGroups.find((x) => x.key === by.slice(6));
+    const n = (k: string) => t.events.filter((e) => e.issues.includes(k)).length;
+    // 群組內最常見的 7 個關鍵字（依設定順序上色），事件取第一個符合的；沒有標這個群組的歸「其他」
+    const keys = (g?.keywords ?? []).filter((k) => n(k)).sort((a, b) => n(b) - n(a)).slice(0, SLOT_COUNT - 1);
+    keys.sort((a, b) => g!.keywords.indexOf(a) - g!.keywords.indexOf(b));
+    return { keys: [...keys, '其他'], labels: [...keys, '其他'], slot: (e) => keys.findIndex((k) => e.issues.includes(k)) };
   }
   const keys = topIssues(t);
   return {
@@ -85,13 +94,19 @@ export function sourceHtml(s: string): string {
 }
 
 /** 把文字中的 T###、S1-T###、S1-### 轉成可點擊的引用 */
+/** 文字中的 id：「S1-T092」或「T092」（事件）、「S1-012」（讀物）、「S4-D001」（一手文件） */
+export const ID_RE = String.raw`(?<![\w-])(?:(S\d+)-)?T(\d{3,})\b|\b(S\d+-\d{3,})\b|\b(S\d+-D\d{3,})\b`;
+/** 事件在其所屬主題的網址（打開時間軸與地圖並顯示詳情） */
+export const eventHref = (id: string) => `#/t/${id.split('-')[0]}/explore?event=${encodeURIComponent(id)}`;
+
 export function linkifyIds(text: string, t: Topic): string {
   const ev = new Set(t.events.map((e) => e.id));
   const rd = new Set(t.readings.map((r) => r.id));
   const dc = new Set(t.documents.map((d) => d.id));
-  return text.replace(new RegExp(`\\b(${t.code}-)?T(\\d{3,})\\b|\\b(S\\d+-\\d{3,})\\b|\\b(S\\d+-D\\d{3,})\\b`, 'g'), (m, _p, num, rid, did) => {
+  return text.replace(new RegExp(ID_RE, 'g'), (m, code, num, rid, did) => {
     if (num) {
-      const id = `${t.code}-T${num}`;
+      const id = `${code ?? t.code}-T${num}`;
+      if (code && code !== t.code) return `<a href="${eventHref(id)}" class="ref-event ext">${m}</a>`;
       return ev.has(id) ? `<a href="#" class="ref-event" data-event="${id}">${m}</a>` : m;
     }
     if (did) return dc.has(did) ? `<a href="#/t/${t.code}/documents?id=${did}" class="ref-reading">${m}</a>` : m;
@@ -133,8 +148,10 @@ export function showEvent(e: EventItem, t: Topic) {
     document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape') closeDrawer(); });
   }
   const byId = new Map(t.events.map((x) => [x.id, x]));
-  const linked = new Set([...e.linked_ids, ...t.events.filter((x) => x.linked_ids.includes(e.id)).map((x) => x.id)]);
+  const linked = new Set([...e.linked_ids, ...t.events.filter((x) => x.linked_ids.includes(e.id)).map((x) => x.id), ...(e.backlinks ?? [])]);
   linked.delete(e.id);
+  const inTopic = [...linked].filter((id) => byId.has(id));
+  const other = [...linked].filter((id) => !byId.has(id));
   drawer.innerHTML = html`
     <button class="drawer-close" aria-label="關閉">×</button>
     <div class="muted small">${esc(e.id)} · ${yearText(e)} · ${esc(regionZh(e.region))}${e.countries.length ? ' · ' + esc(e.countries.join('、')) : ''}</div>
@@ -143,10 +160,14 @@ export function showEvent(e: EventItem, t: Topic) {
     ${e.actors ? `<h4>行動者</h4><p>${esc(e.actors)}</p>` : ''}
     ${e.outcome ? `<h4>結果與影響</h4><p>${linkifyIds(esc(e.outcome), t)}</p>` : ''}
     <h4>來源</h4><ul class="sources">${e.sources.map((s) => `<li>${sourceHtml(s)}</li>`).join('') || '<li class="muted">無</li>'}</ul>
-    ${linked.size ? `<h4>相關事件（${linked.size}）</h4><ul class="linked">${[...linked].map((id) => {
-      const x = byId.get(id);
-      return x ? `<li><a href="#" data-event="${id}">${esc(x.name)}</a> <span class="muted small">${yearText(x)} · ${esc(regionZh(x.region))}</span></li>`
-        : `<li class="muted">${esc(id)}（其他主題或不存在）</li>`;
+    ${inTopic.length ? `<h4>相關事件（${inTopic.length}）</h4><ul class="linked">${inTopic.map((id) => {
+      const x = byId.get(id)!;
+      return `<li><a href="#" data-event="${id}">${esc(x.name)}</a> <span class="muted small">${yearText(x)} · ${esc(regionZh(x.region))}</span></li>`;
+    }).join('')}</ul>` : ''}
+    ${other.length ? `<h4>其他主題的相關事件（${other.length}）</h4><ul class="linked">${other.map((id) => {
+      const x = t.external?.[id];
+      return x ? `<li><span class="topic-chip">${esc(x.topic)}</span> <a href="${eventHref(id)}">${esc(x.name)}</a> <span class="muted small">${yearText(x)} · ${esc(regionZh(x.region))}</span></li>`
+        : `<li class="muted">${esc(id)}（網站上沒有這個主題或 id）</li>`;
     }).join('')}</ul>` : ''}
   `;
   drawer.classList.add('open');

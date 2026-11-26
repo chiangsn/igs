@@ -1,13 +1,13 @@
-// 區域比較：事件數、起點與時間分布、議題／類型組成——呈現「不以美國為中心」的論點
+// 區域比較：事件數、起點與時間分布、議題／類型組成。設定 focusRegion 時強調該區域（S1：北美，呈現「不以美國為中心」的論點）
 import * as d3 from 'd3';
 import type { EventItem, Topic } from '../data';
 import { regionZh } from '../data';
 import { esc, hideTip, legendHtml, palette, showTip, slotVar, type ColorBy } from '../ui';
 
 const LANES = ['East Asia', 'Southeast Asia', 'South Asia', 'Middle East & North Africa', 'Sub-Saharan Africa', 'Europe', 'North America', 'Latin America & Caribbean', 'Oceania & Pacific', 'Arctic', 'Global'];
-const FOCUS = 'North America';
 
 export function renderRegions(root: HTMLElement, t: Topic) {
+  const FOCUS = t.config.thesis.focusRegion;
   const ev = t.events.filter((e) => e.year_start !== null);
   if (!ev.length) { root.innerHTML = '<p class="empty">此主題沒有 timeline.csv。</p>'; return; }
   const regions = LANES.filter((r) => ev.some((e) => e.region === r));
@@ -15,19 +15,21 @@ export function renderRegions(root: HTMLElement, t: Topic) {
   const count = (r: string) => by.get(r)?.length ?? 0;
   const sorted = regions.slice().sort((a, b) => count(b) - count(a));
   const total = ev.length;
-  const na = count(FOCUS);
+  const na = FOCUS ? count(FOCUS) : 0;
   const earliest = (r: string) => d3.min(by.get(r) ?? [], (e) => e.year_start!)!;
-  const naFirst = by.has(FOCUS) ? earliest(FOCUS) : null;
+  const naFirst = FOCUS && by.has(FOCUS) ? earliest(FOCUS) : null;
+  const fz = FOCUS ? regionZh(FOCUS) : '';
   const earlier = naFirst === null ? [] : regions.filter((r) => r !== FOCUS && r !== 'Global' && earliest(r) < naFirst);
   const top = sorted[0];
 
   root.innerHTML = `
     <div class="stat-row">
-      <div class="stat"><div class="stat-num">${na ? ((na / total) * 100).toFixed(1) + '%' : '—'}</div><div class="stat-label">北美事件占全部事件（${na} / ${total}）</div></div>
+      ${FOCUS ? `<div class="stat"><div class="stat-num">${na ? ((na / total) * 100).toFixed(1) + '%' : '—'}</div><div class="stat-label">${esc(fz)}事件占全部事件（${na} / ${total}）</div></div>` : ''}
       <div class="stat"><div class="stat-num">${esc(regionZh(top))}</div><div class="stat-label">事件最多的區域（${count(top)} 筆）</div></div>
-      <div class="stat"><div class="stat-num">${earlier.length} 個</div><div class="stat-label">區域的最早事件早於北美最早事件${naFirst !== null ? `（${naFirst}）` : ''}</div></div>
+      ${FOCUS ? `<div class="stat"><div class="stat-num">${earlier.length} 個</div><div class="stat-label">區域的最早事件早於${esc(fz)}最早事件${naFirst !== null ? `（${naFirst}）` : ''}</div></div>`
+    : `<div class="stat"><div class="stat-num">${regions.length} 個</div><div class="stat-label">有事件的區域</div></div>`}
     </div>
-    <div class="card"><h3>各區域事件數</h3><p class="muted small">北美以強調色標示。全球／跨國指國際會議、條約與跨國網絡。</p><div id="bars"></div></div>
+    <div class="card"><h3>各區域事件數</h3><p class="muted small">${FOCUS ? `${esc(fz)}以強調色標示。` : ''}全球／跨國指國際會議、條約與跨國網絡。</p><div id="bars"></div></div>
     <div class="card"><h3>各區域的起點與時間分布</h3><p class="muted small">每列為一個區域：線段從最早到最晚事件，<b>大圓點＝最早事件</b>，小點為各事件，直線＝中位年份。滑過最早事件可看名稱。</p><div id="span"></div></div>
     <div class="card"><div class="card-head"><h3>各區域組成</h3>
       <div class="seg" id="compBy"><button class="on" data-v="issue">議題</button><button data-v="type">類型</button></div></div>

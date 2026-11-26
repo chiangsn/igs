@@ -2,6 +2,7 @@
 import type { SiteIndex } from '../data';
 import { regionZh } from '../data';
 import { esc } from '../ui';
+import { linkPairs } from './links';
 
 export function renderHome(root: HTMLElement, idx: SiteIndex) {
   root.innerHTML = `
@@ -31,6 +32,8 @@ export function renderHome(root: HTMLElement, idx: SiteIndex) {
         ${regs.length ? `<div class="mini-bars" aria-label="區域分布">${regs.map(([r, n]) => `<div class="mini-bar"><span class="mb-label">${esc(regionZh(r))}</span><span class="mb-track"><span class="mb-fill" style="width:${(n / max) * 100}%"></span></span><span class="mb-n">${n}</span></div>`).join('')}</div>` : ''}
       </a>`;
     }).join('') || '<p class="empty">topics/ 底下還沒有主題。</p>'}</div>
+    ${idx.crossLinks.length ? `<h2>跨主題連結</h2>
+    <div class="stat-row">${linkPairs(idx.crossLinks).map((p) => `<a class="stat" href="#/links"><div class="stat-num">${p.links.length}</div><div class="stat-label">${esc(p.a)} ↔ ${esc(p.b)}：timeline 中互相引用的事件連結</div></a>`).join('')}</div>` : ''}
     <p class="muted small">資料產生時間：${esc(idx.generatedAt)} · <a href="#/quality">資料品質報告</a></p>
   `;
 }

@@ -211,19 +211,87 @@ function readDocs(code, dir) {
     return true;
   };
   for (const [f, g] of DOC_ORDER) if (!push(f, g)) note(code, `缺少 \`${f}\`。`);
-  const regionsDir = path.join(dir, 'regions');
-  if (fs.existsSync(regionsDir)) {
-    for (const f of fs.readdirSync(regionsDir).filter((f) => f.endsWith('.md')).sort()) push(`regions/${f}`, 'region');
+  // 子資料夾（regions/、impacts/、modules/…）：每個資料夾一組，group 用資料夾名稱
+  const subdirs = [];
+  for (const d of fs.readdirSync(dir, { withFileTypes: true }).filter((d) => d.isDirectory() && d.name !== 'data').map((d) => d.name).sort()) {
+    const files = fs.readdirSync(path.join(dir, d)).filter((f) => f.endsWith('.md')).sort();
+    if (!files.length) continue;
+    subdirs.push(d);
+    for (const f of files) push(`${d}/${f}`, d);
   }
   // 其他頂層 .md（未來主題可能新增的檔案）
   const known = new Set([...DOC_ORDER.map((d) => d[0]), ...WORK_DOCS]);
   for (const f of fs.readdirSync(dir).filter((f) => f.endsWith('.md') && !known.has(f)).sort()) push(f, 'main');
   for (const f of WORK_DOCS) push(f, 'work');
-  return docs;
+  return { docs, subdirs };
+}
+
+// ---------- 主題設定（site/topic-config.json）----------
+const SUBDIR_LABELS = { regions: '區域報告', impacts: '影響面向', modules: '模組' };
+function loadConfig() {
+  const text = read(path.join(SITE, 'topic-config.json'));
+  if (text === null) return {};
+  try { return JSON.parse(text); } catch (e) {
+    structural.push(`site/topic-config.json 無法解析（${e.message}）`);
+    return {};
+  }
+}
+
+function resolveConfig(code, raw, subdirs, events) {
+  const c = raw ?? {};
+  const thesis = { view: 'regions', label: '區域比較', focusRegion: null, claim: '', compare: [], ...(c.thesis ?? {}) };
+  if (!['regions', 'issues'].includes(thesis.view)) {
+    warn(code, 'site/topic-config.json', `thesis.view「${thesis.view}」不是 regions 或 issues，改用 regions`);
+    thesis.view = 'regions';
+  }
+  if (thesis.focusRegion && !REGIONS.includes(thesis.focusRegion)) warn(code, 'site/topic-config.json', `focusRegion「${thesis.focusRegion}」不在固定區域分類中`);
+  const issueGroups = (c.issueGroups ?? []).map((g) => ({ key: g.key, label: g.label ?? g.key, filter: !!g.filter, keywords: g.keywords ?? [] }));
+  if (thesis.view === 'issues' && !issueGroups.length) warn(code, 'site/topic-config.json', 'thesis.view 為 issues，但沒有設定 issueGroups');
+  // issue 欄位中出現、但不屬於任何群組的關鍵字（只在有設定群組時提醒）
+  if (issueGroups.length) {
+    const known = new Set(issueGroups.flatMap((g) => g.keywords));
+    const unknown = new Map();
+    for (const e of events) for (const i of e.issues) if (!known.has(i)) unknown.set(i, (unknown.get(i) ?? 0) + 1);
+    if (unknown.size) note(code, `issue 欄位有 ${unknown.size} 個關鍵字不在 topic-config.json 的 issueGroups 中，論點視圖不計入：${[...unknown].map(([k, n]) => `${k}（${n}）`).join('、')}。`);
+    for (const g of issueGroups) {
+      const unused = g.keywords.filter((k) => !events.some((e) => e.issues.includes(k)));
+      if (unused.length) note(code, `issueGroups「${g.label}」中有 ${unused.length} 個關鍵字沒有出現在 timeline：${unused.join('、')}。`);
+    }
+  }
+  const subCfg = c.subdirs ?? {};
+  const groups = subdirs.map((d) => ({ dir: d, label: subCfg[d]?.label ?? SUBDIR_LABELS[d] ?? d, tab: !!subCfg[d]?.tab }));
+  for (const d of Object.keys(subCfg)) if (!subdirs.includes(d)) warn(code, 'site/topic-config.json', `subdirs 設定了 \`${d}/\`，但主題資料夾中沒有這個子資料夾或其中沒有 .md`);
+  return { thesis, issueGroups, subdirs: groups, overviewStats: c.overviewStats ?? [] };
+}
+
+// ---------- 統計 CSV（依設定只取需要的欄位）----------
+function readStats(code, dir, specs) {
+  const out = [];
+  for (const s of specs ?? []) {
+    const where = `site/topic-config.json（${s.id}）`;
+    const text = read(path.join(dir, s.file));
+    if (text === null) { warn(code, where, `找不到 \`${s.file}\`，略過這張圖`); continue; }
+    let rows;
+    try { rows = parse(text, { columns: true, skip_empty_lines: true, trim: true }); } catch (e) {
+      warn(code, where, `\`${s.file}\` 無法解析（${e.message}）`); continue;
+    }
+    const cols = [s.x, s.category, s.value, ...(s.series ?? []).flatMap((x) => [x.col, x.low, x.high]), ...(s.extra ?? []).map((x) => x.col)].filter(Boolean);
+    const missing = cols.filter((c) => rows.length && !(c in rows[0]));
+    if (missing.length) { warn(code, where, `\`${s.file}\` 缺少欄位：${missing.join(', ')}`); continue; }
+    const filtered = rows.filter((r) => Object.entries(s.where ?? {}).every(([k, v]) => r[k] === v));
+    const num = (v) => (v === '' || v === undefined || Number.isNaN(Number(v)) ? null : Number(v));
+    const data = filtered.map((r) => Object.fromEntries(cols.map((c) => {
+      const keepText = c === s.category || (s.extra ?? []).some((x) => x.col === c && !x.suffix);
+      return [c, keepText ? r[c] : num(r[c])];
+    })));
+    const { file, where: _w, ...spec } = s;
+    out.push({ ...spec, file, data });
+  }
+  return out;
 }
 
 // ---------- 主題 ----------
-function buildTopic(folder, registry) {
+function buildTopic(folder, registry, config) {
   const dir = path.join(TOPICS_DIR, folder);
   const reg = registry[folder];
   const code = reg?.code ?? (folder.match(/^(S\d+)/) || [])[1] ?? folder;
@@ -311,8 +379,11 @@ function buildTopic(folder, registry) {
   });
   for (const d of new Set(dup(documents.map((e) => e.id)))) warn(code, 'documents.csv', `id 重複：${d}`);
 
-  const docs = readDocs(code, dir);
+  const { docs, subdirs } = readDocs(code, dir);
   const periods = parsePeriods(code, dir);
+  const cfg = resolveConfig(code, config[code], subdirs, events);
+  const stats = readStats(code, dir, config[code]?.stats);
+  for (const id of cfg.overviewStats) if (!stats.some((s) => s.id === id)) warn(code, 'site/topic-config.json', `overviewStats 指向不存在的圖：${id}`);
 
   // 從 timeline 推導「國家 → 區域」，用來替讀物 tag 歸區
   const countryRegion = {};
@@ -327,7 +398,7 @@ function buildTopic(folder, registry) {
     r.regions = [...set];
   }
 
-  return { code, folder, name, status: reg?.status ?? '', periods, events, readings, concepts, documents, docs,
+  return { code, folder, name, status: reg?.status ?? '', periods, events, readings, concepts, documents, docs, config: cfg, charts: stats,
     has: { timeline: !!tl, readings: !!rd, concepts: !!cc, documents: !!dc } };
 }
 
@@ -350,8 +421,9 @@ function crossChecks(topics) {
     // 文件中的 T### / S1-### / S4-D### 引用
     const missing = new Map();
     for (const d of t.docs) {
-      for (const m of d.md.matchAll(new RegExp(`\\b(?:${t.code}-)?T(\\d{3,})\\b`, 'g'))) {
-        const id = `${t.code}-T${m[1]}`;
+      // 「S1-T092」是其他主題的事件；沒有前綴的「T092」才算本主題
+      for (const m of d.md.matchAll(/(?<![\w-])(?:(S\d+)-)?T(\d{3,})\b/g)) {
+        const id = `${m[1] ?? t.code}-T${m[2]}`;
         if (!eventIds.has(id)) missing.set(`${d.file}: ${id}`, true);
       }
       for (const m of d.md.matchAll(/\b(S\d+-\d{3,})\b/g)) {
@@ -369,6 +441,37 @@ function crossChecks(topics) {
       }
     }
   }
+}
+
+// ---------- 跨主題連結 ----------
+// 每個事件加上 backlinks（其他主題中連到它的事件）；每個主題附上 external（用到的其他主題事件摘要），
+// 讓網絡圖與事件詳情不必載入其他主題的整份 JSON 也能顯示與跳轉。
+function crossTopicLinks(topics) {
+  const all = new Map();
+  for (const t of topics) for (const e of t.events) all.set(e.id, { t, e });
+  const pairs = [];
+  for (const t of topics) for (const e of t.events) e.backlinks = [];
+  for (const t of topics) {
+    for (const e of t.events) {
+      for (const l of e.linked_ids) {
+        const hit = all.get(l);
+        if (!hit || hit.t === t) continue;
+        if (!hit.e.backlinks.includes(e.id)) hit.e.backlinks.push(e.id);
+        pairs.push({ from: e.id, to: l, fromTopic: t.code, toTopic: hit.t.code });
+      }
+    }
+  }
+  const brief = (id) => {
+    const { t, e } = all.get(id);
+    return { id, topic: t.code, name: e.name, year_start: e.year_start, year_end: e.year_end, region: e.region, type: e.type };
+  };
+  for (const t of topics) {
+    const ids = new Set();
+    for (const e of t.events) for (const l of [...e.linked_ids, ...e.backlinks]) if (all.has(l) && all.get(l).t !== t) ids.add(l);
+    t.external = Object.fromEntries([...ids].sort().map((id) => [id, brief(id)]));
+  }
+  // 頁面用：兩端的摘要
+  return pairs.map((p) => ({ from: brief(p.from), to: brief(p.to) }));
 }
 
 function stats(t) {
@@ -433,8 +536,11 @@ function main() {
       return na - nb || a.localeCompare(b);
     })
     : [];
-  const topics = folders.map((f) => buildTopic(f, registry));
+  const config = loadConfig();
+  for (const k of Object.keys(config)) if (/^S\d+$/.test(k) && !folders.some((f) => f.startsWith(k + '-'))) console.log(`topic-config.json 有 ${k} 的設定，但 topics/ 沒有這個主題（略過）`);
+  const topics = folders.map((f) => buildTopic(f, registry, config));
   crossChecks(topics);
+  const crossLinks = crossTopicLinks(topics);
   for (const t of topics) t.stats = stats(t);
 
   const generatedAt = new Date().toISOString().replace('T', ' ').slice(0, 16) + ' UTC';
@@ -450,7 +556,7 @@ function main() {
   fs.mkdirSync(path.join(OUT_DIR, 'topics'), { recursive: true });
   for (const t of topics) fs.writeFileSync(path.join(OUT_DIR, 'topics', `${t.code}.json`), JSON.stringify(t));
   const index = {
-    generatedAt, regions: REGIONS,
+    generatedAt, regions: REGIONS, crossLinks,
     topics: topics.map(({ code, folder, name, status, stats, has, periods }) => ({ code, folder, name, status, stats, has, periodCount: periods.length })),
   };
   fs.writeFileSync(path.join(OUT_DIR, 'index.json'), JSON.stringify(index));

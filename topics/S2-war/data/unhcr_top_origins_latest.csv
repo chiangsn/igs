@@ -1,0 +1,11 @@
+rank,year,country_of_origin,iso3,refugees_unhcr_mandate,other_in_need_of_intl_protection,refugees_plus_oip,share_of_world_refugees_plus_oip_pct
+1,2025,Venezuela (Bolivarian Republic of),VEN,417010,6042706,6459716,18.1
+2,2025,Ukraine,UKR,5224131,0,5224131,14.7
+3,2025,Syrian Arab Rep.,SYR,4865764,0,4865764,13.7
+4,2025,Afghanistan,AFG,2671560,1030958,3702518,10.4
+5,2025,Sudan,SDN,2820737,0,2820737,7.9
+6,2025,South Sudan,SSD,2386499,0,2386499,6.7
+7,2025,Myanmar,MMR,1524378,0,1524378,4.3
+8,2025,Dem. Rep. of the Congo,COD,1176489,0,1176489,3.3
+9,2025,Somalia,SOM,892037,0,892037,2.5
+10,2025,Central African Rep.,CAF,674222,0,674222,1.9

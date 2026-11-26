@@ -1,0 +1,115 @@
+{
+  "_說明": "各主題在網站上的呈現設定，build 時由 scripts/build-data.mjs 讀入。沒有列在這裡的主題用預設值。欄位說明見 site/README.md「主題設定」。",
+  "S1": {
+    "thesis": { "view": "regions", "label": "區域比較", "focusRegion": "North America" }
+  },
+  "S2": {
+    "thesis": {
+      "view": "issues",
+      "label": "延伸影響",
+      "claim": "戰爭的延伸影響比戰爭類型本身更值得關注：timeline 的 issue 欄位中，影響面向的關鍵字出現次數多於戰爭類型的關鍵字。",
+      "compare": ["war", "impact"]
+    },
+    "issueGroups": [
+      { "key": "war", "label": "戰爭類型", "filter": true,
+        "keywords": ["interstate war", "civil war", "colonial war", "proxy war", "genocide", "mass atrocity", "terrorism", "hybrid war"] },
+      { "key": "impact", "label": "影響面向",
+        "keywords": ["refugees", "humanitarian law", "environment", "health", "economy", "food", "gender", "children", "landmines", "arms trade", "nuclear", "memory", "transitional justice", "peacekeeping"] },
+      { "key": "cross", "label": "貫穿性議題",
+        "keywords": ["colonialism", "world order", "civilians"] }
+    ],
+    "subdirs": { "impacts": { "label": "影響面向報告", "tab": true } },
+    "overviewStats": ["conflicts-type", "displaced", "milex"],
+    "stats": [
+      {
+        "id": "conflicts-type", "title": "武裝衝突數量（依類型）", "kind": "stacked",
+        "file": "data/ucdp_conflicts_by_year.csv", "x": "year",
+        "series": [
+          { "col": "intrastate", "label": "國內衝突" },
+          { "col": "internationalized_intrastate", "label": "國際化國內衝突" },
+          { "col": "interstate", "label": "國家間衝突" },
+          { "col": "extrasystemic", "label": "體系外（殖民）衝突" }
+        ],
+        "unit": "場衝突",
+        "note": "國家為一方、該年戰鬥死亡至少 25 人的武裝衝突（UCDP state-based armed conflict），1946–2025 年。",
+        "source": "UCDP/PRIO Armed Conflict Dataset v26.1（Davies, Pettersson & Öberg 2026; Gleditsch et al. 2002）", "url": "https://ucdp.uu.se/downloads/",
+        "license": "CC BY 4.0"
+      },
+      {
+        "id": "conflicts-region", "title": "武裝衝突數量（依 UCDP 區域）", "kind": "line",
+        "file": "data/ucdp_conflicts_by_region_year.csv", "x": "year",
+        "series": [
+          { "col": "Africa", "label": "Africa" },
+          { "col": "Asia", "label": "Asia" },
+          { "col": "Middle East", "label": "Middle East" },
+          { "col": "Europe", "label": "Europe" },
+          { "col": "Americas", "label": "Americas" }
+        ],
+        "unit": "場衝突",
+        "note": "這裡用 UCDP 原本的五個區域（Europe、Middle East、Asia、Africa、Americas），和本專案 timeline 的 11 個固定區域分類不同。跨兩區的國家間衝突在兩區各計一次，五區相加可能略大於總數。",
+        "source": "UCDP/PRIO Armed Conflict Dataset v26.1", "url": "https://ucdp.uu.se/downloads/",
+        "license": "CC BY 4.0"
+      },
+      {
+        "id": "battle-deaths", "title": "戰鬥相關死亡人數", "kind": "line",
+        "file": "data/ucdp_conflicts_by_year.csv", "x": "year",
+        "series": [ { "col": "battle_deaths_best", "label": "最佳估計", "low": "battle_deaths_low", "high": "battle_deaths_high" } ],
+        "unit": "人", "format": "wan",
+        "note": "線為 UCDP 最佳估計，色帶為低估到高估的範圍。只有 1989 年起有資料。",
+        "source": "UCDP Battle-Related Deaths Dataset v26.1（Davies, Pettersson & Öberg 2026）", "url": "https://ucdp.uu.se/downloads/",
+        "license": "CC BY 4.0"
+      },
+      {
+        "id": "displaced", "title": "被迫流離失所人數", "kind": "stacked",
+        "file": "data/unhcr_forcibly_displaced.csv", "x": "year", "where": { "period": "end-year" },
+        "series": [
+          { "col": "idps_conflict_idmc", "label": "境內流離失所者（衝突，IDMC）" },
+          { "col": "refugees_unhcr_mandate", "label": "UNHCR 職權下難民" },
+          { "col": "palestine_refugees_unrwa", "label": "UNRWA 巴勒斯坦難民" },
+          { "col": "asylum_seekers", "label": "尋求庇護者" },
+          { "col": "other_in_need_of_intl_protection", "label": "其他需要國際保護者" }
+        ],
+        "unit": "人", "format": "wan",
+        "note": "2000–2025 年年底數字，五類相加為總數（S2 依 Global Trends 口徑自行加總，引用頭條數字請以當年 UNHCR Global Trends 報告為準）。IDP 數字原出處為 IDMC，巴勒斯坦難民為 UNRWA。",
+        "source": "UNHCR Refugee Population Statistics Database（Refugee Data Finder API）", "url": "https://www.unhcr.org/refugee-statistics/",
+        "license": "CC BY 4.0（待查證：UNHCR 網站擋自動存取，S2 未能核實授權條款）"
+      },
+      {
+        "id": "milex", "title": "世界軍費", "kind": "line",
+        "file": "data/sipri_milex_world.csv", "x": "year",
+        "series": [ { "col": "world_milex_usd_bn_constant_2024", "label": "世界軍費" } ],
+        "unit": "十億美元（2024 年不變價）",
+        "note": "1988–2025 年，2024 年固定價格與匯率。1991 年 SIPRI 沒有提供世界總額，圖上斷開。",
+        "source": "SIPRI Military Expenditure Database 2026", "url": "https://doi.org/10.55163/CQGC9685",
+        "license": "非開放授權：依 SIPRI fair-use 政策，非商業使用、只引用摘要並註明來源"
+      },
+      {
+        "id": "milex-top10", "title": "2025 年軍費前十名國家", "kind": "bar",
+        "file": "data/sipri_top10_spenders_latest.csv", "category": "country", "value": "milex_usd_bn_current",
+        "extra": [ { "col": "share_of_world_pct", "label": "占全球", "suffix": "%" }, { "col": "milex_share_of_gdp_pct", "label": "占 GDP", "suffix": "%" } ],
+        "unit": "十億美元（當期價格）",
+        "note": "依 2025 年當期美元排序。中國、俄羅斯等國的數字為 SIPRI 估計值。",
+        "source": "SIPRI Military Expenditure Database 2026", "url": "https://doi.org/10.55163/CQGC9685",
+        "license": "非開放授權：依 SIPRI fair-use 政策，非商業使用、只引用摘要並註明來源"
+      },
+      {
+        "id": "refugee-origins", "title": "2025 年主要難民來源國", "kind": "bar",
+        "file": "data/unhcr_top_origins_latest.csv", "category": "country_of_origin", "value": "refugees_plus_oip", "format": "wan",
+        "extra": [ { "col": "share_of_world_refugees_plus_oip_pct", "label": "占全球", "suffix": "%" } ],
+        "unit": "人",
+        "note": "難民加上其他需要國際保護者（與 Global Trends 口徑相同），不含 UNRWA 巴勒斯坦難民。只看 UNHCR 職權下難民時，委內瑞拉的排名會大幅下降。",
+        "source": "UNHCR Refugee Population Statistics Database（Refugee Data Finder API）", "url": "https://www.unhcr.org/refugee-statistics/",
+        "license": "CC BY 4.0（待查證：UNHCR 網站擋自動存取，S2 未能核實授權條款）"
+      },
+      {
+        "id": "landmines", "title": "地雷與戰爭遺留爆炸物傷亡", "kind": "columns",
+        "file": "data/landmine_casualties.csv", "x": "year", "value": "casualties_total",
+        "extra": [ { "col": "value_basis", "label": "取值方式" }, { "col": "source_report", "label": "出處" } ],
+        "unit": "人",
+        "note": "Monitor 記錄的死亡、受傷與生死不明人數合計。2015–2020 取自 2021 年版，2021–2025 取自 2026 年版，兩段口徑可能略有差異；部分年份讀自報告圖表的資料標籤。",
+        "source": "International Campaign to Ban Landmines, Landmine Monitor 2021、2026（Geneva: ICBL-CMC）", "url": "https://the-monitor.org/reports/landmine-monitor-2026",
+        "license": "All rights reserved：只引用年度總數並註明出處"
+      }
+    ]
+  }
+}

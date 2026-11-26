@@ -6,6 +6,13 @@ export interface EventItem {
   id: string; year_start: number | null; year_end: number | null; region: string; countries: string[];
   lat: number | null; lon: number | null; name: string; type: string; issues: string[];
   actors: string; outcome: string; linked_ids: string[]; sources: string[]; pending: boolean;
+  /** 其他主題中連到這個事件的 id */
+  backlinks: string[];
+}
+
+/** 其他主題事件的摘要（跨主題連結用） */
+export interface ExternalEvent {
+  id: string; topic: string; name: string; year_start: number | null; year_end: number | null; region: string; type: string;
 }
 
 export interface Reading {
@@ -24,7 +31,27 @@ export interface PrimaryDoc {
   significance: string; url: string; access: string; sources: string[]; pending: boolean;
 }
 
-export interface Doc { slug: string; file: string; group: 'main' | 'region' | 'work'; title: string; md: string }
+/** group：main、work，或子資料夾名稱（regions、impacts、modules…） */
+export interface Doc { slug: string; file: string; group: string; title: string; md: string }
+
+export interface IssueGroup { key: string; label: string; filter: boolean; keywords: string[] }
+
+export interface TopicConfig {
+  thesis: { view: 'regions' | 'issues'; label: string; focusRegion: string | null; claim: string; compare: string[] };
+  issueGroups: IssueGroup[];
+  subdirs: { dir: string; label: string; tab: boolean }[];
+  overviewStats: string[];
+}
+
+export interface ChartSeries { col: string; label: string; low?: string; high?: string }
+export interface ChartExtra { col: string; label: string; suffix?: string }
+/** 統計圖：資料只含設定用到的欄位 */
+export interface StatChart {
+  id: string; title: string; kind: 'line' | 'stacked' | 'bar' | 'columns'; file: string;
+  x?: string; category?: string; value?: string; series?: ChartSeries[]; extra?: ChartExtra[];
+  unit: string; format?: 'wan'; note: string; source: string; url: string; license: string;
+  data: Record<string, number | string | null>[];
+}
 
 export interface TopicStats {
   events: number; readings: number; concepts: number; docs: number; documents: number; regionCounts: Record<string, number>;
@@ -39,9 +66,12 @@ export interface TopicSummary {
 
 export interface Topic extends TopicSummary {
   periods: Period[]; events: EventItem[]; readings: Reading[]; concepts: Concept[]; documents: PrimaryDoc[]; docs: Doc[];
+  config: TopicConfig; charts: StatChart[]; external: Record<string, ExternalEvent>;
 }
 
-export interface SiteIndex { generatedAt: string; regions: string[]; topics: TopicSummary[] }
+export interface CrossLink { from: ExternalEvent; to: ExternalEvent }
+
+export interface SiteIndex { generatedAt: string; regions: string[]; topics: TopicSummary[]; crossLinks: CrossLink[] }
 
 const base = import.meta.env.BASE_URL;
 let indexPromise: Promise<SiteIndex> | null = null;

@@ -247,3 +247,45 @@ table.heat th, table.matrix th { white-space: nowrap; font-size: 0.85em; }
   .md { padding: 4px 16px 16px; }
   .map { height: 360px; }
 }
+
+/* ---------- 統計趨勢圖 ---------- */
+.chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.chart-grid.wide { grid-template-columns: repeat(auto-fit, minmax(440px, 1fr)); }
+.chart-card { margin-bottom: 0; min-width: 0; }
+.mini-chart { min-width: 0; }
+.chart-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.chart-head h4 { margin: 0; font-size: 0.98em; }
+.chart-svg { width: 100%; overflow: hidden; }
+.chart-source { margin-top: 4px; line-height: 1.4; }
+.series-line { fill: none; stroke-width: 2; }
+.band { fill-opacity: 0.18; }
+.stack-area { stroke: var(--surface-1); stroke-width: 1; }
+.crosshair { stroke: var(--text-muted); stroke-width: 1; stroke-dasharray: 3 3; }
+.hover-dot { stroke: var(--surface-1); stroke-width: 2; pointer-events: none; }
+.tooltip .sw, .group-row .sw { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 5px; vertical-align: baseline; }
+
+/* ---------- 論點視圖 ---------- */
+.card.claim { border-left: 4px solid var(--accent); }
+.card.claim p { margin: 0; font-size: 1.02em; }
+.stat-num .vs { font-size: 0.55em; color: var(--text-muted); font-weight: 400; }
+table.heat tr.group-row th { text-align: left; padding-top: 10px; font-weight: 600; color: var(--text-secondary); background: transparent; }
+table.heat tr.col-n td { text-align: center; border: 0; }
+
+/* ---------- 跨主題連結 ---------- */
+.topic-chip { display: inline-block; font-family: ui-monospace, Consolas, monospace; font-size: 0.78em; padding: 0 5px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text-secondary); }
+.node.ext { fill: var(--surface-1); stroke: var(--text-secondary); stroke-width: 1.6; stroke-dasharray: 2 2; }
+.edge.ext { stroke: var(--text-secondary); stroke-opacity: 0.55; stroke-width: 1.2; stroke-dasharray: 4 3; }
+.ext-key { border-bottom: 1px dashed var(--text-secondary); }
+.md .ref-event.ext { border: 1px dashed var(--border); }
+.links-table td { vertical-align: top; }
+.toggle .muted { margin-left: 4px; font-size: 0.85em; }
+.toggle.on .muted { color: inherit; opacity: 0.8; }
+
+@media (max-width: 600px) {
+  .chart-grid.wide { grid-template-columns: 1fr; }
+}
+/* 有最小寬度的圖（網絡圖、區域比較）在手機上於卡片內橫向捲動，不撐開整頁 */
+.net, #bars, #span, #comp { overflow-x: auto; max-width: 100%; }
+.grid2 > * { min-width: 0; }
+.md :not(pre) > code { overflow-wrap: anywhere; }
+label.check { flex-wrap: wrap; white-space: normal; }

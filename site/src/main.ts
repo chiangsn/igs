@@ -1,7 +1,8 @@
-// 進入點：hash 路由（#/、#/t/S1/<分頁>、#/quality），不需伺服器端 rewrite
+// 進入點：hash 路由（#/、#/t/S1/<分頁>、#/links、#/quality），不需伺服器端 rewrite
 import './style.css';
 import { loadIndex, loadTopic } from './data';
 import { renderHome } from './pages/home';
+import { renderLinks } from './pages/links';
 import { renderQuality } from './pages/quality';
 import { renderTopic } from './pages/topic';
 import { closeDrawer, esc, hideTip } from './ui';
@@ -21,12 +22,16 @@ async function route() {
     const idx = await loadIndex();
     nav.innerHTML = `<a href="#/" class="${parts.length ? '' : 'on'}">首頁</a>` +
       idx.topics.map((t) => `<a href="#/t/${esc(t.code)}" class="${parts[1] === t.code ? 'on' : ''}" title="${esc(t.name)}">${esc(t.code)}</a>`).join('') +
+      (idx.crossLinks.length ? `<a href="#/links" class="${parts[0] === 'links' ? 'on' : ''}">跨主題</a>` : '') +
       `<a href="#/quality" class="${parts[0] === 'quality' ? 'on' : ''}">資料品質</a>`;
     if (parts[0] === 't' && parts[1]) {
       if (!idx.topics.some((t) => t.code === parts[1])) throw new Error(`找不到主題 ${parts[1]}`);
       const t = await loadTopic(parts[1]);
       document.title = `${t.code} ${t.name}｜IGS 課程發展`;
       cleanup = renderTopic(app, t, parts[2] ?? '', parts.slice(3), params);
+    } else if (parts[0] === 'links') {
+      document.title = '跨主題連結｜IGS 課程發展';
+      renderLinks(app, idx);
     } else if (parts[0] === 'quality') {
       document.title = '資料品質｜IGS 課程發展';
       await renderQuality(app);

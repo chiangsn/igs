@@ -2,7 +2,7 @@
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 import type { Topic } from './data';
-import { bindEventRefs, esc } from './ui';
+import { bindEventRefs, esc, eventHref, ID_RE } from './ui';
 
 marked.setOptions({ gfm: true });
 
@@ -23,7 +23,7 @@ function decorateText(root: HTMLElement, t?: Topic) {
   const ev = new Set(t?.events.map((e) => e.id) ?? []);
   const rd = new Set(t?.readings.map((r) => r.id) ?? []);
   const dc = new Set(t?.documents.map((d) => d.id) ?? []);
-  const re = t ? new RegExp(`\\b(${t.code}-)?T(\\d{3,})\\b|\\b(S\\d+-\\d{3,})\\b|\\b(S\\d+-D\\d{3,})\\b|待查證`, 'g') : /待查證/g;
+  const re = t ? new RegExp(`${ID_RE}|待查證`, 'g') : /待查證/g;
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
     acceptNode: (n) => (n.parentElement?.closest('a, pre') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT),
   });
@@ -41,6 +41,9 @@ function decorateText(root: HTMLElement, t?: Topic) {
       let out: Node = document.createTextNode(m[0]);
       if (m[0] === '待查證') {
         const s = document.createElement('span'); s.className = 'pending-text'; s.textContent = m[0]; out = s;
+      } else if (t && m[2] && m[1] && m[1] !== t.code) {
+        // 其他主題的事件：連到該主題（id 是否存在由 build 的資料品質報告檢查）
+        const a = document.createElement('a'); a.href = eventHref(`${m[1]}-T${m[2]}`); a.className = 'ref-event ext'; a.textContent = m[0]; out = a;
       } else if (t && m[2]) {
         const id = `${t.code}-T${m[2]}`;
         if (ev.has(id)) { const a = document.createElement('a'); a.href = '#'; a.dataset.event = id; a.className = 'ref-event'; a.textContent = m[0]; out = a; }
