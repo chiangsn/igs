@@ -19,21 +19,26 @@ export interface Concept {
   year: number | null; authors: string[]; definition: string; sources: string[]; pending: boolean;
 }
 
+export interface PrimaryDoc {
+  id: string; year: number | null; title: string; issuing_body: string; doc_type: string; modules: string[];
+  significance: string; url: string; access: string; sources: string[]; pending: boolean;
+}
+
 export interface Doc { slug: string; file: string; group: 'main' | 'region' | 'work'; title: string; md: string }
 
 export interface TopicStats {
-  events: number; readings: number; concepts: number; docs: number; regionCounts: Record<string, number>;
-  pending: { events: number; readings: number; concepts: number };
+  events: number; readings: number; concepts: number; docs: number; documents: number; regionCounts: Record<string, number>;
+  pending: { events: number; readings: number; concepts: number; documents: number };
   yearMin: number | null; yearMax: number | null; warnings: number;
 }
 
 export interface TopicSummary {
   code: string; folder: string; name: string; status: string; stats: TopicStats;
-  has: { timeline: boolean; readings: boolean; concepts: boolean }; periodCount: number;
+  has: { timeline: boolean; readings: boolean; concepts: boolean; documents: boolean }; periodCount: number;
 }
 
 export interface Topic extends TopicSummary {
-  periods: Period[]; events: EventItem[]; readings: Reading[]; concepts: Concept[]; docs: Doc[];
+  periods: Period[]; events: EventItem[]; readings: Reading[]; concepts: Concept[]; documents: PrimaryDoc[]; docs: Doc[];
 }
 
 export interface SiteIndex { generatedAt: string; regions: string[]; topics: TopicSummary[] }
@@ -73,6 +78,7 @@ export const regionZh = (r: string) => REGION_ZH[r] ?? r;
 
 export const TYPE_ZH: Record<string, string> = {
   movement: '運動', disaster: '災害', lawsuit: '訴訟', policy: '政策', treaty: '條約', conference: '會議', publication: '出版',
+  war: '戰爭', institution: '機構', program: '計畫', technology: '技術',
   book: '書', chapter: '章節', article: '論文', report: '報告', news: '新聞', dataset: '資料集', other: '其他',
 };
 export const LANG_ZH: Record<string, string> = { en: '英文', zh: '中文', other: '其他語言' };

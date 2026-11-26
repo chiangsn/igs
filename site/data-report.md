@@ -1,12 +1,13 @@
 # 資料品質報告
 
-> 由 `site/scripts/build-data.mjs` 於 build 時自動產生（2026-10-28 16:05 UTC）。請勿手動編輯；資料問題請轉告對應的主題 session 修正 `topics/` 下的檔案。
+> 由 `site/scripts/build-data.mjs` 於 build 時自動產生（2026-11-26 09:55 UTC）。請勿手動編輯；資料問題請轉告對應的主題 session 修正 `topics/` 下的檔案。
 
 ## 總覽
 
-| 主題 | 事件 | 讀物 | 概念 | 文件 | 待查證（事件／讀物／概念） | 警告 |
-|---|---|---|---|---|---|---|
-| S1 History of Global Environmental Justice | 312 | 107 | 36 | 20 | 24／7／8 | 0 |
+| 主題 | 事件 | 讀物 | 概念 | 一手文件 | Markdown 文件 | 待查證（事件／讀物／概念／一手文件） | 警告 |
+|---|---|---|---|---|---|---|---|
+| S1 History of Global Environmental Justice | 312 | 107 | 36 | 0 | 20 | 24／7／8／0 | 0 |
+| S2 戰爭與其延伸影響 | 0 | 0 | 0 | 0 | 1 | 0／0／0／0 | 0 |
 
 ## S1：History of Global Environmental Justice
 
@@ -63,3 +64,26 @@
 - 概念 回饋金（compensation-for-siting）
 - 概念 Nuclear colonialism（核殖民主義）
 - 概念 Green colonialism / green extractivism（綠色殖民主義／綠色採掘主義）
+
+## S2：戰爭與其延伸影響
+
+資料夾：`topics/S2-war`
+
+### 警告（0）
+
+沒有發現格式問題。
+
+### 說明
+
+- 缺少 `data/timeline.csv`，網站略過此部分。
+- 缺少 `readings.csv`，網站略過此部分。
+- 缺少 `data/concepts.csv`，網站略過此部分。
+- 缺少 `overview.md`。
+- 缺少 `historiography.md`。
+- 缺少 `cases.md`。
+- 缺少 `activities.md`。
+- 缺少 `media.md`。
+
+### 待查證項目
+
+- （無）

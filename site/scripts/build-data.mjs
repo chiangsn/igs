@@ -7,7 +7,8 @@ import { parse } from 'csv-parse/sync';
 
 const SITE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT = path.resolve(SITE, '..');
-const TOPICS_DIR = path.join(ROOT, 'topics');
+// IGS_TOPICS_DIR 只供本機測試（例如用假資料試新欄位），正式 build 一律讀 ../topics
+const TOPICS_DIR = process.env.IGS_TOPICS_DIR ? path.resolve(process.env.IGS_TOPICS_DIR) : path.join(ROOT, 'topics');
 const OUT_DIR = path.join(SITE, 'public', 'data');
 const REPORT_PATH = path.join(SITE, 'data-report.md');
 
@@ -39,6 +40,12 @@ const SCHEMAS = {
     columns: ['concept', 'origin_region', 'year', 'key_authors', 'definition_zh', 'sources'],
     required: ['concept', 'origin_region', 'year'],
   },
+  // 一手文件（S4 交接檔規定的欄位；其他主題若有同名檔也適用）
+  documents: {
+    file: 'data/documents.csv',
+    columns: ['id', 'year', 'title', 'issuing_body', 'doc_type', 'module', 'significance_zh', 'url', 'access', 'sources'],
+    required: ['id', 'year', 'title'],
+  },
 };
 const ENUMS = {
   readings: {
@@ -48,7 +55,12 @@ const ENUMS = {
     access: ['open', 'library', 'paywall'],
   },
   timeline: {
-    type: ['movement', 'disaster', 'lawsuit', 'policy', 'treaty', 'conference', 'publication'],
+    // CLAUDE.md 2026-11-26 版
+    type: ['movement', 'disaster', 'lawsuit', 'policy', 'treaty', 'conference', 'publication',
+      'war', 'institution', 'program', 'technology', 'other'],
+  },
+  documents: {
+    access: ['open', 'library', 'paywall'],
   },
 };
 
@@ -282,6 +294,23 @@ function buildTopic(folder, registry) {
   const nonStd = concepts.filter((c) => c.origin_raw && !REGIONS.includes(c.origin_raw)).length;
   if (nonStd) note(code, `concepts.csv 有 ${nonStd} 筆 \`origin_region\` 不是單一固定分類（含多區域或括號補充），網站以字串中出現的固定分類歸類。CLAUDE.md 未規範此欄，僅供參考。`);
 
+  // documents（選用檔，沒有就不顯示「一手文件」分頁）
+  const dc = fs.existsSync(path.join(dir, SCHEMAS.documents.file)) ? readCsv(code, dir, 'documents') : null;
+  const documents = (dc ?? []).map((r) => {
+    const label = `documents.csv 第 ${r.__line} 列（${r.id || '無 id'}）`;
+    if (r.id && !new RegExp(`^${code}-D\\d+$`).test(r.id)) warn(code, label, `id 格式應為 \`${code}-D###\``);
+    checkEnums(code, 'documents', r, label);
+    if (r.year && toInt(r.year) === null) warn(code, label, `year「${r.year}」不是整數年份`);
+    if (r.url && !/^https?:\/\//.test(r.url)) warn(code, label, `url 不是 http(s) 網址：${r.url}`);
+    if (!r.url && !r.sources) warn(code, label, '沒有網址也沒有來源（url、sources）');
+    return {
+      id: r.id, year: toInt(r.year), title: r.title, issuing_body: r.issuing_body, doc_type: r.doc_type,
+      modules: splitList(r.module), significance: r.significance_zh, url: r.url, access: r.access,
+      sources: splitSources(r.sources), pending: hasPending(r),
+    };
+  });
+  for (const d of new Set(dup(documents.map((e) => e.id)))) warn(code, 'documents.csv', `id 重複：${d}`);
+
   const docs = readDocs(code, dir);
   const periods = parsePeriods(code, dir);
 
@@ -298,14 +327,15 @@ function buildTopic(folder, registry) {
     r.regions = [...set];
   }
 
-  return { code, folder, name, status: reg?.status ?? '', periods, events, readings, concepts, docs,
-    has: { timeline: !!tl, readings: !!rd, concepts: !!cc } };
+  return { code, folder, name, status: reg?.status ?? '', periods, events, readings, concepts, documents, docs,
+    has: { timeline: !!tl, readings: !!rd, concepts: !!cc, documents: !!dc } };
 }
 
 // ---------- 跨主題檢查 ----------
 function crossChecks(topics) {
   const eventIds = new Set(topics.flatMap((t) => t.events.map((e) => e.id)));
   const readingIds = new Set(topics.flatMap((t) => t.readings.map((r) => r.id)));
+  const documentIds = new Set(topics.flatMap((t) => t.documents.map((d) => d.id)));
   for (const t of topics) {
     let asym = 0;
     const byId = new Map(t.events.map((e) => [e.id, e]));
@@ -317,7 +347,7 @@ function crossChecks(topics) {
       }
     }
     if (asym) note(t.code, `linked_ids 有 ${asym} 條只單向記錄；網絡圖一律合併為無向邊。`);
-    // 文件中的 T### / S1-### 引用
+    // 文件中的 T### / S1-### / S4-D### 引用
     const missing = new Map();
     for (const d of t.docs) {
       for (const m of d.md.matchAll(new RegExp(`\\b(?:${t.code}-)?T(\\d{3,})\\b`, 'g'))) {
@@ -326,6 +356,9 @@ function crossChecks(topics) {
       }
       for (const m of d.md.matchAll(/\b(S\d+-\d{3,})\b/g)) {
         if (!readingIds.has(m[1])) missing.set(`${d.file}: ${m[1]}`, true);
+      }
+      for (const m of d.md.matchAll(/\b(S\d+-D\d{3,})\b/g)) {
+        if (!documentIds.has(m[1])) missing.set(`${d.file}: ${m[1]}`, true);
       }
     }
     for (const k of missing.keys()) warn(t.code, k.split(':')[0], `文件引用了不存在的 id：${k.split(': ')[1]}`);
@@ -344,11 +377,12 @@ function stats(t) {
   const ys = t.events.map((e) => e.year_start).filter((y) => y !== null);
   return {
     events: t.events.length, readings: t.readings.length, concepts: t.concepts.length, docs: t.docs.length,
-    regionCounts,
+    documents: t.documents.length, regionCounts,
     pending: {
       events: t.events.filter((e) => e.pending).length,
       readings: t.readings.filter((r) => r.pending).length,
       concepts: t.concepts.filter((c) => c.pending).length,
+      documents: t.documents.filter((d) => d.pending).length,
     },
     yearMin: ys.length ? Math.min(...ys) : null, yearMax: ys.length ? Math.max(...ys) : null,
     warnings: report[t.code].warnings.length,
@@ -359,10 +393,10 @@ function renderReport(topics, generatedAt) {
   const L = [];
   L.push('# 資料品質報告', '');
   L.push(`> 由 \`site/scripts/build-data.mjs\` 於 build 時自動產生（${generatedAt}）。請勿手動編輯；資料問題請轉告對應的主題 session 修正 \`topics/\` 下的檔案。`, '');
-  L.push('## 總覽', '', '| 主題 | 事件 | 讀物 | 概念 | 文件 | 待查證（事件／讀物／概念） | 警告 |', '|---|---|---|---|---|---|---|');
+  L.push('## 總覽', '', '| 主題 | 事件 | 讀物 | 概念 | 一手文件 | Markdown 文件 | 待查證（事件／讀物／概念／一手文件） | 警告 |', '|---|---|---|---|---|---|---|---|');
   for (const t of topics) {
     const s = t.stats;
-    L.push(`| ${t.code} ${t.name} | ${s.events} | ${s.readings} | ${s.concepts} | ${s.docs} | ${s.pending.events}／${s.pending.readings}／${s.pending.concepts} | ${s.warnings} |`);
+    L.push(`| ${t.code} ${t.name} | ${s.events} | ${s.readings} | ${s.concepts} | ${s.documents} | ${s.docs} | ${s.pending.events}／${s.pending.readings}／${s.pending.concepts}／${s.pending.documents} | ${s.warnings} |`);
   }
   L.push('');
   for (const t of topics) {
@@ -382,6 +416,7 @@ function renderReport(topics, generatedAt) {
       ...t.events.filter((e) => e.pending).map((e) => `- 事件 \`${e.id}\` ${e.name}`),
       ...t.readings.filter((x) => x.pending).map((x) => `- 讀物 \`${x.id}\` ${x.title}`),
       ...t.concepts.filter((x) => x.pending).map((x) => `- 概念 ${x.concept}`),
+      ...t.documents.filter((x) => x.pending).map((x) => `- 一手文件 \`${x.id}\` ${x.title}`),
     ];
     L.push(...(pend.length ? pend : ['- （無）']), '');
   }

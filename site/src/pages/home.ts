@@ -13,7 +13,7 @@ export function renderHome(root: HTMLElement, idx: SiteIndex) {
     <h2>主題</h2>
     <div class="topic-grid">${idx.topics.map((t) => {
       const s = t.stats;
-      const pend = s.pending.events + s.pending.readings + s.pending.concepts;
+      const pend = s.pending.events + s.pending.readings + s.pending.concepts + s.pending.documents;
       const regs = Object.entries(s.regionCounts).filter(([, n]) => n > 0).sort((a, b) => b[1] - a[1]);
       const max = Math.max(1, ...regs.map((r) => r[1]));
       return `<a class="topic-card" href="#/t/${esc(t.code)}">
@@ -24,6 +24,7 @@ export function renderHome(root: HTMLElement, idx: SiteIndex) {
           <div><b>${s.events}</b><span>事件</span></div>
           <div><b>${s.readings}</b><span>讀物</span></div>
           <div><b>${s.concepts}</b><span>概念</span></div>
+          ${s.documents ? `<div><b>${s.documents}</b><span>一手文件</span></div>` : ''}
           <div><b class="${pend ? 'pending-text' : ''}">${pend}</b><span>待查證</span></div>
         </div>
         ${s.yearMin !== null ? `<p class="muted small">涵蓋 ${s.yearMin}–${s.yearMax} 年</p>` : ''}

@@ -22,7 +22,8 @@ export function renderMarkdown(container: HTMLElement, md: string, t?: Topic) {
 function decorateText(root: HTMLElement, t?: Topic) {
   const ev = new Set(t?.events.map((e) => e.id) ?? []);
   const rd = new Set(t?.readings.map((r) => r.id) ?? []);
-  const re = t ? new RegExp(`\\b(${t.code}-)?T(\\d{3,})\\b|\\b(S\\d+-\\d{3,})\\b|待查證`, 'g') : /待查證/g;
+  const dc = new Set(t?.documents.map((d) => d.id) ?? []);
+  const re = t ? new RegExp(`\\b(${t.code}-)?T(\\d{3,})\\b|\\b(S\\d+-\\d{3,})\\b|\\b(S\\d+-D\\d{3,})\\b|待查證`, 'g') : /待查證/g;
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
     acceptNode: (n) => (n.parentElement?.closest('a, pre') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT),
   });
@@ -45,6 +46,8 @@ function decorateText(root: HTMLElement, t?: Topic) {
         if (ev.has(id)) { const a = document.createElement('a'); a.href = '#'; a.dataset.event = id; a.className = 'ref-event'; a.textContent = m[0]; out = a; }
       } else if (t && m[3] && rd.has(m[3])) {
         const a = document.createElement('a'); a.href = `#/t/${t.code}/readings?id=${m[3]}`; a.className = 'ref-reading'; a.textContent = m[0]; out = a;
+      } else if (t && m[4] && dc.has(m[4])) {
+        const a = document.createElement('a'); a.href = `#/t/${t.code}/documents?id=${m[4]}`; a.className = 'ref-reading'; a.textContent = m[0]; out = a;
       }
       frag.append(out);
       last = m.index + m[0].length;

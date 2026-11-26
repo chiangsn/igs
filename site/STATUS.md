@@ -1,6 +1,6 @@
 # SZ STATUS：視覺化網站
 
-最後更新：2026-10-28
+最後更新：2026-11-26
 
 ## 目前狀態：第一版完成，已在本機驗證
 
@@ -8,6 +8,13 @@
 - 用 `vite preview` 預覽 `site/dist/`，所有頁面正常載入，瀏覽器 console 沒有錯誤；已檢查深色、淺色模式與手機寬度（375px，沒有水平捲動）。
 - S1 資料管線結果：282 事件、107 讀物、36 概念、20 份文件，**0 則格式警告**（見 `data-report.md`）。
 - `package-lock.json` 已 commit；`render.yaml` 使用 `npm ci`，Node 24.22.1（與本機相同）。
+
+## 2026-11-26 更新
+
+- timeline `type` 驗證清單改為 `CLAUDE.md` 新版 12 類（新增 war / institution / program / technology / other）；中文標籤同步。主題的類型超過 8 種時，時間軸與地圖依類型上色會保留最常見的 7 類，其餘併入「其他」。
+- 支援 `data/documents.csv`（S4 一手文件）：驗證 id 格式 `S4-D###`、年份、網址、`access`、id 重複；主題有這個檔時出現「一手文件」分頁（搜尋、依文件類型／模組／取得方式篩選），總覽與首頁顯示份數，Markdown 中的 `S4-D###` 會連到該文件，引用不存在的 id 會列入警告。
+- 怎麼確認的：S4 尚未產出資料，所以用一份假的 S4 資料（放在 scratchpad，未進 repo）加上 S1 實際資料，以 `IGS_TOPICS_DIR` 跑完整 `npm run build`（含 `tsc`）。報告正確列出刻意放入的錯誤（不合法 type、id 格式、access、年份、網址、不存在的 `S4-D099`）；預覽確認一手文件分頁、文件內連結、12 類上色與圖例正常，S1 頁面不變且沒有「一手文件」分頁，console 無錯誤。再以真實資料 build：0 則警告。
+- 未做：`documents.csv` 的 `doc_type`、`module` 交接檔沒有規定選項，網站照原值顯示、不驗證。
 
 ## 已完成
 

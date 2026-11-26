@@ -3,6 +3,7 @@ import type { Topic } from '../data';
 import { bindToc, renderMarkdown, tocHtml } from '../markdown';
 import { esc } from '../ui';
 import { renderConcepts } from './concepts';
+import { renderDocuments } from './documents';
 import { renderExplore } from './explore';
 import { renderNetwork } from './network';
 import { renderReadings } from './readings';
@@ -10,7 +11,7 @@ import { renderRegions } from './regions';
 
 export const TABS: [string, string][] = [
   ['', '總覽'], ['explore', '時間軸與地圖'], ['network', '網絡圖'], ['regions', '區域比較'],
-  ['concepts', '概念系譜'], ['readings', '讀物'], ['docs', '文件'],
+  ['concepts', '概念系譜'], ['readings', '讀物'], ['documents', '一手文件'], ['docs', '文件'],
 ];
 
 type Cleanup = (() => void) | undefined;
@@ -18,7 +19,7 @@ type Cleanup = (() => void) | undefined;
 export function renderTopic(root: HTMLElement, t: Topic, tab: string, rest: string[], params: URLSearchParams): Cleanup {
   root.innerHTML = `
     <div class="topic-head"><span class="topic-code">${esc(t.code)}</span><h1>${esc(t.name)}</h1></div>
-    <nav class="tabs">${TABS.map(([k, label]) => `<a href="#/t/${t.code}${k ? '/' + k : ''}" class="${k === tab ? 'on' : ''}">${label}</a>`).join('')}</nav>
+    <nav class="tabs">${TABS.filter(([k]) => k !== 'documents' || t.has.documents).map(([k, label]) => `<a href="#/t/${t.code}${k ? '/' + k : ''}" class="${k === tab ? 'on' : ''}">${label}</a>`).join('')}</nav>
     <div id="tab"></div>`;
   const host = root.querySelector('#tab') as HTMLElement;
   switch (tab) {
@@ -27,6 +28,7 @@ export function renderTopic(root: HTMLElement, t: Topic, tab: string, rest: stri
     case 'regions': renderRegions(host, t); break;
     case 'concepts': renderConcepts(host, t); break;
     case 'readings': renderReadings(host, t, params); break;
+    case 'documents': renderDocuments(host, t, params); break;
     case 'docs': renderDocs(host, t, rest[0]); break;
     default: renderOverview(host, t);
   }
@@ -41,8 +43,9 @@ function renderOverview(root: HTMLElement, t: Topic) {
       <a class="stat" href="#/t/${t.code}/explore"><div class="stat-num">${s.events}</div><div class="stat-label">事件${s.yearMin !== null ? `（${s.yearMin}–${s.yearMax}）` : ''}</div></a>
       <a class="stat" href="#/t/${t.code}/readings"><div class="stat-num">${s.readings}</div><div class="stat-label">讀物</div></a>
       <a class="stat" href="#/t/${t.code}/concepts"><div class="stat-num">${s.concepts}</div><div class="stat-label">概念</div></a>
+      ${s.documents ? `<a class="stat" href="#/t/${t.code}/documents"><div class="stat-num">${s.documents}</div><div class="stat-label">一手文件</div></a>` : ''}
       <a class="stat" href="#/t/${t.code}/regions"><div class="stat-num">${Object.values(s.regionCounts).filter((n) => n).length}</div><div class="stat-label">區域有事件</div></a>
-      <div class="stat"><div class="stat-num pending-text">⚠ ${s.pending.events + s.pending.readings + s.pending.concepts}</div><div class="stat-label">待查證（事件 ${s.pending.events}／讀物 ${s.pending.readings}／概念 ${s.pending.concepts}）</div></div>
+      <div class="stat"><div class="stat-num pending-text">⚠ ${s.pending.events + s.pending.readings + s.pending.concepts + s.pending.documents}</div><div class="stat-label">待查證（事件 ${s.pending.events}／讀物 ${s.pending.readings}／概念 ${s.pending.concepts}${s.documents ? `／一手文件 ${s.pending.documents}` : ''}）</div></div>
     </div>
     ${t.periods.length ? `<div class="card"><h3>歷史分期</h3><ol class="periods">${t.periods.map((p) => `<li><b>${esc(p.name)}</b> <span class="muted">${esc(p.label)}${p.start !== null || p.end !== null ? `｜時間軸區間 ${p.start ?? '…'}–${p.end ?? '今'}` : ''}</span></li>`).join('')}</ol></div>` : ''}
     ${overview ? '<div class="doc-layout"><article class="md" id="md"></article><aside id="toc"></aside></div>' : '<p class="empty">此主題沒有 overview.md。</p>'}`;

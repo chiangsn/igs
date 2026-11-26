@@ -59,10 +59,11 @@ npm run data       # 只重跑資料管線（更新 public/data/ 與 data-report
 1. 讀 `REGISTRY.md` 的主題表，取得編號與名稱；掃描 `topics/*/` 找出所有主題資料夾（未登記的主題改用資料夾名稱，並在報告註記）。
 2. 每個主題讀取（缺檔就略過該部分，網站其他部分照常顯示）：
    - `data/timeline.csv`、`data/concepts.csv`、`readings.csv`
+   - `data/documents.csv`（選用，一手文件；欄位見 S4 交接檔，有這個檔才顯示「一手文件」分頁）
    - `overview.md`、`historiography.md`、`cases.md`、`activities.md`、`media.md`、`regions/*.md`、其他頂層 `.md`
    - 工作文件：`STATUS.md`、`verification-todo.md`、`data/README.md`（在「文件 → 工作文件」顯示）
 3. 歷史分期：名稱取自 `overview.md` 的「### 第N期：…」標題，年份邊界取自 `data/README.md` 中含「分期」的那一行（例如「1950 前…；1950–69 年…；2010 年後…」）。兩者數量不一致時不畫分期色帶，並在報告中警告。
-4. 驗證（寫入 `site/data-report.md`，不讓 build 失敗）：欄位名稱、必填欄位、`region` 是否屬固定分類、`type`／`language`／`level`／`access` 列舉值、id 格式與重複、年份與座標、`linked_ids` 是否存在（跨主題查找）、單向連結數、Markdown 與概念來源中引用的 `T###`／`S1-###` 是否存在、所有含「待查證」的項目。
+4. 驗證（寫入 `site/data-report.md`，不讓 build 失敗）：欄位名稱、必填欄位、`region` 是否屬固定分類、`type`／`language`／`level`／`access` 列舉值、id 格式與重複、年份與座標、`linked_ids` 是否存在（跨主題查找）、單向連結數、Markdown 與概念來源中引用的 `T###`／`S1-###`／`S4-D###` 是否存在、所有含「待查證」的項目。
 5. **只有結構性錯誤**（CSV 無法解析、空檔、檔頭缺必要欄位）會讓 build 失敗。
 6. 輸出 `public/data/index.json`、`public/data/topics/<編號>.json`、`public/data/report.md`。
 
@@ -75,3 +76,5 @@ npm run data       # 只重跑資料管線（更新 public/data/ 與 data-report
 repo 根目錄的 `render.yaml`（Render Blueprint）定義一個 static site：從 repo 根目錄執行 `cd site && npm ci && npm run build`，發佈 `site/dist`。不設 `rootDir`，否則讀不到 `topics/`。使用 hash 路由，所以不需 rewrite 規則。另加 `X-Robots-Tag: noindex` header 與 `public/robots.txt`。
 
 由 SZ 負責 commit 與 push 到 `github.com/chiangsn/igs` 的 `main`；Render 由使用者操作。
+
+本機想用假資料測試新欄位時，可設環境變數 `IGS_TOPICS_DIR` 指向另一個 topics 資料夾，例如 `IGS_TOPICS_DIR=/path/to/fixture npm run build`；正式 build 不設。

@@ -25,7 +25,8 @@ export const cssVar = (name: string) => getComputedStyle(document.documentElemen
 export const slotVar = (i: number) => (i >= 0 && i < SLOT_COUNT ? `var(--series-${i + 1})` : 'var(--series-other)');
 export const slotHex = (i: number) => cssVar(i >= 0 && i < SLOT_COUNT ? `--series-${i + 1}` : '--series-other');
 
-export const EVENT_TYPES = ['movement', 'disaster', 'lawsuit', 'policy', 'treaty', 'conference', 'publication'];
+export const EVENT_TYPES = ['movement', 'disaster', 'lawsuit', 'policy', 'treaty', 'conference', 'publication',
+  'war', 'institution', 'program', 'technology', 'other'];
 
 export type ColorBy = 'type' | 'issue';
 
@@ -42,7 +43,14 @@ export function palette(t: Topic, by: ColorBy): Palette {
   if (by === 'type') {
     const known = EVENT_TYPES.filter((x) => t.events.some((e) => e.type === x));
     const extra = [...new Set(t.events.map((e) => e.type))].filter((x) => !known.includes(x));
-    const keys = [...known, ...extra].slice(0, SLOT_COUNT);
+    let keys = [...known, ...extra];
+    // 類型超過色槽時：最常見的 7 類保留（仍依固定順序），其餘併入「其他」
+    if (keys.length > SLOT_COUNT) {
+      const n = (k: string) => t.events.filter((e) => e.type === k).length;
+      const top = new Set([...keys].sort((a, b) => n(b) - n(a)).slice(0, SLOT_COUNT - 1));
+      keys = keys.filter((k) => top.has(k) && k !== 'other');
+      return { keys: [...keys, '其他'], labels: [...keys.map((k) => TYPE_ZH[k] ?? k), '其他'], slot: (e) => keys.indexOf(e.type) };
+    }
     return { keys, labels: keys.map((k) => TYPE_ZH[k] ?? k), slot: (e) => keys.indexOf(e.type) };
   }
   const keys = topIssues(t);
@@ -80,11 +88,13 @@ export function sourceHtml(s: string): string {
 export function linkifyIds(text: string, t: Topic): string {
   const ev = new Set(t.events.map((e) => e.id));
   const rd = new Set(t.readings.map((r) => r.id));
-  return text.replace(new RegExp(`\\b(${t.code}-)?T(\\d{3,})\\b|\\b(S\\d+-\\d{3,})\\b`, 'g'), (m, _p, num, rid) => {
+  const dc = new Set(t.documents.map((d) => d.id));
+  return text.replace(new RegExp(`\\b(${t.code}-)?T(\\d{3,})\\b|\\b(S\\d+-\\d{3,})\\b|\\b(S\\d+-D\\d{3,})\\b`, 'g'), (m, _p, num, rid, did) => {
     if (num) {
       const id = `${t.code}-T${num}`;
       return ev.has(id) ? `<a href="#" class="ref-event" data-event="${id}">${m}</a>` : m;
     }
+    if (did) return dc.has(did) ? `<a href="#/t/${t.code}/documents?id=${did}" class="ref-reading">${m}</a>` : m;
     return rd.has(rid) ? `<a href="#/t/${t.code}/readings?id=${rid}" class="ref-reading">${m}</a>` : m;
   });
 }
