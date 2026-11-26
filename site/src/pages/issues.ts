@@ -35,7 +35,7 @@ export function renderIssues(root: HTMLElement, t: Topic) {
   }
 
   root.innerHTML = `
-    ${t.config.thesis.claim ? `<div class="card claim"><p>${esc(t.config.thesis.claim)}</p>${t.config.thesis.note ? `<p class="muted small claim-note">⚠ ${esc(t.config.thesis.note)}<br>目前分組：${groups.map((g) => `<b>${esc(g.label)}</b>（${esc(g.keywords.join('、'))}）`).join('；')}</p>` : ''}</div>` : ''}
+    ${t.config.thesis.claim ? `<div class="card claim"><p>${esc(t.config.thesis.claim)}</p>${t.config.thesis.note ? `<p class="muted small claim-note">${esc(t.config.thesis.note)}<br>目前分組：${groups.map((g) => `<b>${esc(g.label)}</b>（${esc(g.keywords.join('、'))}）`).join('；')}</p>` : ''}</div>` : ''}
     ${tiles.length ? `<div class="stat-row">${tiles.join('')}</div>` : ''}
     <div class="card"><h3>關鍵字出現次數</h3>
       <p class="muted small">每個事件可以有多個 issue 關鍵字，這裡計算每個關鍵字出現在幾筆事件（共 ${ev.length} 筆）。顏色代表關鍵字群組，群組依 <code>site/topic-config.json</code> 的設定${t.config.thesis.note ? '（見頁首說明）' : '（取自主題 <code>data/README.md</code> 的分類）'}。</p>

@@ -88,7 +88,7 @@ npm run data       # 只重跑資料管線（更新 public/data/ 與 data-report
 | `focusRegion` | `regions` 用：要強調的區域（固定分類之一），例如 S1 的 `North America`；不設就不強調 |
 | `claim` | `issues` 用：放在頁首的一句論點 |
 | `compare` | `issues` 用：要比較的兩個群組 key，`[A, B]`，頁首顯示「標了 B 的事件數 vs 標了 A 的事件數」與 A 最常見關鍵字的名次；`[]` 不顯示 |
-| `note` | 放在論點下方的提醒，例如「分組由 SZ 擬定，待確認」；有設定時也會列出目前的分組 |
+| `note` | 放在論點下方的說明，例如「分組由 SZ 依 overview 擬定」；有設定時也會列出目前的分組 |
 | `groupTrend` | `issues` 用：`true` 時加一張「各群組在各期的比重」折線圖 |
 | `regionHeat` | `issues` 用：`true` 時加一張「區域 × 分期」熱圖（含 Global 與非 Global 比例），用來呈現不是 issue 詞彙的區域論點（S4 的「南方的回應」） |
 

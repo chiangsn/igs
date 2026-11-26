@@ -8,7 +8,7 @@
       "view": "issues",
       "label": "三條線索",
       "claim": "S4 的三條貫穿線索（overview.md 第三節）：人口—環境—發展的組合如何重組、知識工具（模型、指標、目標）如何演變，以及南方如何回應全球框架。前兩條以 timeline 的 issue 詞彙分組呈現，第三條以區域 × 分期呈現。",
-      "note": "issue 詞彙的分組由 SZ 依 overview.md 第三節擬定（S4 的 data/README.md 只列 22 個詞彙，沒有分組），待使用者確認。",
+      "note": "issue 詞彙的分組由 SZ 依 overview.md 第三節擬定（S4 的 data/README.md 只列 22 個詞彙，沒有分組），已經使用者確認（2026-11-26）。",
       "compare": [],
       "groupTrend": true,
       "regionHeat": true

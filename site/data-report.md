@@ -1,6 +1,6 @@
 # 資料品質報告
 
-> 由 `site/scripts/build-data.mjs` 於 build 時自動產生（2026-11-26 14:43 UTC）。請勿手動編輯；資料問題請轉告對應的主題 session 修正 `topics/` 下的檔案。
+> 由 `site/scripts/build-data.mjs` 於 build 時自動產生（2026-11-26 14:49 UTC）。請勿手動編輯；資料問題請轉告對應的主題 session 修正 `topics/` 下的檔案。
 
 ## 總覽
 
