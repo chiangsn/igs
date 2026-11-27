@@ -52,40 +52,40 @@
 ## 事件清單（自 `data/timeline.csv` 產生）
 | id | 年代 | 國家 | 事件 | 類型 | 議題 |
 |---|---|---|---|---|---|
-| S1-T035 | 1885–1908 | Democratic Republic of the Congo | 剛果自由邦紅橡膠暴行 (Congo Free State) | disaster | rubber; forced labor; colonialism |
+| S1-T035 | 1885–1908 | Democratic Republic of the Congo;Belgium | 剛果自由邦紅橡膠暴行 (Congo Free State) | disaster | rubber; forced labor; colonialism |
 | S1-T036 | 1913 | South Africa | 南非《原住民土地法》(Natives Land Act) | policy | land; colonialism; racism |
-| S1-T037 | 1952–1960 | Kenya | 茅茅起義（土地與自由軍）(Mau Mau uprising) | movement | land; colonialism |
+| S1-T037 | 1952–1960 | Kenya;United Kingdom | 茅茅起義（土地與自由軍）(Mau Mau uprising) | movement | land; colonialism |
 | S1-T291 | 1958–2017 | Gabon;France | Mounana 鈾礦前工人求償 | movement | uranium; occupational disease; transnational corporation |
 | S1-T290 | 1971–2010 | Niger;France | Arlit 與 Akokan 鈾礦污染（Areva／Orano） | disaster | uranium; radiation; water; transnational corporation |
 | S1-T038 | 1977–2004 | Kenya | 綠帶運動 (Green Belt Movement) | movement | forest; women; democracy |
-| S1-T040 | 1988 | Nigeria | Koko 有毒廢棄物事件 | disaster | toxic waste; waste trade |
+| S1-T040 | 1988 | Nigeria;Italy | Koko 有毒廢棄物事件 | disaster | toxic waste; waste trade |
 | S1-T041 | 1988–1994 | South Africa | 南非環境正義網絡的形成 (Earthlife Africa / EJNF) | movement | toxic waste; apartheid; labor |
 | S1-T039 | 1989 | Kenya | Uhuru 公園反摩天大樓運動 | movement | urban green space; democracy |
-| S1-T042 | 1990–2021 | South Africa | Thor Chemicals 汞廢料案 (Cato Ridge) | lawsuit | toxic waste; labor; mercury; transnational corporation |
+| S1-T042 | 1990–2021 | South Africa;United Kingdom | Thor Chemicals 汞廢料案 (Cato Ridge) | lawsuit | toxic waste; labor; mercury; transnational corporation |
 | S1-T043 | 1990 | Nigeria | 《Ogoni 人權利法案》與 MOSOP 成立 | movement | oil; ethnic minority; self-determination |
-| S1-T044 | 1993 | Nigeria | Ogoni Day 大遊行與 Shell 撤出 Ogoniland | movement | oil; ethnic minority |
-| S1-T045 | 1995 | Nigeria | Ken Saro-Wiwa 與 Ogoni 九人被處決 | movement | oil; defenders; human rights |
+| S1-T044 | 1993 | Nigeria;Netherlands | Ogoni Day 大遊行與 Shell 撤出 Ogoniland | movement | oil; ethnic minority; transnational corporation |
+| S1-T045 | 1995 | Nigeria;Netherlands | Ken Saro-Wiwa 與 Ogoni 九人被處決 | movement | oil; defenders; human rights |
 | S1-T047 | 1996 | South Africa | 南非憲法第 24 條環境權 | policy | right to environment; post-apartheid |
 | S1-T048 | 1996–2010 | South Africa | 南德班社區環境聯盟 (South Durban Community Environmental Alliance) | movement | industrial pollution; air pollution; racism |
 | S1-T046 | 1998–1999 | Nigeria | Ijaw 青年《Kaiama 宣言》 | movement | oil; ethnic minority; self-determination |
-| S1-T049 | 2000–2008 | Chad;Cameroon | 查德—喀麥隆輸油管與世界銀行 | policy | oil; development finance |
+| S1-T049 | 2000–2008 | Chad;Cameroon;United States | 查德—喀麥隆輸油管與世界銀行 | policy | oil; development finance |
 | S1-T057 | 2000–2021 | Ghana | Agbogbloshie 電子廢棄物場 | disaster | e-waste; waste trade; health |
-| S1-T050 | 2006 | Côte d'Ivoire | Probo Koala 有毒廢棄物傾倒（阿必尚） | disaster | toxic waste; waste trade |
+| S1-T050 | 2006 | Côte d'Ivoire;Netherlands | Probo Koala 有毒廢棄物傾倒（阿必尚） | disaster | toxic waste; waste trade |
 | S1-T051 | 2006–2016 | Ethiopia;Kenya | Gibe III 水壩與 Omo 河—Turkana 湖衝突 | policy | dam; indigenous; water; transboundary |
-| S1-T055 | 2007–2019 | South Africa | Xolobeni Amadiba 反鈦礦運動 | movement | mining; land; defenders |
+| S1-T055 | 2007–2019 | South Africa;Australia | Xolobeni Amadiba 反鈦礦運動 | movement | mining; land; defenders; transnational corporation |
 | S1-T059 | 2008–2022 | Nigeria;Netherlands | Oruma、Goi、Ikot Ada Udo 農民與荷蘭地球之友訴 Shell（海牙） | lawsuit | oil; transnational corporation |
 | S1-T294 | 2008–2010 | Madagascar;South Korea | 大宇物流馬達加斯加 130 萬公頃租地案 | movement | land grabbing; food; transnational corporation |
 | S1-T295 | 2009–2020 | Mozambique;Brazil;Japan | ProSavana 計畫與「Não ao ProSavana」運動 | movement | agribusiness; land; South-South cooperation |
 | S1-T296 | 2009–2013 | Mozambique;Brazil | Tete 煤礦與 Cateme 等安置村 | publication | coal; resettlement; food; transnational corporation |
-| S1-T297 | 2010–2025 | Mozambique;France | Cabo Delgado 液化天然氣開發與武裝衝突 | movement | gas; displacement; conflict; climate |
-| S1-T298 | 2010–2014 | Democratic Republic of the Congo;United Kingdom | Virunga 國家公園石油探勘爭議 | movement | oil; biodiversity; World Heritage; defenders |
-| S1-T052 | 2011 | Nigeria | UNEP《Ogoniland 環境評估報告》 | publication | oil; water; remediation |
+| S1-T297 | 2010–2025 | Mozambique;France | Cabo Delgado 液化天然氣開發與武裝衝突 | movement | gas; displacement; conflict; climate; transnational corporation |
+| S1-T298 | 2010–2014 | Democratic Republic of the Congo;United Kingdom | Virunga 國家公園石油探勘爭議 | movement | oil; biodiversity; World Heritage; defenders; transnational corporation |
+| S1-T052 | 2011 | Nigeria;Netherlands | UNEP《Ogoniland 環境評估報告》 | publication | oil; water; remediation |
 | S1-T053 | 2012 | South Africa | Marikana 礦工屠殺 | disaster | mining; labor |
 | S1-T056 | 2015–2019 | Zambia;United Kingdom | Lungowe v Vedanta（尚比亞村民在英國起訴） | lawsuit | mining; water; transnational corporation |
 | S1-T293 | 2015–2018 | Guinea | 幾內亞 Boké 鋁土礦熱潮 | publication | bauxite; mining; water; land |
-| S1-T299 | 2015–2025 | Angola | Cabinda 海岸漏油與漁民 | disaster | oil spill; fisheries; transnational corporation |
+| S1-T299 | 2015–2025 | Angola;United States | Cabinda 海岸漏油與漁民 | disaster | oil spill; fisheries; transnational corporation |
 | S1-T054 | 2016–2025 | Democratic Republic of the Congo | 剛果手工鈷礦與能源轉型供應鏈 | movement | mining; child labor; energy transition |
 | S1-T292 | 2016–2025 | Senegal | Bargny–Sendou 燃煤電廠抗爭 | movement | coal; fisheries; women; development finance |
-| S1-T058 | 2019–2025 | Uganda;Tanzania | 反東非原油管線運動 (#StopEACOP) | movement | oil; climate; land |
+| S1-T058 | 2019–2025 | Uganda;Tanzania;France;China | 反東非原油管線運動 (#StopEACOP) | movement | oil; climate; land |
 
 共 35 筆。行動者、結果與來源詳見 `data/timeline.csv`。

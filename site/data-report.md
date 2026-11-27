@@ -1,15 +1,15 @@
 # 資料品質報告
 
-> 由 `site/scripts/build-data.mjs` 於 build 時自動產生（2026-11-27 15:33 UTC）。請勿手動編輯；資料問題請轉告對應的主題 session 修正 `topics/` 下的檔案。
+> 由 `site/scripts/build-data.mjs` 於 build 時自動產生（2026-11-27 16:01 UTC）。請勿手動編輯；資料問題請轉告對應的主題 session 修正 `topics/` 下的檔案。
 
 ## 總覽
 
 | 主題 | 事件 | 讀物 | 概念 | 一手文件 | 跨國連結 | Markdown 文件 | 待查證（事件／讀物／概念／一手文件／跨國連結） | 警告 |
 |---|---|---|---|---|---|---|---|---|
-| S1 History of Global Environmental Justice | 312 | 122 | 36 | 0 | 85 | 20 | 17／0／1／0／9 | 0 |
-| S2 戰爭與其延伸影響 | 249 | 174 | 34 | 0 | 0 | 20 | 0／0／0／0／0 | 0 |
+| S1 History of Global Environmental Justice | 312 | 122 | 36 | 0 | 70 | 20 | 17／0／1／0／6 | 0 |
+| S2 戰爭與其延伸影響 | 250 | 174 | 34 | 0 | 88 | 20 | 0／0／0／0／9 | 0 |
 | S3 科技全球發展史 | 238 | 295 | 41 | 0 | 0 | 18 | 0／0／0／0／0 | 2 |
-| S4 永續發展的全球治理史 | 248 | 148 | 40 | 55 | 0 | 21 | 0／0／0／0／0 | 0 |
+| S4 永續發展的全球治理史 | 248 | 148 | 40 | 55 | 90 | 21 | 0／0／0／0／15 | 0 |
 
 ## S1：History of Global Environmental Justice
 
@@ -22,13 +22,13 @@
 ### 說明
 
 - concepts.csv 有 9 筆 `origin_region` 不是單一固定分類（含多區域或括號補充），網站以字串中出現的固定分類歸類。CLAUDE.md 未規範此欄，僅供參考。
-- 推導的事件內負擔轉嫁（已確認）：20 筆事件、23 條線（有方向 12、無方向 11）。三國以上、看不出方向而不收：S1-T086（Bangladesh、India、Pakistan）。
+- 推導的事件內負擔轉嫁（待確認）：48 筆事件、53 條線（有方向 42、無方向 11）。三國以上、看不出方向而不收：S1-T086（Bangladesh、India、Pakistan）。
 - 歷史分期：名稱取自 `overview.md` 的「第 N 期」標題，年份邊界取自 `data/README.md` 的分期分布（6 期）。
 - linked_ids 有 228 條只單向記錄；網絡圖一律合併為無向邊。
-- 南北分類（G77 成員）無法判斷的國家或地區：French Polynesia、Taiwan、Western Sahara、Hong Kong；含這些國家的事件歸「無法判斷」。
-- 南北分類（世界銀行所得分組）無法判斷的國家或地區：Western Sahara；含這些國家的事件歸「無法判斷」。
-- 南北分類：連結兩端涉及 73 個國家或地區，其中 16 個在不同分類下歸屬不同；兩種分類對連結的判斷有 18 條不一致。
-- links.csv：85 列，網站使用 85 條。主要 flow：ideas 38、material 26、people 7、capital 6、technology 4、media 4。mechanism：scale_up 18、commodity_chain 11、burden_shifting 8、boomerang 8、memory 8、colonial 7、litigation 7、geopolitical 6、translation 5、diffusion 4、template 2、imposition 1。沒有 mechanism_2 欄（link-typology 第一版格式），次要機制視為全部留空。跨主題 10 條。
+- 南北分類（G77 成員）無法判斷的國家或地區：French Polynesia、Taiwan、Western Sahara、Soviet Union、Hong Kong；含這些國家的事件歸「無法判斷」。
+- 南北分類（世界銀行所得分組）無法判斷的國家或地區：Western Sahara、Soviet Union；含這些國家的事件歸「無法判斷」。
+- 南北分類：連結兩端涉及 66 個國家或地區，其中 13 個在不同分類下歸屬不同；兩種分類對連結的判斷有 12 條不一致。
+- links.csv：70 列，網站使用 70 條。主要 flow：material 24、ideas 24、people 12、media 5、capital 4、technology 1。mechanism：scale_up 18、boomerang 8、memory 7、geopolitical 5、litigation 5、template 4、evasion 4、colonial 4、burden_shifting 3、commodity_chain 3、diffusion 3、translation 3、contestation 2、imposition 1。次要機制（mechanism_2）：commodity_chain 7、burden_shifting 5、colonial 4、litigation 4、diffusion 4、geopolitical 3、translation 2、memory 1、scale_up 1。跨主題 7 條。
 
 ### 待查證項目
 
@@ -50,14 +50,11 @@
 - 事件 `S1-T299` Cabinda 海岸漏油與漁民
 - 事件 `S1-T303` Rogun 水壩與中亞上下游水權爭端
 - 概念 公害（kōgai）
-- 跨國連結 `S1-L011`（S1-T096 → S1-T118）
-- 跨國連結 `S1-L019`（S1-T056 → S1-T087）
+- 跨國連結 `S1-L011`（S1-T118 → S1-T096）
 - 跨國連結 `S1-L045`（S1-T158 → S1-T133）
 - 跨國連結 `S1-L047`（S1-T252 → S1-T021）
 - 跨國連結 `S1-L053`（S1-T123 → S1-T146）
 - 跨國連結 `S1-L055`（S1-T042 → S1-T056）
-- 跨國連結 `S1-L058`（S1-T045 → S1-T059）
-- 跨國連結 `S1-L073`（S1-T301 → S1-T305）
 - 跨國連結 `S1-L074`（S1-T092 → S1-T270）
 
 ## S2：戰爭與其延伸影響
@@ -72,11 +69,23 @@
 
 - concepts.csv 有 2 筆 `origin_region` 不是單一固定分類（含多區域或括號補充），網站以字串中出現的固定分類歸類。CLAUDE.md 未規範此欄，僅供參考。
 - 歷史分期：名稱取自 `overview.md` 的「第 N 期」標題，年份邊界取自 `data/README.md` 的分期分布（6 期）。
-- linked_ids 有 36 條只單向記錄；網絡圖一律合併為無向邊。
+- linked_ids 有 38 條只單向記錄；網絡圖一律合併為無向邊。
+- 南北分類（G77 成員）無法判斷的國家或地區：Taiwan、Soviet Union、Austria-Hungary、Ottoman Empire、Kosovo、Hong Kong；含這些國家的事件歸「無法判斷」。
+- 南北分類（世界銀行所得分組）無法判斷的國家或地區：Soviet Union、Austria-Hungary、Ottoman Empire；含這些國家的事件歸「無法判斷」。
+- 南北分類：連結兩端涉及 96 個國家或地區，其中 16 個在不同分類下歸屬不同；兩種分類對連結的判斷有 21 條不一致。
+- links.csv：88 列，網站使用 88 條。主要 flow：ideas 48、people 21、material 8、technology 8、media 3。mechanism：geopolitical 30、scale_up 20、litigation 11、evasion 6、colonial 5、template 5、diffusion 3、memory 2、imposition 2、contestation 2、commodity_chain 1、burden_shifting 1。次要機制（mechanism_2）：memory 6、diffusion 3、evasion 3、boomerang 2、template 2、geopolitical 1、commodity_chain 1、litigation 1、burden_shifting 1、colonial 1、contestation 1。跨主題 13 條。
 
 ### 待查證項目
 
-- （無）
+- 跨國連結 `S2-L002`（S1-T063 → S2-T247）
+- 跨國連結 `S2-L003`（S1-T092 → S2-T206）
+- 跨國連結 `S2-L007`（S1-T201 → S2-T165）
+- 跨國連結 `S2-L023`（S2-T055 → S2-T057）
+- 跨國連結 `S2-L027`（S2-T073 → S2-T074）
+- 跨國連結 `S2-L039`（S2-T075 → S2-T160）
+- 跨國連結 `S2-L051`（S2-T040 → S2-T153）
+- 跨國連結 `S2-L079`（S2-T002 → S2-T154）
+- 跨國連結 `S2-L081`（S2-T063 → S2-T092）
 
 ## S3：科技全球發展史
 
@@ -119,7 +128,25 @@
 - 歷史分期：名稱取自 `overview.md` 的「第 N 期」標題，年份邊界取自 `data/README.md` 的分期分布（7 期）。
 - 讀物標籤篩選「專題單元」：14 個值，148 / 148 筆讀物至少有一個（M01 12、M02 14、M03 26、M04 17、M05 16、M06 22、M07 10、M08 8、M09 13、M10 12、M11 10、M12 17、M13 23、M14 20）。
 - 讀物標籤篩選「學術傳統」：6 個值，55 / 148 筆讀物至少有一個（hist:devstudies 13、hist:envhist 8、hist:govstudies 9、hist:indicators 9、hist:population 9、hist:postdev 7）。
+- 南北分類（G77 成員）無法判斷的國家或地區：Taiwan、Soviet Union、Cook Islands；含這些國家的事件歸「無法判斷」。
+- 南北分類（世界銀行所得分組）無法判斷的國家或地區：Soviet Union、Cook Islands；含這些國家的事件歸「無法判斷」。
+- 南北分類：連結兩端涉及 55 個國家或地區，其中 9 個在不同分類下歸屬不同；兩種分類對連結的判斷有 16 條不一致。
+- links.csv：90 列，網站使用 90 條。主要 flow：ideas 69、capital 8、technology 7、people 3、material 3。mechanism：scale_up 29、template 14、translation 13、diffusion 10、contestation 8、evasion 7、geopolitical 4、imposition 4、boomerang 1。次要機制（mechanism_2）：translation 6、template 3、geopolitical 3、contestation 3、imposition 2、burden_shifting 2、commodity_chain 1。跨主題 17 條。
 
 ### 待查證項目
 
-- （無）
+- 跨國連結 `S4-L005`（S4-T009 → S3-T058）
+- 跨國連結 `S4-L011`（S4-T019 → S4-T237）
+- 跨國連結 `S4-L024`（S4-T060 → S1-T130）
+- 跨國連結 `S4-L026`（S4-T068 → S4-T067）
+- 跨國連結 `S4-L039`（S4-T083 → S4-T124）
+- 跨國連結 `S4-L040`（S4-T096 → S4-T124）
+- 跨國連結 `S4-L049`（S4-T105 → S4-T152）
+- 跨國連結 `S4-L055`（S4-T113 → S4-T119）
+- 跨國連結 `S4-L065`（S4-T138 → S1-T253）
+- 跨國連結 `S4-L068`（S4-T152 → S4-T158）
+- 跨國連結 `S4-L074`（S4-T158 → S4-T172）
+- 跨國連結 `S4-L075`（S4-T233 → S4-T173）
+- 跨國連結 `S4-L077`（S4-T159 → S4-T188）
+- 跨國連結 `S4-L079`（S4-T170 → S4-T173）
+- 跨國連結 `S4-L080`（S4-T215 → S4-T173）

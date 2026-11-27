@@ -45,14 +45,14 @@
 | S1-T077 | 1973–1984 | India | Silent Valley 反水壩運動 | movement | dam; biodiversity |
 | S1-T086 | 1980–2025 | Bangladesh;India;Pakistan | 南亞拆船業 (Chittagong、Alang、Gadani) | disaster | toxic waste; labor; waste trade |
 | S1-T078 | 1983 | India | Appiko 運動（南印度抱樹） | movement | forest |
-| S1-T079 | 1984–2010 | India | Bhopal 毒氣災難 | disaster | chemical; transnational corporation; health |
+| S1-T079 | 1984–2010 | India;United States | Bhopal 毒氣災難 | disaster | chemical; transnational corporation; health |
 | S1-T080 | 1985–1987 | India | Oleum 氣體外洩與 M.C. Mehta 案「絕對責任」原則 | lawsuit | chemical; liability; public interest litigation |
 | S1-T081 | 1985–2000 | India | Narmada Bachao Andolan（拯救 Narmada 運動） | movement | dam; displacement; indigenous |
 | S1-T082 | 1992–1993 | India | Morse 報告與世界銀行撤出 Sardar Sarovar | publication | dam; development finance |
 | S1-T083 | 1994–1995 | Nepal | Arun III 水壩與世界銀行 Inspection Panel 首案 | policy | dam; development finance |
 | S1-T084 | 2002–2006 | India | Plachimada 反可口可樂取水運動 | movement | water; transnational corporation; Adivasi |
 | S1-T087 | 2003–2013 | India | Niyamgiri：Dongria Kondh 對抗 Vedanta 鋁土礦 | movement | mining; indigenous; sacred site |
-| S1-T085 | 2006 | Bangladesh | Phulbari 反露天煤礦抗爭 | movement | coal; displacement; land |
+| S1-T085 | 2006 | Bangladesh;United Kingdom | Phulbari 反露天煤礦抗爭 | movement | coal; displacement; land; transnational corporation |
 | S1-T088 | 2013–2025 | Bangladesh | 反 Rampal 燃煤電廠（Sundarbans）運動 | movement | coal; mangrove; transboundary |
 | S1-T089 | 2015 | Pakistan | 喀拉蚩熱浪 | disaster | climate; heat; urban poverty |
 | S1-T091 | 2015 | Pakistan | Leghari v. Federation of Pakistan 氣候訴訟 | lawsuit | climate; public interest litigation |

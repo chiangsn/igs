@@ -47,6 +47,7 @@
 | id | 年代 | 國家 | 事件 | 類型 | 議題 |
 |---|---|---|---|---|---|
 | S1-T116 | 1890–1907 | Japan | 足尾銅山礦毒事件與田中正造 | movement | mining; water; agriculture |
+| S1-T145 | 1930 | Taiwan;Japan | 霧社事件 (Musha/Wushe Incident) | movement | indigenous; colonialism; forest labor |
 | S1-T117 | 1954–1955 | Japan | 第五福龍丸事件與日本禁核彈連署 | movement | nuclear; fisheries |
 | S1-T118 | 1956–1973 | Japan | 水俣病（熊本） | disaster | mercury; industrial pollution; fisheries |
 | S1-T119 | 1960–1972 | Japan | 四日市哮喘與訴訟 | lawsuit | air pollution; petrochemical |
@@ -64,6 +65,8 @@
 | S1-T129 | 1993 | South Korea | 韓國環境運動聯合 (KFEM) 成立 | movement | environmental movement; democracy |
 | S1-T136 | 1994 | China | 自然之友成立 | movement | environmental NGO |
 | S1-T137 | 1994–2012 | China | 三峽大壩與百萬移民 | policy | dam; displacement |
+| S1-T158 | 1994–2018 | Taiwan;United States | RCA 桃園廠污染與職業癌症訴訟 | lawsuit | groundwater; occupational disease; transnational corporation |
+| S1-T161 | 1997–1998 | Taiwan;Germany | 台中反拜耳運動 | movement | chemical; transnational corporation |
 | S1-T131 | 2003–2005 | South Korea | 扶安反核廢料場抗爭 | movement | nuclear waste |
 | S1-T138 | 2003–2016 | China | 怒江水壩運動 | movement | dam; biodiversity; ethnic minority |
 | S1-T132 | 2005–2014 | South Korea | 密陽反超高壓輸電塔抗爭 | movement | energy; land; elderly |
@@ -76,4 +79,4 @@
 | S1-T141 | 2013 | China | 環保部承認「癌症村」 | publication | industrial pollution; health; rural |
 | S1-T143 | 2014–2015 | China | 中國《環境保護法》修訂與環境公益訴訟 | policy | public interest litigation |
 
-共 29 筆。行動者、結果與來源詳見 `data/timeline.csv`。
+共 32 筆。行動者、結果與來源詳見 `data/timeline.csv`。

@@ -73,8 +73,69 @@
 
 **驗證**：81 個網址中 60 個回 200、2 個 202、19 個 403（多為出版社 DOI 頁）；27 個 DOI 中 26 個經 Crossref 比對相符，另 1 個（Ecology & Society，Rockström 2009）已在 timeline 驗證。書籍因 Open Library 無法連線，只引用有 DOI 的版本。4 個概念只有單一非 Wikipedia 來源：Washington Consensus、Human development、Ecological modernization、Post-development。
 
+## links.csv（90 條跨國連結）
+
+依 `link-typology.md` 第二版標記，只收**跨國**的連結：兩事件在不同國家，或恰好一端是 `Global` 事件。兩端都是 Global 的制度沿革（例如斯德哥爾摩 → 里約、MDGs → SDGs）不收，仍留在 timeline 的 `linked_ids`。使用前請讀 `links-caveats.md`。
+
+| 欄位 | 說明 |
+|---|---|
+| `id` | `S4-L###`，依 `from_id` 事件的年份排序編號，之後新增的接在檔尾 |
+| `from_id`、`to_id` | timeline 事件 id；17 條連到 S1（7）、S2（3）、S3（7）的事件 |
+| `flow` | people / capital / technology / material / media / ideas，`;` 分隔，第一個是主要流動 |
+| `mechanism` | 14 類之一（見 `link-typology.md` 第 6 節） |
+| `mechanism_2` | 選填的次要機制（20 條有填），不與 `mechanism` 相同 |
+| `direction` | forward 89 條、mutual 1 條（拉哥斯行動計畫 ↔ 伯格報告） |
+| `note_zh` | 這條連結怎麼發生；邊界案例在此註明 |
+| `sources` | 支持「兩事件有關聯」的來源，` ; ` 分隔；部分支持者註明哪一部分「待查證」（15 條） |
+
+**全球與地方的方向**：Global → 地方 41 條、地方 → Global 31 條、不經過 Global 的國家或區域之間 18 條。
+
+**主要機制（`mechanism`）× flow**（flow 可多值，依任一 flow 計；「條數」是該機制的連結數）
+| 機制 | people | capital | technology | material | media | ideas | 條數 |
+|---|---|---|---|---|---|---|---|
+| scale_up | 5 | 1 | 1 | 1 | 2 | 28 | 29 |
+| template | 1 | 3 | 2 |  |  | 13 | 14 |
+| translation | 1 |  |  |  |  | 13 | 13 |
+| diffusion | 9 | 3 | 6 |  |  | 4 | 10 |
+| contestation |  | 1 |  |  |  | 8 | 8 |
+| evasion |  | 1 |  | 2 |  | 7 | 7 |
+| geopolitical |  | 3 | 2 |  | 1 |  | 4 |
+| imposition |  | 4 |  | 1 |  | 3 | 4 |
+| boomerang | 1 |  |  |  |  | 1 | 1 |
+
+**次要機制（`mechanism_2`）× flow**（有填次要機制的 20 條）
+| 機制 | people | capital | technology | material | media | ideas | 條數 |
+|---|---|---|---|---|---|---|---|
+| translation |  | 1 |  |  |  | 6 | 6 |
+| template | 1 |  | 1 |  |  | 2 | 3 |
+| geopolitical | 2 |  | 2 | 1 |  | 1 | 3 |
+| contestation | 1 |  |  |  |  | 3 | 3 |
+| imposition |  |  | 1 |  | 1 | 1 | 2 |
+| burden_shifting |  |  |  | 2 |  | 2 | 2 |
+| commodity_chain |  | 1 |  |  |  | 1 | 1 |
+
+**檢查**：`python data/scripts/validate_links.py`（加 `--table` 印出上表）。檢查所有 id 存在於 S1–S4 的 timeline、詞彙都在清單內、`mechanism_2` 不等於 `mechanism`、沒有同國連結、沒有兩端都是 Global、沒有重複、沒有跨主題重複收錄的同一事件、每條都有說明與非 Wikipedia 來源。目前 0 個錯誤。候選清單可用 `python data/scripts/candidates.py <輸出.tsv>` 重新產生。
+
+### 與其他主題重複收錄的事件
+
+以下是同一事件在兩個主題各有一筆，已在雙方的 `linked_ids` 互相引用，不建連結：
+
+| S4 | 其他主題 | 事件 |
+|---|---|---|
+| S4-T067 | S1-T242 | 斯德哥爾摩人類環境會議（1972） |
+| S4-T062 | S1-T243 | Founex 報告（1971） |
+| S4-T105 | S1-T244 | Brundtland 報告（1987） |
+| S4-T115、S4-T119 | S1-T249 | 里約地球高峰會（1992）：S4 分列《二十一世紀議程》與《里約宣言》 |
+| S4-T172 | S1-T267 | 巴黎協定（2015） |
+| S4-T158 | S1-T021 | 科恰班巴世界人民氣候大會（2010） |
+| S4-T009 | S3-T033 | 農復會（1948） |
+
+### `country` 的寫法（2026-11-27 更新）
+
+依 `CLAUDE.md` 新規定，多國事件改為受影響地在前、外部的主要行動者（援助國、宗主國、企業母國）在後。共改 18 筆，例如亞斯文高壩 S4-T235 改為 `Egypt;United States;United Kingdom;Soviet Union`、印度糧援 S4-T043 改為 `India;United States`、南太平洋委員會 S4-T004 改為 `New Caledonia;Australia;...`。國際貨幣基金與世界銀行等多邊機構不是國家，不列入 `country`，在 `actors` 說明。石油禁運（S4-T074）的行動者就是事件所在的阿拉伯產油國，維持 `Kuwait;Saudi Arabia` 不變。
+
 ## 給 SZ 的建議
 
 - 時間軸：以 `year_start` 排序，`year_end` 畫區間；`Global` 事件太多，建議依 `type` 或 `issue` 分泳道，而不是依區域。
-- 網絡圖：`linked_ids` 中的 `S1-T###` 可以畫成跨主題的邊。
+- 網絡圖：`linked_ids` 中的 `S1-T###` 可以畫成跨主題的邊。注意 `linked_ids` 以全球層次的制度沿革為主（119 對中 66 對兩端都是 Global），跨國關係請改用 `links.csv`。
 - 分期：七期標題與上方分期分布一致，可直接解析。

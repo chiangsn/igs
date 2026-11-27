@@ -450,3 +450,176 @@
 - **交給 S0**：
   - 「回報一」與「回報二之二」中的分類建議：反制全球會議、規避全球規範、跨主題重複事件的標註方式。
   - 依檢查等級，links.csv 若要寫進論文，需改為第 2 級。
+
+## 第五輪：依連結指南第二版補標（2026-11-27，`prompts/S1-links-v2.md`）
+
+### 1. 做了什麼
+- **`links.csv` 改成第二版欄位**：加上 `mechanism_2`；85 條檢查後保留 **70 條**、移除 15 條（id 不再使用）。沒有新增連結。
+- **新機制**：4 條規避或違反巴塞爾公約的連結改標 `evasion`（L012 電子廢棄物、L013 Probo Koala、L064 台塑汞污泥、L067 拆船），次要機制 `burden_shifting`，方向統一由公約指向事件。2 條改標 `contestation`（L052 哥本哈根 → Tiquipaya、L082 巴塞爾 → 巴馬科）。
+- **任務檔點名的 L056（Thor Chemicals → 巴塞爾）沒有改成 evasion**：Thor 的進口發生在 1986–1990 年，巴塞爾公約 1992 年才生效，南非當時也不是締約方。來源說的是它被引為 1995 年禁令修正案的例子，所以改標 `scale_up`，次要機制 `burden_shifting`。
+- **template**：依第 7 節第 2 點（模仿的是文本就標 template），L007（《環境正義原則》→ 峇里原則）與 L051（厄瓜多憲法 → 地球母親權利宣言）改為 template。
+- **mutual**：23 條中保留 4 條（共同行動或互相聲援），8 條改 forward，11 條移除。
+- **ideas**：含 ideas 的由 55 條降到 33 條；25 條調整了 flow，並確認第一個值是主要流動。
+- **`timeline.csv`**：47 筆補上外部行動者的 `country`，15 筆在 `issue` 加 `transnational corporation`，17 筆在 `linked_ids` 引用其他主題的重複事件。只改 `country`、`issue`、`linked_ids`，id 不變。
+- **文件**：`validate_links.py`（新欄位、14 類、mechanism_2 不等於 mechanism、不重用已移除的 id、flow 不重複）；`data/README.md`（欄位、收錄規則、兩張分布表、與其他主題重複的事件）；`links-caveats.md` 全面改寫（見下方第 2 點）。
+
+**改標主要機制（9 條）**
+
+| id | 原本 | 改為 | 次要機制 |
+|---|---|---|---|
+| S1-L007 | scale_up | template | scale_up |
+| S1-L012 | burden_shifting | evasion | burden_shifting |
+| S1-L013 | burden_shifting | evasion | burden_shifting |
+| S1-L051 | diffusion | template | diffusion |
+| S1-L052 | translation | contestation | — |
+| S1-L056 | burden_shifting | scale_up | burden_shifting |
+| S1-L064 | burden_shifting | evasion | burden_shifting |
+| S1-L067 | burden_shifting | evasion | burden_shifting |
+| S1-L082 | translation | contestation | translation |
+
+**方向改變（8 條，mutual → forward）**： S1-L012（from/to 對調）、S1-L013（from/to 對調）、S1-L032（from/to 對調）、S1-L034、S1-L056、S1-L064（from/to 對調）、S1-L067（from/to 對調）、S1-L075
+另外 S1-L011 原本方向相反（Bukit Merah → 水俣病），改為由水俣病（日本國內管制）指向 Bukit Merah。
+
+**回填 mechanism_2（31 條）**： S1-L006 memory、S1-L007 scale_up、S1-L010 colonial、S1-L011 commodity_chain、S1-L012 burden_shifting、S1-L013 burden_shifting、S1-L014 litigation、S1-L018 colonial、S1-L024 commodity_chain、S1-L025 geopolitical、S1-L027 colonial、S1-L029 commodity_chain、S1-L036 commodity_chain、S1-L038 litigation、S1-L039 litigation、S1-L041 litigation、S1-L042 diffusion、S1-L045 diffusion、S1-L048 translation、S1-L051 diffusion、S1-L056 burden_shifting、S1-L059 geopolitical、S1-L064 burden_shifting、S1-L065 commodity_chain、S1-L066 commodity_chain、S1-L067 burden_shifting、S1-L070 diffusion、S1-L075 geopolitical、S1-L082 translation、S1-L084 commodity_chain、S1-L085 colonial
+
+**flow 調整（25 條）**
+
+| id | 原本 | 改為 |
+|---|---|---|
+| S1-L001 | material;ideas | material |
+| S1-L002 | material;ideas | material |
+| S1-L003 | material;ideas | material |
+| S1-L005 | ideas;people | people;ideas |
+| S1-L006 | material;ideas | material |
+| S1-L009 | ideas;capital | capital;ideas |
+| S1-L010 | ideas;people | material;people |
+| S1-L014 | capital;material | capital;material;people |
+| S1-L034 | people;ideas | people |
+| S1-L036 | people;ideas | people |
+| S1-L037 | ideas;people | people |
+| S1-L038 | ideas;people | people;ideas |
+| S1-L043 | media;ideas | media |
+| S1-L044 | media;ideas | media |
+| S1-L053 | ideas;technology | ideas |
+| S1-L057 | ideas | people;ideas |
+| S1-L060 | ideas;capital | capital;ideas |
+| S1-L062 | ideas;media | media |
+| S1-L066 | people;ideas | people |
+| S1-L068 | people;ideas;media | people;media |
+| S1-L069 | media;ideas | media |
+| S1-L072 | media;ideas | media |
+| S1-L075 | material;ideas | material |
+| S1-L077 | ideas | material |
+| S1-L080 | ideas;people | people |
+
+**移除（15 條，id 不再使用）**
+
+| id | 原因 |
+|---|---|
+| S1-L015 | 並存：剛果鈷礦與鋰三角只同屬電池供應鏈的兩個開採端，兩事件之間沒有流動 |
+| S1-L016 | 並存：Chevron 在厄瓜多與安哥拉的兩件污染，事件之間沒有互動 |
+| S1-L017 | 並存：Areva 在尼日與加彭的兩座鈾礦，來源只是並列報導；事件內的法國→尼日、法國→加彭由網站依 country 推導 |
+| S1-L019 | 並存：Vedanta 在尚比亞與印度的兩件爭議，受害者各自訴訟，未查到互動（原本也標待查證） |
+| S1-L020 | 同國：RCA 桃園廠補上 United States 後，兩端 country 都是 Taiwan;United States |
+| S1-L022 | 同國：阿爾及利亞獨立戰爭與撒哈拉核試補上 France 後，兩端 country 相同 |
+| S1-L023 | 並存：Banaba 與諾魯同由英國磷酸鹽委員會開採，兩事件之間沒有流動 |
+| S1-L028 | 跨主題重複：S3-T052 蘇聯援建與 S1-T060 是同一座亞斯文高壩，改在 linked_ids 互相引用；蘇聯已補進 S1-T060 的 country |
+| S1-L033 | 並存：Vedanta 案與荷蘭 Shell 案屬同一司法趨勢，未查到後案引用前案 |
+| S1-L054 | 並存：Vale 在巴西與莫三比克的兩件爭議，事件之間沒有互動 |
+| S1-L058 | 同國：Ogoni 事件補上 Netherlands 後，兩端 country 相同；屬奈及利亞內部運動的延續（原本也標待查證） |
+| S1-L073 | 實質同國：Mailuu-Suu 尾礦與吉爾吉斯反鈾礦運動都在吉爾吉斯，country 不同只因 T301 記了下游的烏茲別克（原本也標待查證） |
+| S1-L076 | 並存：鹹海乾涸與棉花強迫勞動是同一棉花體系的兩個後果，屬共同起因，不是兩事件之間的流動 |
+| S1-L079 | 比較：人權團體比較 Rio Tinto 在 Panguna 與 Juukan Gorge 的作為，兩事件之間沒有流動 |
+| S1-L081 | 比較：Noor 與西撒哈拉的再生能源計畫被評論者並列為綠色殖民，兩事件之間沒有流動 |
+
+**`country` 補上外部行動者（47 筆）**
+
+| id | 原本 | 改為 |
+|---|---|---|
+| S1-T001 | Peru;Colombia | Peru;Colombia;United Kingdom |
+| S1-T009 | Ecuador | Ecuador;United States |
+| S1-T012 | Puerto Rico | Puerto Rico;United States |
+| S1-T013 | Bolivia | Bolivia;United States |
+| S1-T017 | Argentina;Uruguay | Argentina;Uruguay;Finland |
+| S1-T025 | Peru | Peru;United States |
+| S1-T029 | Brazil | Brazil;Australia |
+| S1-T034 | Chile;Argentina;Bolivia | Chile;Argentina;Bolivia;United States |
+| S1-T035 | Democratic Republic of the Congo | Democratic Republic of the Congo;Belgium |
+| S1-T037 | Kenya | Kenya;United Kingdom |
+| S1-T040 | Nigeria | Nigeria;Italy |
+| S1-T042 | South Africa | South Africa;United Kingdom |
+| S1-T044 | Nigeria | Nigeria;Netherlands |
+| S1-T045 | Nigeria | Nigeria;Netherlands |
+| S1-T049 | Chad;Cameroon | Chad;Cameroon;United States |
+| S1-T050 | Côte d'Ivoire | Côte d'Ivoire;Netherlands |
+| S1-T052 | Nigeria | Nigeria;Netherlands |
+| S1-T055 | South Africa | South Africa;Australia |
+| S1-T058 | Uganda;Tanzania | Uganda;Tanzania;France;China |
+| S1-T060 | Egypt;Sudan | Egypt;Sudan;Soviet Union |
+| S1-T061 | Algeria | Algeria;France |
+| S1-T063 | Kuwait | Kuwait;Iraq |
+| S1-T079 | India | India;United States |
+| S1-T085 | Bangladesh | Bangladesh;United Kingdom |
+| S1-T092 | Vietnam | Vietnam;United States |
+| S1-T096 | Malaysia | Malaysia;Japan |
+| S1-T106 | Indonesia | Indonesia;United States |
+| S1-T108 | Myanmar | Myanmar;China |
+| S1-T111 | Malaysia | Malaysia;Australia |
+| S1-T115 | Laos | Laos;South Korea |
+| S1-T145 | Taiwan | Taiwan;Japan |
+| S1-T158 | Taiwan | Taiwan;United States |
+| S1-T161 | Taiwan | Taiwan;Germany |
+| S1-T189 | Romania;Hungary;Serbia | Romania;Hungary;Serbia;Australia |
+| S1-T197 | Serbia | Serbia;United Kingdom |
+| S1-T199 | Kiribati;Fiji | Kiribati;Fiji;United Kingdom;Australia;New Zealand |
+| S1-T200 | Nauru | Nauru;Australia;United Kingdom;New Zealand |
+| S1-T201 | Marshall Islands | Marshall Islands;United States |
+| S1-T202 | Marshall Islands | Marshall Islands;United States |
+| S1-T203 | Australia | Australia;United Kingdom |
+| S1-T204 | French Polynesia | French Polynesia;France |
+| S1-T206 | Papua New Guinea | Papua New Guinea;Australia |
+| S1-T207 | New Zealand | New Zealand;France |
+| S1-T208 | Papua New Guinea | Papua New Guinea;Australia |
+| S1-T278 | Turkey | Turkey;Canada |
+| S1-T299 | Angola | Angola;United States |
+| S1-T309 | Puerto Rico | Puerto Rico;United States |
+
+**`issue` 加上 transnational corporation（15 筆）**： S1-T013、S1-T025、S1-T029、S1-T044、S1-T055、S1-T085、S1-T106、S1-T111、S1-T197、S1-T206、S1-T238、S1-T297、S1-T298、S1-T309、S1-T311
+
+**跨主題重複事件，在 `linked_ids` 引用對方（17 筆）**： S1-T007（S4-T205）、S1-T019（S4-T152）、S1-T021（S4-T158）、S1-T022（S4-T158）、S1-T032（S4-T218）、S1-T060（S3-T052）、S1-T074（S4-T247）、S1-T082（S4-T208）、S1-T097（S3-T114、S4-T196）、S1-T200（S3-T229）、S1-T206（S3-T230）、S1-T219（S4-T210）、S1-T242（S4-T067）、S1-T243（S4-T062）、S1-T244（S4-T105）、S1-T267（S4-T172）、S1-T310（S4-T184）
+
+**`country` 的寫法原則**：受影響地在前，外部的主要行動者（企業母國、宗主國、出兵國、援助國）在後。前蘇聯加盟共和國的事件（鹹海、塞米巴拉金斯克、車諾比）不另列 Soviet Union，因為當時不是外國；亞斯文高壩是埃及的事件，所以列 Soviet Union。國際組織（世界銀行、聯合國）不列。同一事件有多家外國企業、國籍分散的（剛果鈷礦、幾內亞 Boké、南亞拆船、開羅清運公司）不補。Shell 一律記為 Netherlands（與 S1-T059 一致）。
+
+### 2. 怎麼確認是對的（可重做）
+- `python data/scripts/validate_links.py`：70 條，0 個錯誤。包括 id 都存在、14 類詞彙、mechanism_2 不等於 mechanism、沒有重用已移除的 id、補上 `country` 後沒有同國連結、沒有重複的配對、每條都有來源與備註。
+- 改標的過程寫成腳本（S1 session 的 scratchpad `scripts/links_v2.py`），逐條列出 flow、mechanism、mechanism_2、direction 與是否對調 from/to；腳本會檢查 85 條中每一條都有處理（保留或移除）。第一版的 `links.csv` 與 `timeline.csv` 備份在 scratchpad `b2/bak_v1/`。
+- 推導的負擔轉嫁清單：用 SZ 在 `site/STATUS.md` 寫的規則，以修改前後的 `timeline.csv` 各算一次，事件由 20 筆增加到 48 筆（變動列在下方第 5 點）。
+- 跨主題重複事件：比對 S2–S4 事件名稱的共同詞與年份（相差 5 年內），並查 S1 的 Global 事件在其他主題同年同類型的事件，再逐筆判讀。
+- `links-caveats.md` 對照第二版第 8 節：一句話版本、數量反映文獻、主題特有的偏誤（Global 事件偏多）、排除的候選與是否逐一搜尋、來源層級，都有涵蓋。另外改寫了第 2（事件內推導）、4（主次機制）、5（ideas）、6（新判準）、7（country 補齊後的影響）、8（mutual）、9（並存）點，並新增第 11 點（移除的連結）。
+
+### 3. 結論
+- 第二版讓分類更有區辨力：ideas 不再無所不在（主要流動 24 條、含 ideas 33 條）；evasion 把「規範已經存在卻被規避」從負擔轉嫁中分出來；mutual 只剩真正的互相影響。
+- 代價是條數變少（85 → 70），而且 `commodity_chain` 的主要機制只剩 3 條。原因是同一企業在兩地的爭議被判為並存。跨國企業的關係改由事件內推導呈現（48 筆推導事件中，大多數是 transnational corporation），這是資料結構的取捨，不是說跨國企業不重要。
+- 主要機制：scale_up 18、boomerang 8、memory 7、geopolitical 5、litigation 5、evasion 4、template 4、colonial 4、burden_shifting 3、commodity_chain 3、diffusion 3、translation 3、contestation 2、imposition 1。
+
+### 4. 未解問題
+- **同一企業的兩地爭議算不算連結**：第二版的 commodity_chain 例子是「剛果鈷礦與電子產品」（供應鏈上下游），沒有說同一家企業在兩地的平行事件怎麼處理。我照「只是同時並存的不收」移除了 7 條（L015、L016、L017、L019、L023、L054、L079）。若 S0 認為同一企業本身就是流動（資本），這 7 條可以恢復。
+- **補上 `country` 後變成同國的連結**：3 條（L020、L022、L058），關係本身是真的。例如阿爾及利亞獨立戰爭與撒哈拉核試，兩端都是 Algeria;France。照規則移除，但這會讓「同一組殖民關係內的前後發展」看不到。
+- **實質同國但欄位不同**：L073（Mailuu-Suu → 吉爾吉斯反鈾礦）的 country 不同只因為 T301 記了下游的烏茲別克。我依實質判斷移除，這是唯一一條沒有照字面規則處理的。
+- **跨境事件補上外部企業後**：T017（Gualeguaychú，補 Finland）與 T189（Baia Mare，補 Australia）同時是 transboundary 與跨國企業，網站的無方向規則會在受影響國與企業母國之間也畫線。
+- 6 條連結仍有一部分待查證：L011、L045、L047、L053、L055、L074。
+
+### 5. 要交給誰
+- **給 SZ（請使用者或 S0 轉達）**：
+  - `links.csv` 換成第二版欄位，多了 `mechanism_2`；機制多了 `contestation`、`evasion`；條數 85 → 70，移除的 15 個 id 見上表。網站上若有寫死的數字（85、10 條跨主題、9 條待查證）要更新，現在是 70、7、6。
+  - 4 條 evasion 連結的 from/to 對調了（由公約指向事件），另外 L011、L032 也對調。
+  - **推導的事件內負擔轉嫁由 20 筆變成 48 筆**。新增的 28 筆主要是補上企業母國或宗主國後符合條件的事件，例如 Koko（Italy → Nigeria）、RCA（United States → Taiwan）、Bhopal（United States → India）、台中反拜耳（Germany → Taiwan）、癌症巷（Taiwan → United States）。
+  - **T017 與 T189 的推導會出錯**：它們是 transboundary（無方向），country 補上 Finland、Australia 後，規則會在第一個國家與企業母國之間也畫無方向的線。建議規則改成：transboundary 事件若也含 transnational corporation，只在受影響國之間畫無方向線，最後一個國家（企業母國）另畫箭頭；或請 S0 決定是否不補這兩筆的企業母國。
+  - `links-caveats.md` 已改寫，「使用前請讀」的內容要重新讀取（網站本來就不寫死）。
+  - `data/README.md` 新增「與其他主題重複的事件」表（17 筆）。
+- **給 S0：照第二版標記時判斷不了的情況**：
+  1. 同一企業或供應鏈上的兩個平行事件，算連結還是並存（見第 4 點）。建議在第 2 節或第 7 節第 3 點寫清楚。
+  2. 補上外部行動者後變成同國的連結，要不要例外保留。
+  3. evasion 與 scale_up 的先後：事件與規範的時間很接近時（例如 Thor 與巴塞爾），以規範「生效」還是「通過」為準，另外事件發生國不是締約方時算不算規避（台塑汞污泥：台灣不是締約方，柬埔寨 2001 年才加入）。我暫以「規範已通過、且至少一端受其拘束」算 evasion。
+  4. transboundary 事件的 country 要不要列外部企業（見給 SZ 的說明）。
+  5. 前蘇聯加盟共和國與國際組織不列入 country 的做法，建議寫進第 3 節，S2–S4 才會一致。

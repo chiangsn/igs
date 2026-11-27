@@ -4,9 +4,10 @@
     "thesis": { "view": "regions", "label": "區域比較", "focusRegion": "North America" },
     "networkNote": "S1 全面標記跨國連結時，timeline 中 297 對跨國候選約有 190 對被判讀為「比較案例」（同類型、可以拿來比較，但兩者之間沒有人、物、錢、觀念的流動），所以這張圖的連線有很大一部分是比較關係，不是史實上的關聯。這個判讀沒有逐一搜尋（見 data/links-caveats.md 第 9 點）。",
     "derivedBurden": {
-      "status": "",
+      "status": "待確認",
       "directedIssues": ["toxic waste", "waste trade", "waste", "e-waste", "radioactive waste", "nuclear waste", "transnational corporation", "transnational investment", "land grabbing"],
       "undirectedIssues": ["transboundary"],
+      "actorLastEvents": ["S1-T017", "S1-T189"],
       "excludeTypes": ["treaty", "conference", "institution"]
     }
   },
@@ -46,6 +47,7 @@
     ]
   },
   "S4": {
+    "networkNote": "S4 的 linked_ids 有 119 對，其中 66 對兩端都是全球層級的事件（聯合國會議、公約與全球報告），所以這張圖會以聯合國會議為中心、呈星狀。這呈現的是全球治理制度本身的沿革，不是國與國之間的跨國關係；跨國的流動與機制請看「跨國連結」視圖。（依 S4 的 STATUS.md）",
     "thesis": {
       "view": "issues",
       "label": "三條線索",
@@ -75,6 +77,7 @@
     ]
   },
   "S2": {
+    "networkNote": "這張圖的連線來自時間軸的 linked_ids，只代表「這兩件事有關」，其中很多是同一場衝突的前後發展（例如 1948 年戰爭與加薩戰爭）或可以拿來比較的案例（例如赫雷羅與馬及馬及起義），不代表兩地之間有人、物、錢或觀念的流動。真正的跨國流動（例如難民潮、地雷規範、國際法庭審理、真相委員會模式的傳播）請看「跨國連結」視圖，那裡的每一條都有流動類型、連結機制與來源。（文字取自 S2 的 STATUS.md）",
     "thesis": {
       "view": "issues",
       "label": "延伸影響",

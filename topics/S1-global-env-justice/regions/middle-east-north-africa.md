@@ -41,10 +41,10 @@
 ## 事件清單（自 `data/timeline.csv` 產生）
 | id | 年代 | 國家 | 事件 | 類型 | 議題 |
 |---|---|---|---|---|---|
-| S1-T060 | 1960–1970 | Egypt;Sudan | 亞斯文高壩與努比亞人遷移 | policy | dam; displacement; cold war |
-| S1-T061 | 1960–1966 | Algeria | 法國阿爾及利亞撒哈拉核試爆 | disaster | nuclear; colonialism; military |
+| S1-T060 | 1960–1970 | Egypt;Sudan;Soviet Union | 亞斯文高壩與努比亞人遷移 | policy | dam; displacement; cold war |
+| S1-T061 | 1960–1966 | Algeria;France | 法國阿爾及利亞撒哈拉核試爆 | disaster | nuclear; colonialism; military |
 | S1-T062 | 1989–2017 | Turkey | Bergama 反氰化物金礦運動 | movement | mining; agriculture; water |
-| S1-T063 | 1991 | Kuwait | 波斯灣戰爭油井大火 | disaster | oil; war; air pollution |
+| S1-T063 | 1991 | Kuwait;Iraq | 波斯灣戰爭油井大火 | disaster | oil; war; air pollution |
 | S1-T064 | 1991–2016 | Iraq | 美索不達米亞沼澤排乾與沼澤阿拉伯人 | disaster | water; displacement; war |
 | S1-T284 | 1995–2009 | Palestine;Israel | 約旦河西岸水資源分配不平等（Oslo II 第 40 條） | policy | water; occupation; discrimination |
 | S1-T288 | 2003–2009 | Egypt | 開羅 Zabbaleen 拾荒者與廢棄物私有化、宰豬令 | movement | waste; livelihood; religious minority; privatization |
@@ -67,7 +67,7 @@
 | S1-T276 | 2016–2025 | Morocco | Noor Ouarzazate 太陽能電廠與「綠色掠奪」爭議 | movement | energy transition; land; indigenous; pastoralism |
 | S1-T289 | 2017–2018 | Western Sahara;Morocco;South Africa | 西撒哈拉 Bou Craa 磷礦與 NM Cherry Blossom 扣船案 | lawsuit | phosphate; occupation; self-determination |
 | S1-T277 | 2018–2019 | Iraq | 巴斯拉水危機 | disaster | water; health; governance |
-| S1-T278 | 2019–2026 | Turkey | Kaz 山（Ida 山）「水與良知守夜」反金礦運動 | movement | mining; forest; water; transnational corporation |
+| S1-T278 | 2019–2026 | Turkey;Canada | Kaz 山（Ida 山）「水與良知守夜」反金礦運動 | movement | mining; forest; water; transnational corporation |
 | S1-T286 | 2020–2023 | Saudi Arabia | NEOM 新城與 Huwaitat 部落強制遷離 | movement | land; displacement; megaproject; defenders |
 | S1-T280 | 2021 | Qatar | 國際特赦組織報告：卡達移工高溫死亡未獲調查 | publication | heat; labor; migration; climate |
 | S1-T074 | 2022 | Egypt | COP27（Sharm el-Sheikh）通過損失與損害基金 | conference | climate; loss and damage |

@@ -9,6 +9,94 @@
 - S1 資料管線結果：282 事件、107 讀物、36 概念、20 份文件，**0 則格式警告**（見 `data-report.md`）。
 - `package-lock.json` 已 commit；`render.yaml` 使用 `npm ci`，Node 24.22.1（與本機相同）。
 
+## 2026-11-28 跨國連結第二版 B 部分：接上 S1（補標）、S2、S4
+
+### 1. 做了什麼
+
+- **S1（第二版補標）**：70 條（原 85，移除 15）、跨主題 7、待查證 6；有 `mechanism_2`，mutual 顯示「雙向（互相影響）」。
+  - 推導的事件內負擔轉嫁：S1 補了外部行動者的 `country` 後，由 20 筆增加到 **48 筆事件、53 條線**。為此補上 12 國的代表座標（Angola、Australia、Bolivia、Côte d'Ivoire、Ecuador、Finland、Germany、Italy、Laos、Papua New Guinea、Puerto Rico、Turkey），否則這些線會被略過。
+  - **規則修改**（依 S1 建議）：越境事件（transboundary）若也含跨國企業等有方向的標籤，或列在 `actorLastEvents`，最後一個國家視為外部行動者：受影響國之間畫無箭頭的線，外部行動者 → 第一個國家畫箭頭。T017、T189 沒有 `transnational corporation` 標籤，所以列在 `actorLastEvents`。
+  - 規則與清單改變了，所以 S1 的推導**重新標為「待確認」**。
+- **S2（第一次標記）**：88 條、跨主題 13、待查證 9。依 S2 建議**不開啟**推導（多國事件後段是出兵國、交戰另一方或法庭所在地）。`networkNote` 用 S2 `STATUS.md` 提供的文字。
+- **S4（第一次標記）**：90 條、跨主題 17、待查證 15。依 S4 建議**不開啟**推導（多國事件多為援助國與受援地）。`networkNote` 說明 119 對 `linked_ids` 中有 66 對兩端都是 Global，所以網絡圖以聯合國會議為中心。
+- 三個主題的「跨國連結」分頁自動出現，`links-caveats.md` 的一句話與「使用前請讀」都有顯示，網絡圖移到「相關事件網絡」。
+- **S3**：還沒有 `links.csv`，資料夾在調整中（timeline、scripts），這次不 commit，網站用 S3 已上線的版本。
+
+### 2. 怎麼確認是對的
+
+- 以 S1、S2、S4 的新資料與 S3 已 commit 的版本跑 `npm run build`：3 個主題的連結都 0 則警告（整體 2 則是 S3 已知的 `S3-146`）。`data-report.md` 總覽：S1 70 條（待查證 6）、S2 88 條（9）、S4 90 條（15）。
+- 推導：48 筆事件、53 條線（有方向 42、無方向 11），與 S1 依同一規則自算的 48 筆一致；T017 推為 Argentina — Uruguay、Finland → Argentina；T189 推為 Romania — Hungary、Romania — Serbia、Australia → Romania；Koko 推為 Italy → Nigeria、RCA 推為 United States → Taiwan。
+- 預覽：S1、S2、S4 的跨國連結分頁都有三行使用限制、「使用前請讀」、只看待查證（6／9／15）、包含次要機制選項；mutual 顯示「雙向（互相影響）」；推導開關只有 S1 有；各自的相關事件網絡頁首有 `networkNote`。S3 分頁不變。手機寬度 375px 沒有水平捲動，深色模式正常，console 沒有錯誤。
+
+### 3. 結論
+
+S1、S2、S4 的跨國連結已接上網站。剩 S3。
+
+### 4. 未解問題
+
+- S2、S4 都提到可以改用中性的「外部行動者 → 受影響地」推導（S2：外部介入；S4：援助國 → 受援地），而不是「負擔轉嫁」。網站目前不提供這種推導；若要做，是新的視圖設定，需要使用者決定。
+- S4 指出真正屬於負擔轉嫁的多國事件只有東協霾害協定（S4-T230），目前沒有推導。
+
+### 5. 要交給誰／需要使用者決定的事
+
+- **使用者確認 S1 的推導清單（48 筆）與規則修改**：
+
+| id | 事件 | country | 推導 |
+|---|---|---|---|
+| S1-T008 | Khian Sea 焚化灰渣傾倒海地 (Khian Sea waste disp | Haiti; United States | United States → Haiti |
+| S1-T009 | Texaco/Chevron 亞馬遜石油污染與 Lago Agrio 訴訟 | Ecuador; United States | United States → Ecuador |
+| S1-T013 | Cochabamba 水戰爭 (Guerra del Agua) | Bolivia; United States | United States → Bolivia |
+| S1-T017 | Gualeguaychú 反紙漿廠運動與國際法院案 (Pulp Mills on | Argentina; Uruguay; Finland | Argentina — Uruguay、Finland → Argentina |
+| S1-T025 | Conga 金礦抗爭 (Cajamarca) | Peru; United States | United States → Peru |
+| S1-T029 | Mariana（Fundão）與 Brumadinho 尾礦壩災難 | Brazil; Australia | Australia → Brazil |
+| S1-T040 | Koko 有毒廢棄物事件 | Nigeria; Italy | Italy → Nigeria |
+| S1-T042 | Thor Chemicals 汞廢料案 (Cato Ridge) | South Africa; United Kingdom | United Kingdom → South Africa |
+| S1-T044 | Ogoni Day 大遊行與 Shell 撤出 Ogoniland | Nigeria; Netherlands | Netherlands → Nigeria |
+| S1-T050 | Probo Koala 有毒廢棄物傾倒（阿必尚） | Côte d'Ivoire; Netherlands | Netherlands → Côte d'Ivoire |
+| S1-T051 | Gibe III 水壩與 Omo 河—Turkana 湖衝突 | Ethiopia; Kenya | Ethiopia — Kenya |
+| S1-T055 | Xolobeni Amadiba 反鈦礦運動 | South Africa; Australia | Australia → South Africa |
+| S1-T056 | Lungowe v Vedanta（尚比亞村民在英國起訴） | Zambia; United Kingdom | United Kingdom → Zambia |
+| S1-T059 | Oruma、Goi、Ikot Ada Udo 農民與荷蘭地球之友訴 Shell（ | Nigeria; Netherlands | Netherlands → Nigeria |
+| S1-T079 | Bhopal 毒氣災難 | India; United States | United States → India |
+| S1-T085 | Phulbari 反露天煤礦抗爭 | Bangladesh; United Kingdom | United Kingdom → Bangladesh |
+| S1-T096 | Bukit Merah 亞洲稀土放射性廢料案 (Asian Rare Earth | Malaysia; Japan | Japan → Malaysia |
+| S1-T103 | 東南亞霾害（1997–98 印尼森林大火） | Indonesia; Malaysia; Singapore | Indonesia — Malaysia、Indonesia — Singapore |
+| S1-T104 | 台塑汞污泥傾倒柬埔寨施亞努港 | Cambodia; Taiwan | Taiwan → Cambodia |
+| S1-T105 | Yadana 天然氣管線與 Doe v. Unocal 案 | Myanmar; United States | United States → Myanmar |
+| S1-T106 | Buyat 灣污染與 Newmont 案 | Indonesia; United States | United States → Indonesia |
+| S1-T108 | Myitsone 水壩暫停 | Myanmar; China | China → Myanmar |
+| S1-T111 | 反 Lynas 稀土廠運動 (Himpunan Hijau) | Malaysia; Australia | Australia → Malaysia |
+| S1-T114 | 台塑河靜鋼廠海洋污染事件 | Vietnam; Taiwan | Taiwan → Vietnam |
+| S1-T115 | 寮國 Xe-Pian Xe-Namnoy 水壩潰堤 | Laos; South Korea | South Korea → Laos |
+| S1-T139 | 松花江苯污染事件 | China; Russia | China — Russia |
+| S1-T158 | RCA 桃園廠污染與職業癌症訴訟 | Taiwan; United States | United States → Taiwan |
+| S1-T161 | 台中反拜耳運動 | Taiwan; Germany | Germany → Taiwan |
+| S1-T189 | Baia Mare 氰化物外洩 | Romania; Hungary; Serbia; Australia | Romania — Hungary、Romania — Serbia、Australia → Romania |
+| S1-T197 | Jadar 河谷反 Rio Tinto 鋰礦運動 | Serbia; United Kingdom | United Kingdom → Serbia |
+| S1-T206 | Bougainville Panguna 銅礦與內戰 | Papua New Guinea; Australia | Australia → Papua New Guinea |
+| S1-T208 | Ok Tedi 銅礦與 Fly 河污染訴訟 | Papua New Guinea; Australia | Australia → Papua New Guinea |
+| S1-T238 | 「癌症巷」反台塑 Sunshine Project 運動 | United States; Taiwan | Taiwan → United States |
+| S1-T274 | Damietta 反 Agrium 化肥廠運動 | Egypt; Canada | Canada → Egypt |
+| S1-T278 | Kaz 山（Ida 山）「水與良知守夜」反金礦運動 | Turkey; Canada | Canada → Turkey |
+| S1-T283 | 衣索比亞復興大壩（GERD）與尼羅河水權爭端 | Ethiopia; Egypt; Sudan | Ethiopia — Egypt、Ethiopia — Sudan |
+| S1-T290 | Arlit 與 Akokan 鈾礦污染（Areva／Orano） | Niger; France | France → Niger |
+| S1-T291 | Mounana 鈾礦前工人求償 | Gabon; France | France → Gabon |
+| S1-T294 | 大宇物流馬達加斯加 130 萬公頃租地案 | Madagascar; South Korea | South Korea → Madagascar |
+| S1-T296 | Tete 煤礦與 Cateme 等安置村 | Mozambique; Brazil | Brazil → Mozambique |
+| S1-T297 | Cabo Delgado 液化天然氣開發與武裝衝突 | Mozambique; France | France → Mozambique |
+| S1-T298 | Virunga 國家公園石油探勘爭議 | Democratic Republic of the Congo; United Kingdom | United Kingdom → Democratic Republic of the Congo |
+| S1-T299 | Cabinda 海岸漏油與漁民 | Angola; United States | United States → Angola |
+| S1-T300 | Barskoon 氰化物外洩（Kumtor 金礦） | Kyrgyzstan; Canada | Canada → Kyrgyzstan |
+| S1-T301 | Mailuu-Suu 蘇聯鈾礦尾礦 | Kyrgyzstan; Uzbekistan | Kyrgyzstan — Uzbekistan |
+| S1-T303 | Rogun 水壩與中亞上下游水權爭端 | Tajikistan; Uzbekistan | Tajikistan — Uzbekistan |
+| S1-T309 | 波多黎各 AES 煤灰傾倒抗爭（Peñuelas、Guayama） | Puerto Rico; United States | United States → Puerto Rico |
+| S1-T311 | 蓋亞那 Stabroek 石油許可訴訟 | Guyana; United States | United States → Guyana |
+
+  確認後把 `derivedBurden.status` 改回空字串。
+- **使用者決定**：S2、S4 是否要另做「外部行動者 → 受影響地」的中性推導（預設不做）。
+- **轉告 S1**：T017、T189 若加上 `transnational corporation`，可以從 `actorLastEvents` 移除，改由規則自動判斷。
+- **使用者**：同意 push（檔案清單見對話）。
+
 ## 2026-11-27 任務：跨國連結配合指南第二版（`prompts/SZ-links-v2.md`，A 部分）
 
 ### 1. 做了什麼

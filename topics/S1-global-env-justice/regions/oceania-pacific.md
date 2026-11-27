@@ -35,16 +35,16 @@
 ## 事件清單（自 `data/timeline.csv` 產生）
 | id | 年代 | 國家 | 事件 | 類型 | 議題 |
 |---|---|---|---|---|---|
-| S1-T199 | 1900–1979 | Kiribati;Fiji | Banaba（大洋島）磷礦開採與族人遷徙 | disaster | mining; colonialism; displacement |
-| S1-T200 | 1906–1993 | Nauru | 諾魯磷礦開採與國際法院案 | lawsuit | mining; colonialism |
-| S1-T201 | 1946–1958 | Marshall Islands | 美國在馬紹爾群島核試爆 | disaster | nuclear; colonialism; displacement |
-| S1-T202 | 1954 | Marshall Islands | Castle Bravo 氫彈試爆與 Rongelap 輻射 | disaster | nuclear; health |
-| S1-T203 | 1956–1985 | Australia | Maralinga 英國核試與皇家調查委員會 | disaster | nuclear; indigenous |
-| S1-T204 | 1966–1996 | French Polynesia | 法國 Moruroa 與 Fangataufa 核試爆 | disaster | nuclear; colonialism |
-| S1-T206 | 1972–1998 | Papua New Guinea | Bougainville Panguna 銅礦與內戰 | disaster | mining; land; self-determination |
+| S1-T199 | 1900–1979 | Kiribati;Fiji;United Kingdom;Australia;New Zealand | Banaba（大洋島）磷礦開採與族人遷徙 | disaster | mining; colonialism; displacement |
+| S1-T200 | 1906–1993 | Nauru;Australia;United Kingdom;New Zealand | 諾魯磷礦開採與國際法院案 | lawsuit | mining; colonialism |
+| S1-T201 | 1946–1958 | Marshall Islands;United States | 美國在馬紹爾群島核試爆 | disaster | nuclear; colonialism; displacement |
+| S1-T202 | 1954 | Marshall Islands;United States | Castle Bravo 氫彈試爆與 Rongelap 輻射 | disaster | nuclear; health |
+| S1-T203 | 1956–1985 | Australia;United Kingdom | Maralinga 英國核試與皇家調查委員會 | disaster | nuclear; indigenous |
+| S1-T204 | 1966–1996 | French Polynesia;France | 法國 Moruroa 與 Fangataufa 核試爆 | disaster | nuclear; colonialism |
+| S1-T206 | 1972–1998 | Papua New Guinea;Australia | Bougainville Panguna 銅礦與內戰 | disaster | mining; land; self-determination; transnational corporation |
 | S1-T205 | 1975–1985 | Fiji | 非核獨立太平洋運動 (NFIP) 與《拉洛東加條約》 | treaty | nuclear; decolonization |
-| S1-T208 | 1984–1996 | Papua New Guinea | Ok Tedi 銅礦與 Fly 河污染訴訟 | lawsuit | mining; water; transnational corporation |
-| S1-T207 | 1985 | New Zealand | 彩虹勇士號爆炸案 | disaster | nuclear; state violence |
+| S1-T208 | 1984–1996 | Papua New Guinea;Australia | Ok Tedi 銅礦與 Fly 河污染訴訟 | lawsuit | mining; water; transnational corporation |
+| S1-T207 | 1985 | New Zealand;France | 彩虹勇士號爆炸案 | disaster | nuclear; state violence |
 | S1-T209 | 1998–2003 | Australia | Mirarr 族 Jabiluka 反鈾礦封鎖 | movement | uranium; indigenous |
 | S1-T210 | 2014–2017 | New Zealand | Te Urewera 與 Whanganui 河的法律人格 | policy | rights of nature; indigenous; Treaty of Waitangi |
 | S1-T211 | 2014 | Australia | 太平洋氣候戰士 Newcastle 獨木舟封港行動 | movement | climate; coal |

@@ -267,8 +267,10 @@ function readCaveats(code, dir) {
 // 一筆事件就包含跨國的轉嫁（例如 Khian Sea：美國 → 海地），沒有「另一端事件」可以連。網站依 country 推導：
 //   條件：region 不是 Global、country 有兩個以上、type 不在 excludeTypes。
 //   有方向：issue 含 directedIssues 之一、且恰好兩個國家 → 第二個國家（外部行動者）→ 第一個國家（受影響地）。
-//           依據是 S1 的 country 寫法：受影響地寫在前面（尚待 S1 確認）。三國以上看不出方向，不收。
+//           依據是 CLAUDE.md 的 country 規定：受影響地在前，外部的主要行動者在後。三國以上看不出方向，不收。
 //   無方向：issue 含 undirectedIssues（越境污染、上下游水權）→ 第一個國家與其他每個國家之間畫無箭頭的線。
+//   越境＋外部行動者：無方向的事件若也含 directedIssues（例如跨國企業），或列在 actorLastEvents 中，
+//           最後一個國家視為外部行動者（企業母國）：受影響國之間畫無箭頭的線，外部行動者 → 第一個國家畫箭頭。
 function deriveBurden(code, events, cfg) {
   if (!cfg) return [];
   const coords = JSON.parse(read(path.join(SITE, 'country-coords.json')) ?? '{}');
@@ -278,7 +280,14 @@ function deriveBurden(code, events, cfg) {
     const und = e.issues.filter((i) => (cfg.undirectedIssues ?? []).includes(i));
     const dir = e.issues.filter((i) => (cfg.directedIssues ?? []).includes(i));
     let pairs = [];
-    if (und.length) pairs = e.countries.slice(1).map((c) => ({ from: e.countries[0], to: c, directed: false, by: und }));
+    const actorLast = und.length && e.countries.length >= 3 && (dir.length || (cfg.actorLastEvents ?? []).includes(e.id));
+    if (actorLast) {
+      const affected = e.countries.slice(0, -1); const actor = e.countries[e.countries.length - 1];
+      pairs = [
+        ...affected.slice(1).map((c) => ({ from: affected[0], to: c, directed: false, by: und })),
+        { from: actor, to: affected[0], directed: true, by: dir.length ? dir : ['actorLastEvents'] },
+      ];
+    } else if (und.length) pairs = e.countries.slice(1).map((c) => ({ from: e.countries[0], to: c, directed: false, by: und }));
     else if (dir.length && e.countries.length === 2) pairs = [{ from: e.countries[1], to: e.countries[0], directed: true, by: dir }];
     else if (dir.length) { skipped.push(`${e.id}（${e.countries.join('、')}）`); continue; }
     for (const p of pairs) {

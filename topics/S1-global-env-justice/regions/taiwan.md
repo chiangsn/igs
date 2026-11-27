@@ -78,7 +78,7 @@
 ## 事件清單（自 `data/timeline.csv` 產生）
 | id | 年代 | 國家 | 事件 | 類型 | 議題 |
 |---|---|---|---|---|---|
-| S1-T145 | 1930 | Taiwan | 霧社事件 (Musha/Wushe Incident) | movement | indigenous; colonialism; forest labor |
+| S1-T145 | 1930 | Taiwan;Japan | 霧社事件 (Musha/Wushe Incident) | movement | indigenous; colonialism; forest labor |
 | S1-T146 | 1979 | Taiwan | 米糠油（多氯聯苯）中毒事件 | disaster | PCB; food safety |
 | S1-T147 | 1982 | Taiwan | 桃園觀音高銀化工「鎘米」事件 | disaster | cadmium; agriculture |
 | S1-T148 | 1986–1988 | Taiwan | 新竹水源里反李長榮化工圍廠 | movement | industrial pollution; water |
@@ -91,10 +91,10 @@
 | S1-T155 | 1988–1993 | Taiwan | 原住民族「還我土地」運動 | movement | land; indigenous |
 | S1-T156 | 1991–2014 | Taiwan | 反核四（龍門核電廠）運動 | movement | nuclear |
 | S1-T157 | 1992–2000 | Taiwan | 美濃反水庫運動 | movement | dam; Hakka; agriculture |
-| S1-T158 | 1994–2018 | Taiwan | RCA 桃園廠污染與職業癌症訴訟 | lawsuit | groundwater; occupational disease; transnational corporation |
+| S1-T158 | 1994–2018 | Taiwan;United States | RCA 桃園廠污染與職業癌症訴訟 | lawsuit | groundwater; occupational disease; transnational corporation |
 | S1-T159 | 1994–2010 | Taiwan | 雲林麥寮六輕設廠與工安污染爭議 | disaster | petrochemical; air pollution; health |
 | S1-T160 | 1994–2006 | Taiwan | 七股反濱南工業區（黑面琵鷺） | movement | wetland; petrochemical; steel |
-| S1-T161 | 1997–1998 | Taiwan | 台中反拜耳運動 | movement | chemical; transnational corporation |
+| S1-T161 | 1997–1998 | Taiwan;Germany | 台中反拜耳運動 | movement | chemical; transnational corporation |
 | S1-T104 | 1998–1999 | Cambodia;Taiwan | 台塑汞污泥傾倒柬埔寨施亞努港 | disaster | toxic waste; mercury; waste trade |
 | S1-T162 | 2001 | Taiwan | 阿瑪斯號（Amorgos）墾丁漏油事件 | disaster | oil spill; coastal ecology |
 | S1-T163 | 2002 | Taiwan | 《環境基本法》與「非核家園」入法 | policy | nuclear; environmental law |
@@ -108,7 +108,7 @@
 | S1-T175 | 2016–2019 | Taiwan | 總統向原住民族道歉與蘭嶼核廢補償 | policy | nuclear waste; indigenous; transitional justice |
 | S1-T170 | 2017–2023 | Taiwan | 亞泥太魯閣礦權展延爭議與礦業法修法 | movement | mining; indigenous; consultation |
 | S1-T171 | 2018 | Taiwan | 中部空污與 2018 年「以空污減量」公投 | movement | air pollution; coal |
-| S1-T238 | 2018–2024 | United States;Taiwan | 「癌症巷」反台塑 Sunshine Project 運動 | movement | petrochemical; racism |
+| S1-T238 | 2018–2024 | United States;Taiwan | 「癌症巷」反台塑 Sunshine Project 運動 | movement | petrochemical; racism; transnational corporation |
 | S1-T172 | 2020–2021 | Taiwan | 大潭藻礁保護與三接公投 | movement | coastal ecology; energy transition |
 | S1-T173 | 2023 | Taiwan | 《氣候變遷因應法》 | policy | climate; carbon fee; just transition |
 | S1-T174 | 2025 | Taiwan | 核三廠停機、台灣進入「非核」狀態 | policy | nuclear; energy transition |

@@ -61,7 +61,7 @@
 | S1-T187 | 1998–2001 | Denmark | Aarhus 公約 | treaty | access to information; participation; access to justice |
 | S1-T300 | 1998–2022 | Kyrgyzstan;Canada | Barskoon 氰化物外洩（Kumtor 金礦） | disaster | cyanide; mining; water; transnational corporation |
 | S1-T188 | 1999–2016 | Kosovo | Mitrovica 羅姆人鉛污染難民營 | disaster | lead; racism; refugees |
-| S1-T189 | 2000 | Romania;Hungary;Serbia | Baia Mare 氰化物外洩 | disaster | mining; cyanide; transboundary |
+| S1-T189 | 2000 | Romania;Hungary;Serbia;Australia | Baia Mare 氰化物外洩 | disaster | mining; cyanide; transboundary |
 | S1-T190 | 2002–2013 | Romania | Roșia Montană 反金礦運動 (Salvați Roșia Montană) | movement | mining; cultural heritage |
 | S1-T191 | 2002 | Spain | Prestige 油輪漏油與「Nunca Máis」運動 | disaster | oil spill; fisheries |
 | S1-T301 | 2004–2013 | Kyrgyzstan;Uzbekistan | Mailuu-Suu 蘇聯鈾礦尾礦 | disaster | uranium; radioactive waste; landslide; transboundary |
@@ -74,6 +74,6 @@
 | S1-T198 | 2016–2024 | Switzerland | KlimaSeniorinnen 訴瑞士案（歐洲人權法院） | lawsuit | climate; human rights; elderly women |
 | S1-T305 | 2019–2024 | Kyrgyzstan | 吉爾吉斯反鈾礦運動與禁令 | movement | uranium; lake; biosphere reserve |
 | S1-T196 | 2020 | United Kingdom | Ella Kissi-Debrah 死因調查認定空污致死 | lawsuit | air pollution; racism; children |
-| S1-T197 | 2021–2025 | Serbia | Jadar 河谷反 Rio Tinto 鋰礦運動 | movement | mining; energy transition; water |
+| S1-T197 | 2021–2025 | Serbia;United Kingdom | Jadar 河谷反 Rio Tinto 鋰礦運動 | movement | mining; energy transition; water; transnational corporation |
 
 共 29 筆。行動者、結果與來源詳見 `data/timeline.csv`。

@@ -47,7 +47,7 @@ S1-003、S1-006、S1-007、S1-010、S1-011、S1-016、S1-095、S1-096、S1-102
 | S1-T235 | 1994 | United States | 美國第 12898 號行政命令（環境正義） | policy | environmental justice |
 | S1-T236 | 2014–2019 | United States | Flint 水危機 | disaster | water; lead; racism |
 | S1-T237 | 2016–2017 | United States | Standing Rock 反達科他輸油管運動 (#NoDAPL) | movement | oil; indigenous; water |
-| S1-T238 | 2018–2024 | United States;Taiwan | 「癌症巷」反台塑 Sunshine Project 運動 | movement | petrochemical; racism |
+| S1-T238 | 2018–2024 | United States;Taiwan | 「癌症巷」反台塑 Sunshine Project 運動 | movement | petrochemical; racism; transnational corporation |
 | S1-T239 | 2019–2020 | Canada | Wet'suwet'en 反 Coastal GasLink 管線 | movement | gas; indigenous; sovereignty |
 | S1-T240 | 2021–2025 | United States | Justice40 倡議 | policy | climate; environmental justice |
 | S1-T241 | 2021–2025 | United States | Thacker Pass（Peehee Mu'huh）鋰礦爭議 | movement | mining; energy transition; indigenous |

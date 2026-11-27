@@ -38,11 +38,11 @@
 ## 事件清單（自 `data/timeline.csv` 產生）
 | id | 年代 | 國家 | 事件 | 類型 | 議題 |
 |---|---|---|---|---|---|
-| S1-T092 | 1961–1971 | Vietnam | 越戰橙劑（Agent Orange）噴灑 | disaster | chemical; war; health |
+| S1-T092 | 1961–1971 | Vietnam;United States | 越戰橙劑（Agent Orange）噴灑 | disaster | chemical; war; health |
 | S1-T093 | 1974–1986 | Philippines | Chico 河水壩反對運動與 Macli-ing Dulag 遇害 | movement | dam; indigenous; martial law |
 | S1-T094 | 1976–1986 | Philippines | Bataan 核電廠 | policy | nuclear; corruption |
 | S1-T095 | 1982 | Malaysia | 農藥行動網絡 (PAN) 於檳城成立 | movement | pesticides; transnational network |
-| S1-T096 | 1982–1994 | Malaysia | Bukit Merah 亞洲稀土放射性廢料案 (Asian Rare Earth) | lawsuit | radioactive waste; transnational corporation; health |
+| S1-T096 | 1982–1994 | Malaysia;Japan | Bukit Merah 亞洲稀土放射性廢料案 (Asian Rare Earth) | lawsuit | radioactive waste; transnational corporation; health |
 | S1-T099 | 1982–1988 | Thailand | 反 Nam Choan 水壩運動 | movement | dam; biodiversity |
 | S1-T097 | 1984 | Malaysia | 第三世界網絡 (Third World Network) 成立 | movement | transnational network; trade; development |
 | S1-T098 | 1987–1993 | Malaysia | 砂拉越 Penan 族反伐木封路 | movement | forest; indigenous; logging |
@@ -52,15 +52,15 @@
 | S1-T105 | 1996–2005 | Myanmar;United States | Yadana 天然氣管線與 Doe v. Unocal 案 | lawsuit | oil; forced labor; transnational corporation |
 | S1-T103 | 1997–1998 | Indonesia;Malaysia;Singapore | 東南亞霾害（1997–98 印尼森林大火） | disaster | forest fire; air pollution; palm oil; transboundary |
 | S1-T104 | 1998–1999 | Cambodia;Taiwan | 台塑汞污泥傾倒柬埔寨施亞努港 | disaster | toxic waste; mercury; waste trade |
-| S1-T106 | 2004–2007 | Indonesia | Buyat 灣污染與 Newmont 案 | lawsuit | mining; mercury; arsenic |
+| S1-T106 | 2004–2007 | Indonesia;United States | Buyat 灣污染與 Newmont 案 | lawsuit | mining; mercury; arsenic; transnational corporation |
 | S1-T107 | 2006–2025 | Indonesia | Lapindo（Sidoarjo）泥火山 | disaster | gas drilling; displacement |
-| S1-T108 | 2009–2011 | Myanmar | Myitsone 水壩暫停 | policy | dam; ethnic minority; transnational investment |
-| S1-T111 | 2011–2025 | Malaysia | 反 Lynas 稀土廠運動 (Himpunan Hijau) | movement | radioactive waste; rare earth; energy transition |
+| S1-T108 | 2009–2011 | Myanmar;China | Myitsone 水壩暫停 | policy | dam; ethnic minority; transnational investment |
+| S1-T111 | 2011–2025 | Malaysia;Australia | 反 Lynas 稀土廠運動 (Himpunan Hijau) | movement | radioactive waste; rare earth; energy transition; transnational corporation |
 | S1-T109 | 2012 | Cambodia | Chut Wutty 遇害與 Boeung Kak 湖強拆 | movement | forest; land; defenders |
 | S1-T110 | 2012–2013 | Myanmar | Letpadaung 銅礦抗爭 | movement | mining; land |
 | S1-T112 | 2013–2022 | Philippines | 颱風海燕與菲律賓人權委員會「碳巨頭」調查 | lawsuit | climate; human rights |
 | S1-T113 | 2014–2017 | Indonesia | Kendeng 農民反水泥廠運動（「水泥封腳」） | movement | mining; water; agriculture |
 | S1-T114 | 2016 | Vietnam;Taiwan | 台塑河靜鋼廠海洋污染事件 | disaster | industrial pollution; fisheries; transnational corporation |
-| S1-T115 | 2018 | Laos | 寮國 Xe-Pian Xe-Namnoy 水壩潰堤 | disaster | dam; transnational investment |
+| S1-T115 | 2018 | Laos;South Korea | 寮國 Xe-Pian Xe-Namnoy 水壩潰堤 | disaster | dam; transnational investment |
 
 共 24 筆。行動者、結果與來源詳見 `data/timeline.csv`。
