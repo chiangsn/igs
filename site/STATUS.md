@@ -2,7 +2,7 @@
 
 最後更新：2026-11-27
 
-## 目前狀態：已上線（S1–S4，含 S1 跨國連結與南北分類比較；最新 706e917）。S1 第四輪已在本機完成與驗證，待 push；待使用者看過網站後整體調整
+## 目前狀態：已上線（S1–S4，含 S1 跨國連結與南北分類比較；最新 3dc1c9f）。S1 第四輪已上線；待使用者看過網站後整體調整
 
 - `npm ci && npm run build`（含 `tsc --noEmit` 型別檢查）在刪除 `node_modules` 後的乾淨環境成功。
 - 用 `vite preview` 預覽 `site/dist/`，所有頁面正常載入，瀏覽器 console 沒有錯誤；已檢查深色、淺色模式與手機寬度（375px，沒有水平捲動）。
@@ -22,7 +22,7 @@
   - **分布**：篩選列與斷裂圖旁加「數量反映可查的文獻，不等於歷史上的實際分布」。
   - **mutual**：不畫箭頭，提示與詳情寫「雙向或並存」，詳情另有一句解釋。
   - **相關事件網絡**：頁首加註 S1 的估計（297 對跨國候選中約 190 對為比較案例，未逐一搜尋），文字放在 `topic-config.json` 的 `networkNote`。
-- **推導的事件內負擔轉嫁**（新功能，預設關閉，有獨立開關，**待使用者確認**）：規則見第 5 節，設定方式見 `site/README.md`。國家代表座標放在新檔 `site/country-coords.json`（首都近似座標）。
+- **推導的事件內負擔轉嫁**（新功能，預設關閉，有獨立開關；使用者已於 2026-11-27 確認規則與清單）：規則見第 5 節，設定方式見 `site/README.md`。國家代表座標放在新檔 `site/country-coords.json`（首都近似座標）。
 - **SZ 自己的修正**：無。
 
 ### 2. 怎麼確認是對的
@@ -35,7 +35,7 @@
 
 ### 3. 結論
 
-S1 的跨國連結視覺化已完成：85 條連結、使用限制、待查證標記與推導的負擔轉嫁都上了網站。推導規則與清單待使用者確認。
+S1 的跨國連結視覺化已完成：85 條連結、使用限制、待查證標記與推導的負擔轉嫁都上了網站。推導規則與清單已經使用者確認（2026-11-27），網站已拿掉「待確認」。
 
 ### 4. 未解問題
 
@@ -47,7 +47,7 @@ S1 的跨國連結視覺化已完成：85 條連結、使用限制、待查證�
 
 ### 5. 要交給誰／需要使用者決定的事
 
-- **使用者確認推導規則與事件清單**：
+- **推導規則與事件清單（使用者已確認，2026-11-27）**：
   - 條件：`region` 不是 Global、`country` 兩個以上、`type` 不是 treaty／conference／institution。
   - **有方向**（issue 含 toxic waste、waste trade、waste、e-waste、radioactive waste、nuclear waste、transnational corporation、transnational investment、land grabbing 之一，且恰好兩國）：第二個國家 → 第一個國家。
   - **無方向**（issue 含 transboundary，優先於上一條）：第一個國家與其他國家之間畫無箭頭的線。理由：上下游水權與越境污染看不出由誰轉嫁給誰。
@@ -76,12 +76,12 @@ S1 的跨國連結視覺化已完成：85 條連結、使用限制、待查證�
 | S1-T301 | Mailuu-Suu 蘇聯鈾礦尾礦 | Kyrgyzstan; Uzbekistan | Kyrgyzstan — Uzbekistan | 無方向（transboundary）|
 | S1-T303 | Rogun 水壩與中亞上下游水權爭端 | Tajikistan; Uzbekistan | Tajikistan — Uzbekistan | 無方向（transboundary）|
 
-  確認後把 `topic-config.json` 中 `derivedBurden.status` 改成空字串，網站就拿掉「待確認」。
+  已把 `topic-config.json` 中 `derivedBurden.status` 改成空字串，網站不再顯示「待確認」。
 - **轉告 S1**：
   - 請確認 `country` 的寫法是否一律「受影響地在前、外部行動者在後」；
   - Koko、RCA 若要讓網站推導，`country` 需要補上義大利、美國；
   - 上面第 4 節列的 4 筆事件，若屬跨國企業轉嫁，可在 `issue` 加 `transnational corporation`。
-- **使用者**：同意 push（檔案清單見對話）；部署後確認 Render 成功並看 S1 頁面。
+- **使用者**：已同意 push 並部署（3dc1c9f）；請在網站上看 S1 頁面。
 
 ## 2026-11-27 任務：把 S3 加進網站（`prompts/SZ-S3-visualization.md`）
 

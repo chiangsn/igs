@@ -1,6 +1,6 @@
 # 資料品質報告
 
-> 由 `site/scripts/build-data.mjs` 於 build 時自動產生（2026-11-27 06:13 UTC）。請勿手動編輯；資料問題請轉告對應的主題 session 修正 `topics/` 下的檔案。
+> 由 `site/scripts/build-data.mjs` 於 build 時自動產生（2026-11-27 06:54 UTC）。請勿手動編輯；資料問題請轉告對應的主題 session 修正 `topics/` 下的檔案。
 
 ## 總覽
 
@@ -22,7 +22,7 @@
 ### 說明
 
 - concepts.csv 有 9 筆 `origin_region` 不是單一固定分類（含多區域或括號補充），網站以字串中出現的固定分類歸類。CLAUDE.md 未規範此欄，僅供參考。
-- 推導的事件內負擔轉嫁（待確認）：20 筆事件、23 條線（有方向 12、無方向 11）。三國以上、看不出方向而不收：S1-T086（Bangladesh、India、Pakistan）。
+- 推導的事件內負擔轉嫁（已確認）：20 筆事件、23 條線（有方向 12、無方向 11）。三國以上、看不出方向而不收：S1-T086（Bangladesh、India、Pakistan）。
 - 歷史分期：名稱取自 `overview.md` 的「第 N 期」標題，年份邊界取自 `data/README.md` 的分期分布（6 期）。
 - linked_ids 有 228 條只單向記錄；網絡圖一律合併為無向邊。
 - 南北分類（G77 成員）無法判斷的國家或地區：French Polynesia、Taiwan、Western Sahara、Hong Kong；含這些國家的事件歸「無法判斷」。

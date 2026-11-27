@@ -4,7 +4,7 @@
     "thesis": { "view": "regions", "label": "區域比較", "focusRegion": "North America" },
     "networkNote": "S1 全面標記跨國連結時，timeline 中 297 對跨國候選約有 190 對被判讀為「比較案例」（同類型、可以拿來比較，但兩者之間沒有人、物、錢、觀念的流動），所以這張圖的連線有很大一部分是比較關係，不是史實上的關聯。這個判讀沒有逐一搜尋（見 data/links-caveats.md 第 9 點）。",
     "derivedBurden": {
-      "status": "待確認",
+      "status": "",
       "directedIssues": ["toxic waste", "waste trade", "waste", "e-waste", "radioactive waste", "nuclear waste", "transnational corporation", "transnational investment", "land grabbing"],
       "undirectedIssues": ["transboundary"],
       "excludeTypes": ["treaty", "conference", "institution"]
