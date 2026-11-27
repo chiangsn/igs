@@ -1,13 +1,87 @@
 # SZ STATUS：視覺化網站
 
-最後更新：2026-11-26
+最後更新：2026-11-27
 
-## 目前狀態：已上線（S1、S2、S4，含 S1 跨國連結）；S3 已在本機完成與驗證，待 push
+## 目前狀態：已上線（S1–S4，含 S1 跨國連結與南北分類比較；最新 706e917）。S1 第四輪已在本機完成與驗證，待 push；待使用者看過網站後整體調整
 
 - `npm ci && npm run build`（含 `tsc --noEmit` 型別檢查）在刪除 `node_modules` 後的乾淨環境成功。
 - 用 `vite preview` 預覽 `site/dist/`，所有頁面正常載入，瀏覽器 console 沒有錯誤；已檢查深色、淺色模式與手機寬度（375px，沒有水平捲動）。
 - S1 資料管線結果：282 事件、107 讀物、36 概念、20 份文件，**0 則格式警告**（見 `data-report.md`）。
 - `package-lock.json` 已 commit；`render.yaml` 使用 `npm ci`，Node 24.22.1（與本機相同）。
+
+## 2026-11-27 任務：S1 第四輪成果上網站（`prompts/SZ-S1-round4-update.md`）
+
+### 1. 做了什麼
+
+- **資料更新**：重跑管線，S1 換成第四輪的事件、讀物（122）、概念、區域報告；首頁與總覽數字跟著更新。待查證計數加入跨國連結：總覽顯示「事件 17／讀物 0／概念 1／跨國連結 9」，`data-report.md` 總覽表新增「跨國連結」欄。
+- **85 條跨國連結**：三種視圖都換成 85 條；跨主題 10 條照舊以虛線圓圈與主題代號標出。
+- **待查證的連結**（9 條）：弧線加橙色光暈（與事件的橙色外框一致），提示顯示 ⚠，詳情列出「待查證的部分」（取自 `sources` 中含「待查證」的項目與 `note_zh` 中含「待查證」的句子；S1-L045、L047 的待查證寫在說明裡，也會列出）。篩選列加「只看待查證」。
+- **使用限制**：讀取 `data/links-caveats.md`（不寫死）：「一句話版本」放在流向地圖、泳道弧線圖、斷裂圖的頂端，不能收合；「詳細說明」放在分頁上方可展開的「使用前請讀」。通用：其他主題有這個檔也會出現。
+- **配合使用限制調整視圖**：
+  - **上色**：原本就依第一個 flow（主要流動）上色；這次在說明與圖例明寫「顏色＝第一個 flow」，並說明原因。
+  - **分布**：篩選列與斷裂圖旁加「數量反映可查的文獻，不等於歷史上的實際分布」。
+  - **mutual**：不畫箭頭，提示與詳情寫「雙向或並存」，詳情另有一句解釋。
+  - **相關事件網絡**：頁首加註 S1 的估計（297 對跨國候選中約 190 對為比較案例，未逐一搜尋），文字放在 `topic-config.json` 的 `networkNote`。
+- **推導的事件內負擔轉嫁**（新功能，預設關閉，有獨立開關，**待使用者確認**）：規則見第 5 節，設定方式見 `site/README.md`。國家代表座標放在新檔 `site/country-coords.json`（首都近似座標）。
+- **SZ 自己的修正**：無。
+
+### 2. 怎麼確認是對的
+
+- 以 S1–S4 的資料在刪除 `node_modules` 後跑 `npm ci && npm run build`：型別檢查通過，4 個主題、2 則警告（都是先前已知的 S3 `S3-146` 說明文字）；S1 0 則警告。
+- `data-report.md` 總覽：S1 事件 312、讀物 122、跨國連結 85，待查證「17／0／1／0／9」，與 S1 的 `verification-todo.md` 一致。
+- 預覽：85 條連結；「只看待查證」→ 9 條；泳道圖有 9 道橙色光暈；S1-L011 詳情列出兩項待查證（章節頁碼、日本運動者介入程度）；mutual 連結詳情顯示「雙向或並存」與解釋；打開推導開關後地圖多 23 條點線，點 Khian Sea 顯示「United States → Haiti」與推導依據；「使用前請讀」展開後顯示 10 點說明；南北分類在 85 條上兩種都可切換（G77：南南 12、南北 9、北北 8…；世銀：南南 13、南北 11、北北 12…；兩者判斷不同 18 條）。
+- 回歸：S2 網絡圖沒有加註、統計圖 8 張；S3 論點視圖的讀物標籤圖仍在；S4 專題單元 14 個；首頁 S1 主題卡顯示 85 條連結。
+- 淺色、深色模式；手機寬度 375px 量頁面 `scrollWidth` 都是 375；瀏覽器 console 沒有錯誤。
+
+### 3. 結論
+
+S1 的跨國連結視覺化已完成：85 條連結、使用限制、待查證標記與推導的負擔轉嫁都上了網站。推導規則與清單待使用者確認。
+
+### 4. 未解問題
+
+- 推導規則依賴 S1 的 `country` 寫法「受影響地在前」。目前 12 筆有方向的事件都符合，但這不是寫在規格裡的慣例。
+- **Koko（S1-T040）與 RCA（S1-T158）推導不到**：它們的 `country` 只寫了受影響國（Nigeria；Taiwan），沒有義大利或美國，所以 S1 在 caveats 中舉的這兩個例子，網站反而推不出來。
+- 有幾筆看起來是跨國企業轉嫁、但 `issue` 沒有標 `transnational corporation` 的事件，目前不收：S1-T238「癌症巷」反台塑（United States; Taiwan）、S1-T297 Cabo Delgado（Mozambique; France）、S1-T298 Virunga（DRC; United Kingdom）、S1-T311 蓋亞那 Stabroek（Guyana; United States）。
+- 三國以上的 S1-T086 南亞拆船業（Bangladesh、India、Pakistan）看不出方向，不收；S1-T295 ProSavana（Mozambique、Brazil、Japan）沒有符合的 issue，也不收。
+- 推導只畫在流向地圖，不進泳道圖、斷裂圖與南北分類統計。
+
+### 5. 要交給誰／需要使用者決定的事
+
+- **使用者確認推導規則與事件清單**：
+  - 條件：`region` 不是 Global、`country` 兩個以上、`type` 不是 treaty／conference／institution。
+  - **有方向**（issue 含 toxic waste、waste trade、waste、e-waste、radioactive waste、nuclear waste、transnational corporation、transnational investment、land grabbing 之一，且恰好兩國）：第二個國家 → 第一個國家。
+  - **無方向**（issue 含 transboundary，優先於上一條）：第一個國家與其他國家之間畫無箭頭的線。理由：上下游水權與越境污染看不出由誰轉嫁給誰。
+  - 符合的 20 筆事件（23 條線）：
+
+| id | 事件 | country | 推導 | 類型（依據的 issue） |
+|---|---|---|---|---|
+| S1-T008 | Khian Sea 焚化灰渣傾倒海地 (Khian Sea waste disposal incident) | Haiti; United States | United States → Haiti | 有方向（toxic waste、waste trade）|
+| S1-T017 | Gualeguaychú 反紙漿廠運動與國際法院案 (Pulp Mills on the River Uruguay) | Argentina; Uruguay | Argentina — Uruguay | 無方向（transboundary）|
+| S1-T051 | Gibe III 水壩與 Omo 河—Turkana 湖衝突 | Ethiopia; Kenya | Ethiopia — Kenya | 無方向（transboundary）|
+| S1-T056 | Lungowe v Vedanta（尚比亞村民在英國起訴） | Zambia; United Kingdom | United Kingdom → Zambia | 有方向（transnational corporation）|
+| S1-T059 | Oruma、Goi、Ikot Ada Udo 農民與荷蘭地球之友訴 Shell（海牙） | Nigeria; Netherlands | Netherlands → Nigeria | 有方向（transnational corporation）|
+| S1-T103 | 東南亞霾害（1997–98 印尼森林大火） | Indonesia; Malaysia; Singapore | Indonesia — Malaysia、Indonesia — Singapore | 無方向（transboundary）|
+| S1-T104 | 台塑汞污泥傾倒柬埔寨施亞努港 | Cambodia; Taiwan | Taiwan → Cambodia | 有方向（toxic waste、waste trade）|
+| S1-T105 | Yadana 天然氣管線與 Doe v. Unocal 案 | Myanmar; United States | United States → Myanmar | 有方向（transnational corporation）|
+| S1-T114 | 台塑河靜鋼廠海洋污染事件 | Vietnam; Taiwan | Taiwan → Vietnam | 有方向（transnational corporation）|
+| S1-T139 | 松花江苯污染事件 | China; Russia | China — Russia | 無方向（transboundary）|
+| S1-T189 | Baia Mare 氰化物外洩 | Romania; Hungary; Serbia | Romania — Hungary、Romania — Serbia | 無方向（transboundary）|
+| S1-T274 | Damietta 反 Agrium 化肥廠運動 | Egypt; Canada | Canada → Egypt | 有方向（transnational corporation）|
+| S1-T283 | 衣索比亞復興大壩（GERD）與尼羅河水權爭端 | Ethiopia; Egypt; Sudan | Ethiopia — Egypt、Ethiopia — Sudan | 無方向（transboundary）|
+| S1-T290 | Arlit 與 Akokan 鈾礦污染（Areva／Orano） | Niger; France | France → Niger | 有方向（transnational corporation）|
+| S1-T291 | Mounana 鈾礦前工人求償 | Gabon; France | France → Gabon | 有方向（transnational corporation）|
+| S1-T294 | 大宇物流馬達加斯加 130 萬公頃租地案 | Madagascar; South Korea | South Korea → Madagascar | 有方向（land grabbing、transnational corporation）|
+| S1-T296 | Tete 煤礦與 Cateme 等安置村 | Mozambique; Brazil | Brazil → Mozambique | 有方向（transnational corporation）|
+| S1-T300 | Barskoon 氰化物外洩（Kumtor 金礦） | Kyrgyzstan; Canada | Canada → Kyrgyzstan | 有方向（transnational corporation）|
+| S1-T301 | Mailuu-Suu 蘇聯鈾礦尾礦 | Kyrgyzstan; Uzbekistan | Kyrgyzstan — Uzbekistan | 無方向（transboundary）|
+| S1-T303 | Rogun 水壩與中亞上下游水權爭端 | Tajikistan; Uzbekistan | Tajikistan — Uzbekistan | 無方向（transboundary）|
+
+  確認後把 `topic-config.json` 中 `derivedBurden.status` 改成空字串，網站就拿掉「待確認」。
+- **轉告 S1**：
+  - 請確認 `country` 的寫法是否一律「受影響地在前、外部行動者在後」；
+  - Koko、RCA 若要讓網站推導，`country` 需要補上義大利、美國；
+  - 上面第 4 節列的 4 筆事件，若屬跨國企業轉嫁，可在 `issue` 加 `transnational corporation`。
+- **使用者**：同意 push（檔案清單見對話）；部署後確認 Render 成功並看 S1 頁面。
 
 ## 2026-11-27 任務：把 S3 加進網站（`prompts/SZ-S3-visualization.md`）
 

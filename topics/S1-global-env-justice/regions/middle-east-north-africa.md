@@ -60,14 +60,14 @@
 | S1-T066 | 2012–2026 | Tunisia | Gabès 磷酸鹽工業污染抗爭 (Stop Pollution) | movement | industrial pollution; water; health |
 | S1-T068 | 2013 | Turkey | Gezi 公園抗爭 | movement | urban green space; democracy |
 | S1-T069 | 2014 | Turkey | Soma 煤礦災難 | disaster | coal; labor |
+| S1-T279 | 2014–2020 | Lebanon | Bisri 水壩與世界銀行撤回貸款 | policy | dam; development finance; biodiversity |
 | S1-T070 | 2015 | Algeria | In Salah 反頁岩氣（水力壓裂）抗爭 | movement | fracking; water |
 | S1-T071 | 2015–2016 | Lebanon | 黎巴嫩垃圾危機與「你很臭」運動 (YouStink) | movement | waste; governance |
-| S1-T279 | 2015–2020 | Lebanon | Bisri 水壩與世界銀行撤回貸款 | policy | dam; development finance; biodiversity |
 | S1-T281 | 2015–2023 | Yemen | FSO Safer 油輪危機 | disaster | oil; war; marine ecology |
 | S1-T276 | 2016–2025 | Morocco | Noor Ouarzazate 太陽能電廠與「綠色掠奪」爭議 | movement | energy transition; land; indigenous; pastoralism |
 | S1-T289 | 2017–2018 | Western Sahara;Morocco;South Africa | 西撒哈拉 Bou Craa 磷礦與 NM Cherry Blossom 扣船案 | lawsuit | phosphate; occupation; self-determination |
 | S1-T277 | 2018–2019 | Iraq | 巴斯拉水危機 | disaster | water; health; governance |
-| S1-T278 | 2019–2020 | Turkey | Kaz 山（Ida 山）「水與良知守夜」反金礦運動 | movement | mining; forest; water; transnational corporation |
+| S1-T278 | 2019–2026 | Turkey | Kaz 山（Ida 山）「水與良知守夜」反金礦運動 | movement | mining; forest; water; transnational corporation |
 | S1-T286 | 2020–2023 | Saudi Arabia | NEOM 新城與 Huwaitat 部落強制遷離 | movement | land; displacement; megaproject; defenders |
 | S1-T280 | 2021 | Qatar | 國際特赦組織報告：卡達移工高溫死亡未獲調查 | publication | heat; labor; migration; climate |
 | S1-T074 | 2022 | Egypt | COP27（Sharm el-Sheikh）通過損失與損害基金 | conference | climate; loss and damage |

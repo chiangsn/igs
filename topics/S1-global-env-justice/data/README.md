@@ -41,42 +41,42 @@
 | `definition_zh` | 中文定義 |
 | `sources` | URL、DOI 或 `readings.csv` 的 id（`S1-###`），` ; ` 分隔 |
 
-## links.csv（跨國連結，試標 50 條，2026-11-27）
+## links.csv（跨國連結，85 條，2026-11-27）
 
 欄位與詞彙依 `CLAUDE.md` 與根目錄的 `link-typology.md`：`id,from_id,to_id,flow,mechanism,direction,note_zh,sources`。
 
 | 欄位 | 說明 |
 |---|---|
-| `id` | `S1-L###`，發出後不重新編號 |
-| `from_id` / `to_id` | timeline 事件 id，可引用 S2、S3、S4（試標中 7 條跨主題） |
+| `id` | `S1-L###`，發出後不重新編號；L001–L050 為試標，L051 起為全面標記 |
+| `from_id` / `to_id` | timeline 事件 id，可引用 S2、S3、S4（目前 10 條跨主題） |
 | `flow` | people / capital / technology / material / media / ideas，`;` 分隔，第一個為主要流動 |
 | `mechanism` | 12 種之一，只填一個；第二種也成立時寫在 `note_zh` |
 | `direction` | `forward`（from 為源頭）或 `mutual` |
-| `sources` | 能支持「兩事件有關聯」的來源，` ; ` 分隔；`S1-###` 指 readings.csv；含「待查證」者為關聯本身尚待確認 |
+| `sources` | 能支持「兩事件有關聯」的來源，` ; ` 分隔；`S1-###` 指 readings.csv；含「待查證」者為關聯中某一部分尚待確認 |
 
-**收錄規則**：兩端事件的 `country` 不完全相同，或任一端 `region` 為 `Global`。同國連結留在 timeline 的 `linked_ids`。只收有來源支持的實質關聯；同類型但沒有因果或互動的「比較案例」不收（見 STATUS.md 試標回報）。
+**收錄規則**：兩端事件的 `country` 不完全相同，或任一端 `region` 為 `Global`。同國連結留在 timeline 的 `linked_ids`。只收有來源支持的實質關聯（人、資本、技術、物質、影像或觀念確實在兩事件之間流動）；同類型但沒有互動的「比較案例」與全球層次內部的制度沿革不收。
 
-**試標分布**（flow 可多值，因此各列加總大於 50）：
+**分布**（flow 可多值，因此各列加總大於條數）：
 
 | mechanism | people | capital | technology | material | media | ideas | 條數 |
 |---|---|---|---|---|---|---|---|
-| scale_up | 3 | 1 |  | 5 |  | 10 | 10 |
-| commodity_chain |  | 5 | 2 | 6 |  |  | 7 |
-| boomerang | 4 |  |  |  |  | 5 | 5 |
-| colonial |  | 1 | 2 | 5 |  | 1 | 5 |
-| memory | 1 |  |  |  | 4 | 4 | 4 |
-| litigation |  |  |  |  |  | 4 | 4 |
-| geopolitical | 1 | 1 | 1 | 2 |  |  | 4 |
-| diffusion |  |  |  |  |  | 3 | 3 |
-| burden_shifting |  | 1 |  | 3 |  |  | 3 |
-| translation |  |  |  |  |  | 2 | 2 |
+| scale_up | 5 | 2 |  | 5 | 2 | 18 | 18 |
+| commodity_chain |  | 8 | 2 | 10 |  |  | 11 |
+| burden_shifting |  | 1 |  | 8 |  |  | 8 |
+| memory | 1 |  | 1 |  | 5 | 8 | 8 |
+| boomerang | 6 |  |  |  | 1 | 7 | 8 |
+| litigation | 1 |  |  |  |  | 7 | 7 |
+| colonial |  | 1 | 2 | 7 |  | 3 | 7 |
+| geopolitical | 1 | 1 | 2 | 4 |  |  | 6 |
+| translation |  |  |  |  |  | 5 | 5 |
+| diffusion |  |  |  |  |  | 4 | 4 |
 | template |  |  |  |  |  | 2 | 2 |
 | imposition |  | 1 |  |  |  | 1 | 1 |
-| **合計** | 9 | 10 | 5 | 21 | 4 | 32 | 50 |
-
-這是試標結果，使用者確認分類後會全面標記，表格屆時更新。
+| **合計** | 14 | 14 | 7 | 34 | 8 | 55 | 85 |
 
 **使用限制**：使用者指示網站必須呈現這份資料的限制，提醒教學者它只是內部參考、不能直接當成教學資料。完整說明見 `links-caveats.md`（給 SZ）。
 
+**檢查**：`python data/scripts/validate_links.py` 檢查 id 存在、詞彙、同國、重複、來源與備註，並印出上表。
+
 ## 相關檔案
-- `../readings.csv`：107 筆讀物，欄位依 `CLAUDE.md`；期刊論文 DOI 已透過 Crossref 驗證，英文書籍已透過 Open Library 比對書名與作者。
+- `../readings.csv`：122 筆讀物（中文 19 筆，15.6%），欄位依 `CLAUDE.md`；期刊論文 DOI 已透過 Crossref 驗證，英文書籍已透過 Open Library 比對書名與作者。

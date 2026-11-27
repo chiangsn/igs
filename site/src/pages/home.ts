@@ -14,7 +14,7 @@ export function renderHome(root: HTMLElement, idx: SiteIndex) {
     <h2>主題</h2>
     <div class="topic-grid">${idx.topics.map((t) => {
       const s = t.stats;
-      const pend = s.pending.events + s.pending.readings + s.pending.concepts + s.pending.documents;
+      const pend = s.pending.events + s.pending.readings + s.pending.concepts + s.pending.documents + s.pending.links;
       const regs = Object.entries(s.regionCounts).filter(([, n]) => n > 0).sort((a, b) => b[1] - a[1]);
       const max = Math.max(1, ...regs.map((r) => r[1]));
       return `<a class="topic-card" href="#/t/${esc(t.code)}">

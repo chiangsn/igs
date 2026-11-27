@@ -1,5 +1,5 @@
 // 共用 UI 工具：元素建立、色彩、徽章、事件詳情面板、tooltip
-import type { EventItem, ExternalEvent, Link, Topic } from './data';
+import type { DerivedBurden, EventItem, ExternalEvent, Link, Topic } from './data';
 import { FLOW_ZH, FLOWS, MECH_ZH, regionZh, TYPE_ZH } from './data';
 
 export function esc(s: unknown): string {
@@ -203,6 +203,28 @@ const endHtml = (id: string, t: Topic) => {
   return `${a}<div class="muted small">${esc(id)} · ${yearText(e)} · ${esc(regionZh(e.region))}${e.countries.length ? ' · ' + esc(e.countries.join('、')) : ''}</div>`;
 };
 
+/** 連結中標「待查證」的部分：sources 中含「待查證」的項目，以及說明中含「待查證」的句子 */
+export function pendingParts(l: Link): string[] {
+  const fromSources = l.sources.filter((x) => x.includes('待查證'));
+  const fromNote = l.note.split(/(?<=[。；;])/).filter((x) => x.includes('待查證')).map((x) => x.trim());
+  return [...fromSources, ...fromNote];
+}
+
+/** 推導的事件內負擔轉嫁的詳情 */
+export function showDerived(ds: DerivedBurden[], t: Topic) {
+  const d = ensureDrawer(t);
+  const e = t.events.find((x) => x.id === ds[0].event_id);
+  d.innerHTML = `
+    <button class="drawer-close" aria-label="關閉">×</button>
+    <div class="muted small">推導的事件內負擔轉嫁${t.config.derivedStatus ? `（${esc(t.config.derivedStatus)}）` : ''}</div>
+    <h2>${e ? esc(e.name) : esc(ds[0].event_id)}</h2>
+    <div class="derived-box">網站依事件的 <code>country</code> 欄位推導，<b>不是人工標記的連結</b>，也沒有逐筆查證方向。</div>
+    <h4>推導出的關係</h4><ul>${ds.map((x) => `<li>${esc(x.from)} ${x.directed ? '→' : '—'} ${esc(x.to)}${x.directed ? '' : '（不推定方向）'}</li>`).join('')}</ul>
+    <h4>依據</h4><p class="small">issue 含 ${ds[0].by.map((b) => `<code>${esc(b)}</code>`).join('、')}。${ds[0].directed ? '有方向的規則：恰好兩個國家，第二個國家（外部行動者）→ 第一個國家（受影響地）。' : '越境影響（上下游、跨界污染）看不出由誰轉嫁給誰，只畫無箭頭的線。'}</p>
+    ${e ? `<h4>事件</h4><p><a href="#" data-event="${e.id}">${esc(e.name)}</a> <span class="muted small">${esc(e.id)} · ${yearText(e)} · ${esc(e.countries.join('、'))}</span></p>` : ''}`;
+  d.classList.add('open');
+}
+
 /** 跨國連結的詳情（links.csv 的一列） */
 export function showLink(l: Link, t: Topic) {
   const d = ensureDrawer(t);
@@ -211,7 +233,9 @@ export function showLink(l: Link, t: Topic) {
     <div class="muted small">${esc(l.id)} · 跨國連結 · ${l.year}</div>
     <h2>${esc(MECH_ZH[l.mechanism] ?? l.mechanism)} ${pendingBadge(l.pending)}</h2>
     <div class="chips">${l.flows.map((f, i) => `<span class="chip${i ? ' ghost' : ''}"><i class="sw" style="background:${slotVar(FLOWS.indexOf(f))}"></i>${esc(FLOW_ZH[f] ?? f)}${i ? '' : '（主要）'}</span>`).join('')}
-      <span class="chip ghost">${l.direction === 'forward' ? '單向 →' : '雙向 ↔'}</span>${l.ns && t.northSouth ? t.northSouth.schemes.map((sc) => `<span class="chip ghost" title="${esc(sc.label)}">${esc(sc.short)}：${esc(l.ns![sc.key] ?? '')}</span>`).join('') : ''}</div>
+      <span class="chip ghost">${l.direction === 'forward' ? '單向 →' : '雙向或並存'}</span>${l.ns && t.northSouth ? t.northSouth.schemes.map((sc) => `<span class="chip ghost" title="${esc(sc.label)}">${esc(sc.short)}：${esc(l.ns![sc.key] ?? '')}</span>`).join('') : ''}</div>
+    ${l.pending ? `<div class="pending-box"><b>⚠ 待查證的部分</b><ul>${pendingParts(l).map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''}
+    ${l.direction === 'mutual' ? '<p class="muted small">「雙向或並存」：兩事件互相影響，或同時並存、分不出先後（link-typology 的 mutual 同時用於這兩種情況）。</p>' : ''}
     <h4>${l.direction === 'forward' ? '從' : '一端'}</h4>${endHtml(l.from_id, t)}
     <h4>${l.direction === 'forward' ? '到' : '另一端'}</h4>${endHtml(l.to_id, t)}
     ${l.note ? `<h4>說明</h4><p>${linkifyIds(esc(l.note).replace(/待查證/g, '<span class="pending-text">待查證</span>'), t)}</p>` : ''}
@@ -238,7 +262,7 @@ export function showEvent(e: EventItem, t: Topic) {
     <h4>來源</h4><ul class="sources">${e.sources.map((s) => `<li>${sourceHtml(s)}</li>`).join('') || '<li class="muted">無</li>'}</ul>
     ${myLinks.length ? `<h4>跨國連結（${myLinks.length}）</h4><ul class="linked">${myLinks.map((l) => {
       const other = endpoint(l.from_id === e.id ? l.to_id : l.from_id, t);
-      return `<li><i class="sw" style="background:${slotVar(FLOWS.indexOf(l.flows[0]))}"></i><a href="#" data-link="${l.id}">${esc(MECH_ZH[l.mechanism] ?? l.mechanism)}</a> ${l.direction === 'forward' ? (l.from_id === e.id ? '→' : '←') : '↔'} ${esc(other?.name ?? '')}</li>`;
+      return `<li><i class="sw" style="background:${slotVar(FLOWS.indexOf(l.flows[0]))}"></i><a href="#" data-link="${l.id}">${esc(MECH_ZH[l.mechanism] ?? l.mechanism)}</a> ${l.direction === 'forward' ? (l.from_id === e.id ? '→' : '←') : '—（雙向或並存）'} ${esc(other?.name ?? '')} ${pendingBadge(l.pending)}</li>`;
     }).join('')}</ul>` : ''}
     ${inTopic.length ? `<h4>相關事件（${inTopic.length}）</h4><ul class="linked">${inTopic.map((id) => {
       const x = byId.get(id)!;

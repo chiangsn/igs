@@ -1,15 +1,15 @@
 # 資料品質報告
 
-> 由 `site/scripts/build-data.mjs` 於 build 時自動產生（2026-11-27 04:08 UTC）。請勿手動編輯；資料問題請轉告對應的主題 session 修正 `topics/` 下的檔案。
+> 由 `site/scripts/build-data.mjs` 於 build 時自動產生（2026-11-27 06:13 UTC）。請勿手動編輯；資料問題請轉告對應的主題 session 修正 `topics/` 下的檔案。
 
 ## 總覽
 
-| 主題 | 事件 | 讀物 | 概念 | 一手文件 | Markdown 文件 | 待查證（事件／讀物／概念／一手文件） | 警告 |
-|---|---|---|---|---|---|---|---|
-| S1 History of Global Environmental Justice | 312 | 107 | 36 | 0 | 20 | 24／7／8／0 | 0 |
-| S2 戰爭與其延伸影響 | 249 | 174 | 34 | 0 | 20 | 0／0／0／0 | 0 |
-| S3 科技全球發展史 | 238 | 295 | 41 | 0 | 18 | 0／0／0／0 | 2 |
-| S4 永續發展的全球治理史 | 248 | 148 | 40 | 55 | 21 | 0／0／0／0 | 0 |
+| 主題 | 事件 | 讀物 | 概念 | 一手文件 | 跨國連結 | Markdown 文件 | 待查證（事件／讀物／概念／一手文件／跨國連結） | 警告 |
+|---|---|---|---|---|---|---|---|---|
+| S1 History of Global Environmental Justice | 312 | 122 | 36 | 0 | 85 | 20 | 17／0／1／0／9 | 0 |
+| S2 戰爭與其延伸影響 | 249 | 174 | 34 | 0 | 0 | 20 | 0／0／0／0／0 | 0 |
+| S3 科技全球發展史 | 238 | 295 | 41 | 0 | 0 | 18 | 0／0／0／0／0 | 2 |
+| S4 永續發展的全球治理史 | 248 | 148 | 40 | 55 | 0 | 21 | 0／0／0／0／0 | 0 |
 
 ## S1：History of Global Environmental Justice
 
@@ -22,12 +22,13 @@
 ### 說明
 
 - concepts.csv 有 9 筆 `origin_region` 不是單一固定分類（含多區域或括號補充），網站以字串中出現的固定分類歸類。CLAUDE.md 未規範此欄，僅供參考。
+- 推導的事件內負擔轉嫁（待確認）：20 筆事件、23 條線（有方向 12、無方向 11）。三國以上、看不出方向而不收：S1-T086（Bangladesh、India、Pakistan）。
 - 歷史分期：名稱取自 `overview.md` 的「第 N 期」標題，年份邊界取自 `data/README.md` 的分期分布（6 期）。
 - linked_ids 有 228 條只單向記錄；網絡圖一律合併為無向邊。
 - 南北分類（G77 成員）無法判斷的國家或地區：French Polynesia、Taiwan、Western Sahara、Hong Kong；含這些國家的事件歸「無法判斷」。
 - 南北分類（世界銀行所得分組）無法判斷的國家或地區：Western Sahara；含這些國家的事件歸「無法判斷」。
-- 南北分類：連結兩端涉及 53 個國家或地區，其中 8 個在不同分類下歸屬不同；兩種分類對連結的判斷有 10 條不一致。
-- links.csv：50 列，網站使用 50 條。主要 flow：ideas 20、material 16、capital 4、technology 4、people 4、media 2。mechanism：scale_up 10、commodity_chain 7、colonial 5、boomerang 5、geopolitical 4、litigation 4、memory 4、burden_shifting 3、diffusion 3、translation 2、template 2、imposition 1。跨主題 7 條。
+- 南北分類：連結兩端涉及 73 個國家或地區，其中 16 個在不同分類下歸屬不同；兩種分類對連結的判斷有 18 條不一致。
+- links.csv：85 列，網站使用 85 條。主要 flow：ideas 38、material 26、people 7、capital 6、technology 4、media 4。mechanism：scale_up 18、commodity_chain 11、burden_shifting 8、boomerang 8、memory 8、colonial 7、litigation 7、geopolitical 6、translation 5、diffusion 4、template 2、imposition 1。跨主題 10 條。
 
 ### 待查證項目
 
@@ -43,37 +44,21 @@
 - 事件 `S1-T155` 原住民族「還我土地」運動
 - 事件 `S1-T160` 七股反濱南工業區（黑面琵鷺）
 - 事件 `S1-T161` 台中反拜耳運動
-- 事件 `S1-T164` 司馬庫斯櫸木事件
 - 事件 `S1-T168` 日月光 K7 廠排放廢水事件
 - 事件 `S1-T170` 亞泥太魯閣礦權展延爭議與礦業法修法
 - 事件 `S1-T238` 「癌症巷」反台塑 Sunshine Project 運動
-- 事件 `S1-T278` Kaz 山（Ida 山）「水與良知守夜」反金礦運動
-- 事件 `S1-T279` Bisri 水壩與世界銀行撤回貸款
-- 事件 `S1-T281` FSO Safer 油輪危機
-- 事件 `S1-T282` Derna 水壩潰堤（Storm Daniel）
 - 事件 `S1-T299` Cabinda 海岸漏油與漁民
 - 事件 `S1-T303` Rogun 水壩與中亞上下游水權爭端
-- 事件 `S1-T308` 牙買加 Cockpit Country 反鋁土礦運動
-- 事件 `S1-T311` 蓋亞那 Stabroek 石油許可訴訟
-- 讀物 `S1-019` Environmental justice and the global South
-- 讀物 `S1-060` The Greater Common Good
-- 讀物 `S1-069` 公害原論
-- 讀物 `S1-076` 한국 환경운동의 사회학
-- 讀物 `S1-083` 環境風險與公共治理：探索台灣環境民主實踐之道
-- 讀物 `S1-084` 拒絕被遺忘的聲音：RCA 工殤口述史
-- 讀物 `S1-104` The human right to a clean, healthy and sustainable environment (A/RES/76/300)
-- 概念 Environmentalism of the poor（窮人的環境主義）
-- 概念 Ecological debt（生態債）
 - 概念 公害（kōgai）
-- 概念 Pollution export（公害輸出）
-- 概念 自力救濟（self-help protest）
-- 概念 回饋金（compensation-for-siting）
-- 概念 Nuclear colonialism（核殖民主義）
-- 概念 Green colonialism / green extractivism（綠色殖民主義／綠色採掘主義）
 - 跨國連結 `S1-L011`（S1-T096 → S1-T118）
 - 跨國連結 `S1-L019`（S1-T056 → S1-T087）
 - 跨國連結 `S1-L045`（S1-T158 → S1-T133）
 - 跨國連結 `S1-L047`（S1-T252 → S1-T021）
+- 跨國連結 `S1-L053`（S1-T123 → S1-T146）
+- 跨國連結 `S1-L055`（S1-T042 → S1-T056）
+- 跨國連結 `S1-L058`（S1-T045 → S1-T059）
+- 跨國連結 `S1-L073`（S1-T301 → S1-T305）
+- 跨國連結 `S1-L074`（S1-T092 → S1-T270）
 
 ## S2：戰爭與其延伸影響
 

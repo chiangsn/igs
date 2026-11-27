@@ -243,6 +243,53 @@ function readDocs(code, dir) {
 
 // ---------- 主題設定（site/topic-config.json）----------
 const SUBDIR_LABELS = { regions: '區域報告', impacts: '影響面向', modules: '模組' };
+// ---------- 跨國連結的使用限制（data/links-caveats.md）----------
+// 主題有這個檔時，網站在跨國連結頁顯示：「一句話版本」放在每個視圖頂端，「詳細說明」放進可展開的區塊。
+// 找不到這兩個標題時，整份當詳細說明、第一段當一句話。
+function readCaveats(code, dir) {
+  const md = read(path.join(dir, 'data', 'links-caveats.md'));
+  if (md === null) return null;
+  const sections = md.split(/^## /m);
+  const short = sections.find((x) => x.startsWith('一句話'));
+  const detail = sections.find((x) => x.startsWith('詳細說明'));
+  const body = (sec) => sec.split(/\r?\n/).slice(1).join('\n').trim();
+  const firstPara = (txt) => txt.split(/\n\s*\n/)[0].trim();
+  // 一句話版本：該節的第一段；沒有該節時，跳過標題與引言（> 開頭）後的第一段
+  const shortText = firstPara(short ? body(short) : md.replace(/^#.*$/gm, '').replace(/^>.*$/gm, '').trim());
+  if (!short || !detail) note(code, '`data/links-caveats.md` 沒有「一句話版本」或「詳細說明」標題，網站改以第一段為一句話、整份為詳細說明。');
+  return { short: shortText, detail: detail ? body(detail) : md };
+}
+
+// ---------- 推導的事件內負擔轉嫁（topic-config.json 的 derivedBurden）----------
+// 一筆事件就包含跨國的轉嫁（例如 Khian Sea：美國 → 海地），沒有「另一端事件」可以連。網站依 country 推導：
+//   條件：region 不是 Global、country 有兩個以上、type 不在 excludeTypes。
+//   有方向：issue 含 directedIssues 之一、且恰好兩個國家 → 第二個國家（外部行動者）→ 第一個國家（受影響地）。
+//           依據是 S1 的 country 寫法：受影響地寫在前面（尚待 S1 確認）。三國以上看不出方向，不收。
+//   無方向：issue 含 undirectedIssues（越境污染、上下游水權）→ 第一個國家與其他每個國家之間畫無箭頭的線。
+function deriveBurden(code, events, cfg) {
+  if (!cfg) return [];
+  const coords = JSON.parse(read(path.join(SITE, 'country-coords.json')) ?? '{}');
+  const out = []; const skipped = []; const noCoord = new Set();
+  for (const e of events) {
+    if (e.region === 'Global' || e.countries.length < 2 || (cfg.excludeTypes ?? []).includes(e.type)) continue;
+    const und = e.issues.filter((i) => (cfg.undirectedIssues ?? []).includes(i));
+    const dir = e.issues.filter((i) => (cfg.directedIssues ?? []).includes(i));
+    let pairs = [];
+    if (und.length) pairs = e.countries.slice(1).map((c) => ({ from: e.countries[0], to: c, directed: false, by: und }));
+    else if (dir.length && e.countries.length === 2) pairs = [{ from: e.countries[1], to: e.countries[0], directed: true, by: dir }];
+    else if (dir.length) { skipped.push(`${e.id}（${e.countries.join('、')}）`); continue; }
+    for (const p of pairs) {
+      for (const c of [p.from, p.to]) if (!coords[c]) noCoord.add(c);
+      if (!coords[p.from] || !coords[p.to]) continue;
+      out.push({ event_id: e.id, ...p, fromXY: coords[p.from], toXY: coords[p.to], year: e.year_start });
+    }
+  }
+  if (noCoord.size) warn(code, 'site/country-coords.json', `推導負擔轉嫁需要的國家沒有座標：${[...noCoord].join('、')}`);
+  const ev = new Set(out.map((d) => d.event_id));
+  note(code, `推導的事件內負擔轉嫁（${cfg.status || '已確認'}）：${ev.size} 筆事件、${out.length} 條線（有方向 ${out.filter((d) => d.directed).length}、無方向 ${out.filter((d) => !d.directed).length}）。${skipped.length ? `三國以上、看不出方向而不收：${skipped.join('、')}。` : ''}`);
+  return out;
+}
+
 function loadConfig() {
   const text = read(path.join(SITE, 'topic-config.json'));
   if (text === null) return {};
@@ -280,7 +327,8 @@ function resolveConfig(code, raw, subdirs, events) {
   const lanes = c.timelineLanes ?? 'region';
   if (!['region', 'type', 'group'].includes(lanes)) warn(code, 'site/topic-config.json', `timelineLanes「${lanes}」不是 region、type 或 group`);
   return { thesis, issueGroups, subdirs: groups, overviewStats: c.overviewStats ?? [], timelineLanes: lanes, readingFacets: c.readingFacets ?? [],
-    conceptGroups: (c.conceptGroups ?? []).map((g) => ({ label: g.label })), otherLanguageTag: !!c.otherLanguageTag };
+    conceptGroups: (c.conceptGroups ?? []).map((g) => ({ label: g.label })), otherLanguageTag: !!c.otherLanguageTag,
+    networkNote: c.networkNote ?? '', derivedStatus: c.derivedBurden?.status ?? '' };
 }
 
 // ---------- 讀物標籤篩選（readingFacets）----------
@@ -470,6 +518,8 @@ function buildTopic(folder, registry, config) {
   }
 
   const { docs, subdirs } = readDocs(code, dir);
+  const linksCaveats = readCaveats(code, dir);
+  const derived = deriveBurden(code, events, config[code]?.derivedBurden);
   const periods = parsePeriods(code, dir);
   const cfg = resolveConfig(code, config[code], subdirs, events);
   cfg.readingFacets = resolveFacets(code, cfg.readingFacets, readings, docs);
@@ -489,7 +539,7 @@ function buildTopic(folder, registry, config) {
     r.regions = [...set];
   }
 
-  return { code, folder, name, status: reg?.status ?? '', periods, events, readings, concepts, documents, docs, config: cfg, charts: stats,
+  return { code, folder, name, status: reg?.status ?? '', periods, events, readings, concepts, documents, docs, config: cfg, charts: stats, linksCaveats, derived,
     linksRaw, has: { timeline: !!tl, readings: !!rd, concepts: !!cc, documents: !!dc, links: !!lk } };
 }
 
@@ -708,6 +758,7 @@ function stats(t) {
       readings: t.readings.filter((r) => r.pending).length,
       concepts: t.concepts.filter((c) => c.pending).length,
       documents: t.documents.filter((d) => d.pending).length,
+      links: (t.links ?? []).filter((l) => l.pending).length,
     },
     yearMin: ys.length ? Math.min(...ys) : null, yearMax: ys.length ? Math.max(...ys) : null,
     warnings: report[t.code].warnings.length,
@@ -718,10 +769,10 @@ function renderReport(topics, generatedAt) {
   const L = [];
   L.push('# 資料品質報告', '');
   L.push(`> 由 \`site/scripts/build-data.mjs\` 於 build 時自動產生（${generatedAt}）。請勿手動編輯；資料問題請轉告對應的主題 session 修正 \`topics/\` 下的檔案。`, '');
-  L.push('## 總覽', '', '| 主題 | 事件 | 讀物 | 概念 | 一手文件 | Markdown 文件 | 待查證（事件／讀物／概念／一手文件） | 警告 |', '|---|---|---|---|---|---|---|---|');
+  L.push('## 總覽', '', '| 主題 | 事件 | 讀物 | 概念 | 一手文件 | 跨國連結 | Markdown 文件 | 待查證（事件／讀物／概念／一手文件／跨國連結） | 警告 |', '|---|---|---|---|---|---|---|---|---|');
   for (const t of topics) {
     const s = t.stats;
-    L.push(`| ${t.code} ${t.name} | ${s.events} | ${s.readings} | ${s.concepts} | ${s.documents} | ${s.docs} | ${s.pending.events}／${s.pending.readings}／${s.pending.concepts}／${s.pending.documents} | ${s.warnings} |`);
+    L.push(`| ${t.code} ${t.name} | ${s.events} | ${s.readings} | ${s.concepts} | ${s.documents} | ${s.links} | ${s.docs} | ${s.pending.events}／${s.pending.readings}／${s.pending.concepts}／${s.pending.documents}／${s.pending.links} | ${s.warnings} |`);
   }
   L.push('');
   for (const t of topics) {

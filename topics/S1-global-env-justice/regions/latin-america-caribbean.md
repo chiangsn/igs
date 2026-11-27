@@ -92,7 +92,7 @@
 | S1-T309 | 2016–2018 | Puerto Rico | 波多黎各 AES 煤灰傾倒抗爭（Peñuelas、Guayama） | movement | coal ash; toxic waste; colonial status |
 | S1-T032 | 2018–2021 | Costa Rica | Escazú 協定 (Acuerdo de Escazú) | treaty | access to information; participation; defenders |
 | S1-T033 | 2018–2019 | Chile | Quintero–Puchuncaví「犧牲區」中毒事件 | disaster | industrial pollution; air pollution; health |
-| S1-T311 | 2019–2024 | Guyana;United States | 蓋亞那 Stabroek 石油許可訴訟 | lawsuit | oil; climate; financial liability |
+| S1-T311 | 2019–2026 | Guyana;United States | 蓋亞那 Stabroek 石油許可訴訟 | lawsuit | oil; climate; financial liability |
 | S1-T310 | 2022–2024 | Barbados | Bridgetown 倡議（氣候金融改革） | policy | climate finance; debt; loss and damage |
 
 共 41 筆。行動者、結果與來源詳見 `data/timeline.csv`。

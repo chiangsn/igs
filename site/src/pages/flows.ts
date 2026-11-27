@@ -5,14 +5,16 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import type { EventItem, ExternalEvent, Link, Topic } from '../data';
 import { FLOW_ZH, FLOWS, MECH_ZH, MECHANISMS, regionZh } from '../data';
-import { endpoint, esc, hideTip, showLink, showTip, slotHex, slotVar } from '../ui';
+import type { DerivedBurden } from '../data';
+import { renderMarkdown } from '../markdown';
+import { endpoint, esc, hideTip, showDerived, showLink, showTip, slotHex, slotVar } from '../ui';
 
 const LANES = ['Global', 'East Asia', 'Southeast Asia', 'South Asia', 'Middle East & North Africa', 'Sub-Saharan Africa', 'Europe', 'North America', 'Latin America & Caribbean', 'Oceania & Pacific', 'Arctic'];
 const NS_ORDER = ['南南', '南北', '北北', '南—全球', '北—全球', '全球—全球', '無法判斷'];
 
 type End = (EventItem | ExternalEvent) & { ext: boolean };
 /** scheme：南北分類用哪一種（north-south.json 的 key）；ns：選取的南北類別 */
-interface LF { flows: Set<string>; mechs: Set<string>; ns: Set<string>; scheme: string; cursor: number | null }
+interface LF { flows: Set<string>; mechs: Set<string>; ns: Set<string>; scheme: string; cursor: number | null; pendingOnly: boolean; derived: boolean }
 const store = new Map<string, LF>();
 
 const flowColor = (f: string) => slotVar(FLOWS.indexOf(f));
@@ -21,19 +23,25 @@ const flowHex = (f: string) => slotHex(FLOWS.indexOf(f));
 export function renderFlows(root: HTMLElement, t: Topic): () => void {
   const all = t.links;
   if (!all.length) { root.innerHTML = '<p class="empty">此主題沒有 data/links.csv。</p>'; return () => {}; }
-  if (!store.has(t.code)) store.set(t.code, { flows: new Set(), mechs: new Set(), ns: new Set(), scheme: t.northSouth?.schemes[0]?.key ?? '', cursor: null });
+  if (!store.has(t.code)) store.set(t.code, { flows: new Set(), mechs: new Set(), ns: new Set(), scheme: t.northSouth?.schemes[0]?.key ?? '', cursor: null, pendingOnly: false, derived: false });
   const f = store.get(t.code)!;
   const ends = new Map<string, End>();
   for (const l of all) for (const id of [l.from_id, l.to_id]) { const e = endpoint(id, t); if (e) ends.set(id, e); }
   const yMin = d3.min(all, (l) => l.year)!; const yMax = d3.max(all, (l) => l.year)!;
   const cnt = (pred: (l: Link) => boolean) => all.filter(pred).length;
   const ns = t.northSouth;
+  // 使用限制（data/links-caveats.md）：一句話放在每個視圖頂端，詳細說明放在可展開的區塊
+  const cav = t.linksCaveats;
+  const caveatLine = cav ? `<p class="caveat-line">⚠ ${esc(cav.short)}</p>` : '';
+  const distNote = '數量反映的是哪些關係留下了可查的文獻，不等於歷史上的實際分布。';
+  const npend = cnt((l) => l.pending);
 
   root.innerHTML = `
     <div class="card intro">
-      <p>這一頁只看 <code>data/links.csv</code> 的<b>跨國連結</b>（${all.length} 條）：兩端在不同國家，或一端是全球層級的事件。每條連結標了<b>流動的是什麼</b>（flow，以 Appadurai 的 scapes 為基礎，另補「物質」）與<b>怎麼連起來的</b>（mechanism，12 類）。分類定義見專案根目錄的 <code>link-typology.md</code>。顏色代表連結的主要 flow；點弧線看說明與來源。</p>
-      <div class="legend">${FLOWS.map((x) => `<span class="legend-item"><i style="background:${flowColor(x)}"></i>${esc(FLOW_ZH[x])}</span>`).join('')}</div>
+      <p>這一頁只看 <code>data/links.csv</code> 的<b>跨國連結</b>（${all.length} 條）：兩端在不同國家，或一端是全球層級的事件。每條連結標了<b>流動的是什麼</b>（flow，以 Appadurai 的 scapes 為基礎，另補「物質」）與<b>怎麼連起來的</b>（mechanism，12 類）。分類定義見專案根目錄的 <code>link-typology.md</code>。<b>顏色＝第一個 flow（主要流動）</b>：多數連結同時含「觀念與規範」，若每個 flow 都上色，大部分弧線會是同一個顏色。點弧線看說明與來源。</p>
+      <div class="legend">${FLOWS.map((x) => `<span class="legend-item"><i style="background:${flowColor(x)}"></i>${esc(FLOW_ZH[x])}</span>`).join('')}<span class="muted small">（第一個 flow）</span></div>
     </div>
+    ${cav ? `<details class="caveat-more"><summary>使用前請讀：跨國連結資料的使用限制</summary><div class="md" id="cavMd"></div></details>` : ''}
     <div class="filterbar">
       <div class="frow"><label class="flabel">流動</label><div class="toggles" data-group="flows">${FLOWS.filter((x) => cnt((l) => l.flows.includes(x))).map((x) => `<button class="toggle" data-v="${x}"><i class="sw" style="background:${flowColor(x)}"></i>${esc(FLOW_ZH[x])}<span class="muted">${cnt((l) => l.flows.includes(x))}</span></button>`).join('')}</div></div>
       <div class="frow"><label class="flabel">機制</label><div class="toggles" data-group="mechs">${MECHANISMS.filter((m) => cnt((l) => l.mechanism === m)).map((m) => `<button class="toggle" data-v="${m}" title="${m}">${esc(MECH_ZH[m])}<span class="muted">${cnt((l) => l.mechanism === m)}</span></button>`).join('')}</div></div>
@@ -45,19 +53,22 @@ export function renderFlows(root: HTMLElement, t: Topic): () => void {
         <span class="cursor-year" id="lyear">全部年份</span>
         <button class="link-btn" id="lall" disabled>顯示全部</button>
         <span class="muted small">年份滑桿：顯示到該年為止成立的連結（連結年份＝兩端事件中較晚的開始年）。</span>
+        ${npend ? `<label class="check"><input type="checkbox" id="lpend" ${f.pendingOnly ? 'checked' : ''}> 只看待查證（${npend}）</label>` : ''}
         <button class="link-btn" data-reset>清除篩選</button>
       </div>
+      <p class="muted small dist-note">上方按鈕的數字是連結數。${distNote}</p>
     </div>
     <div id="lcount" class="muted"></div>
-    <div class="card"><div class="card-head"><h3>跨國流向地圖</h3></div>
-      <p class="muted small">弧線連接兩端事件的地點；單向連結有箭頭。<b>全球層級的事件</b>（國際公約、會議、組織）畫在通過地或會議地點，用<span class="key-global">方框</span>標示、弧線改為虛線：那個地點代表的是一個全球制度，不是一國對一國的流動。<span class="key-ext">虛線圓圈</span>是其他主題的事件。</p>
+    <div class="card">${caveatLine}<div class="card-head"><h3>跨國流向地圖</h3>
+      ${t.derived.length ? `<label class="check"><input type="checkbox" id="lderived" ${f.derived ? 'checked' : ''}> 顯示推導的事件內負擔轉嫁${t.config.derivedStatus ? `（${esc(t.config.derivedStatus)}）` : ''}</label>` : ''}</div>
+      <p class="muted small">弧線連接兩端事件的地點；單向連結有箭頭。<b>全球層級的事件</b>（國際公約、會議、組織）畫在通過地或會議地點，用<span class="key-global">方框</span>標示、弧線改為虛線：那個地點代表的是一個全球制度，不是一國對一國的流動。<span class="key-ext">虛線圓圈</span>是其他主題的事件。橙色光暈＝待查證的連結。${t.derived.length ? '<span class="derived-key"></span>點線（打開開關後）＝<b>網站依事件的國家欄位推導的事件內負擔轉嫁，不是人工標記</b>；兩端畫在國家的代表座標（首都），不是事件地點。' : ''}</p>
       <div id="lmap" class="map"></div></div>
-    <div class="card"><div class="card-head"><h3>區域泳道弧線圖</h3></div>
-      <p class="muted small">每個區域一條泳道（全球層級在最上方），橫軸為年代。泳道底部的淺色長條是該區域<b>所有事件</b>的十年分布（看事件何時變多）；實心點是有跨國連結的事件，弧線是連結（顏色＝主要 flow，箭頭＝方向）。同一泳道內的跨國連結（例如兩個歐洲國家之間）畫在泳道上方。</p>
+    <div class="card">${caveatLine}<div class="card-head"><h3>區域泳道弧線圖</h3></div>
+      <p class="muted small">每個區域一條泳道（全球層級在最上方），橫軸為年代。泳道底部的淺色長條是該區域<b>所有事件</b>的十年分布（看事件何時變多）；實心點是有跨國連結的事件，弧線是連結（顏色＝第一個 flow，箭頭＝單向；沒有箭頭＝雙向或並存；橙色光暈＝待查證）。同一泳道內的跨國連結（例如兩個歐洲國家之間）畫在泳道上方。</p>
       <div id="llanes" class="lane-arcs"></div></div>
-    <div class="card"><div class="card-head"><h3>斷裂圖：區域 × 分期的各種流動</h3>
+    <div class="card">${caveatLine}<div class="card-head"><h3>斷裂圖：區域 × 分期的各種流動</h3>
       <div class="seg" id="dmode"><button class="on" data-v="n">連結數</button><button data-v="pct">比重</button></div></div>
-      <p class="muted small">Appadurai 認為不同的流動（人、資本、技術、影像、觀念）各有各的路徑與節奏，彼此並不同步，這種落差就是 disjuncture。每一格是一個區域在一個時期的連結，六根柱子是六種 flow。一條連結算進兩端事件所在的區域（同區域只算一次）、算進連結年份所在的時期；一條連結有多個 flow 時，每個 flow 都算。切換成「比重」可以比較各格內部的組成。</p>
+      <p class="muted small">Appadurai 認為不同的流動（人、資本、技術、影像、觀念）各有各的路徑與節奏，彼此並不同步，這種落差就是 disjuncture。每一格是一個區域在一個時期的連結，六根柱子是六種 flow。一條連結算進兩端事件所在的區域（同區域只算一次）、算進連結年份所在的時期；一條連結有多個 flow 時，每個 flow 都算。切換成「比重」可以比較各格內部的組成。<b>${distNote}</b></p>
       <div id="ldis"></div></div>
     ${ns ? `<div class="card" id="nsIssue"><h3>南北分類：一個議題</h3>
       <p class="small">「南」「北」不是地理事實，而是分類的結果；用哪一種分類，同一條連結就可能從「南南」變成「南北」。這裡並列兩種常用的分類，上方篩選可以切換。兩種分類都只依國家判斷：一個事件涉及多國且南北混合、或有國家無法分類時，歸「無法判斷」；全球層級的事件另列「全球」。</p>
@@ -68,7 +79,7 @@ export function renderFlows(root: HTMLElement, t: Topic): () => void {
   // ---------- 篩選 ----------
   const filtered = () => all.filter((l) =>
     (!f.flows.size || l.flows.some((x) => f.flows.has(x))) && (!f.mechs.size || f.mechs.has(l.mechanism)) &&
-    (!f.ns.size || (l.ns !== undefined && f.ns.has(l.ns[f.scheme]))) && (f.cursor === null || l.year <= f.cursor));
+    (!f.ns.size || (l.ns !== undefined && f.ns.has(l.ns[f.scheme]))) && (f.cursor === null || l.year <= f.cursor) && (!f.pendingOnly || l.pending));
   const bar = root.querySelector('.filterbar') as HTMLElement;
   const syncToggles = () => bar.querySelectorAll<HTMLElement>('[data-group]').forEach((g) => {
     const set = f[g.dataset.group as 'flows' | 'mechs' | 'ns'];
@@ -101,10 +112,31 @@ export function renderFlows(root: HTMLElement, t: Topic): () => void {
     }
   };
   map.on('zoomend', placeArrows);
+  // 推導的事件內負擔轉嫁：點線、單一中性色；有方向者畫箭頭；兩端為國家的代表座標
+  const byEvent = d3.group(t.derived, (d) => d.event_id);
+  const drawDerived = (ink: string) => {
+    const shown = t.derived.filter((d) => f.cursor === null || (d.year ?? 0) <= f.cursor);
+    for (const d of shown) {
+      const pts = arc(L.latLng(d.fromXY[0], d.fromXY[1]), L.latLng(d.toXY[0], d.toXY[1]));
+      const e = t.events.find((x) => x.id === d.event_id);
+      const tip = `<div class="tip-title">推導：${esc(d.from)} ${d.directed ? '→' : '—'} ${esc(d.to)}</div>${esc(e?.name ?? d.event_id)}<div class="muted">網站依國家欄位推導，非人工標記${t.config.derivedStatus ? `（${esc(t.config.derivedStatus)}）` : ''}</div>`;
+      L.polyline(pts, { color: ink, weight: 2, opacity: 0.7, dashArray: '2 6', interactive: false }).addTo(layer);
+      L.polyline(pts, { color: ink, weight: 12, opacity: 0 }).addTo(layer)
+        .on('mouseover', (ev) => showTip(ev.originalEvent as MouseEvent, tip)).on('mouseout', hideTip)
+        .on('click', () => { hideTip(); showDerived(byEvent.get(d.event_id) as DerivedBurden[], t); });
+      if (d.directed) {
+        const i = Math.round(pts.length * 0.72);
+        const m = L.marker(pts[i], { interactive: false, icon: L.divIcon({ className: 'arc-arrow', html: `<span style="color:${ink};opacity:0.7">▷</span>`, iconSize: [12, 12] }) }).addTo(layer);
+        arrows.push({ m, a: pts[i - 1], b: pts[i + 1] });
+      }
+    }
+  };
   const drawMap = (links: Link[]) => {
     layer.clearLayers(); arrows = [];
     const ring = getComputedStyle(document.documentElement).getPropertyValue('--surface-1').trim();
     const ink = getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim();
+    const warnC = getComputedStyle(document.documentElement).getPropertyValue('--warning').trim();
+    if (f.derived) drawDerived(ink);
     const used = new Set<string>();
     for (const l of links) {
       const a = ends.get(l.from_id); const b = ends.get(l.to_id);
@@ -113,7 +145,8 @@ export function renderFlows(root: HTMLElement, t: Topic): () => void {
       const pts = arc(L.latLng(a.lat, a.lon), L.latLng(b.lat, b.lon));
       const global = a.region === 'Global' || b.region === 'Global';
       const color = flowHex(l.flows[0]);
-      const tip = `<div class="tip-title">${esc(MECH_ZH[l.mechanism])}</div>${esc(a.name)} ${l.direction === 'forward' ? '→' : '↔'} ${esc(b.name)}<div class="muted">${l.flows.map((x) => FLOW_ZH[x]).join('、')} · ${l.year}</div>`;
+      const tip = `<div class="tip-title">${esc(MECH_ZH[l.mechanism])}</div>${esc(a.name)} ${l.direction === 'forward' ? '→' : '—'} ${esc(b.name)}${l.direction === 'forward' ? '' : '<div class="muted">雙向或並存</div>'}<div class="muted">${l.flows.map((x) => FLOW_ZH[x]).join('、')} · ${l.year}</div>${l.pending ? '<div class="pending-text">⚠ 待查證</div>' : ''}`;
+      if (l.pending) L.polyline(pts, { color: warnC, weight: 8, opacity: 0.35, interactive: false }).addTo(layer);
       L.polyline(pts, { color, weight: 2.5, opacity: 0.85, dashArray: global ? '6 5' : undefined, interactive: false }).addTo(layer);
       // 較寬的透明線當點擊範圍
       L.polyline(pts, { color, weight: 12, opacity: 0 }).addTo(layer)
@@ -183,8 +216,9 @@ export function renderFlows(root: HTMLElement, t: Topic): () => void {
       const dpath = same
         ? `M${x1},${y1} Q${(x1 + x2) / 2},${y1 + bulge * 2} ${x2},${y2}`
         : `M${x1},${y1} C${x1 + (x2 - x1) * 0.15},${(y1 + y2) / 2} ${x2 - (x2 - x1) * 0.15},${(y1 + y2) / 2} ${x2},${y2}`;
+      if (l.pending) svg.append('path').attr('d', dpath).attr('class', 'lane-arc pending-halo');
       const p = svg.append('path').attr('d', dpath).attr('class', 'lane-arc').style('stroke', flowColor(l.flows[0]))
-        .on('mousemove', (ev) => showTip(ev, `<div class="tip-title">${esc(MECH_ZH[l.mechanism])}</div>${esc(regionZh(a.region))} ${l.direction === 'forward' ? '→' : '↔'} ${esc(regionZh(b.region))}<div class="muted">${esc(a.name)} ${l.direction === 'forward' ? '→' : '↔'} ${esc(b.name)}</div><div class="muted">${l.flows.map((z) => FLOW_ZH[z]).join('、')} · ${l.year}</div>`))
+        .on('mousemove', (ev) => showTip(ev, `<div class="tip-title">${esc(MECH_ZH[l.mechanism])}</div>${esc(regionZh(a.region))} ${l.direction === 'forward' ? '→' : '—'} ${esc(regionZh(b.region))}<div class="muted">${esc(a.name)} ${l.direction === 'forward' ? '→' : '—'} ${esc(b.name)}</div>${l.direction === 'forward' ? '' : '<div class="muted">雙向或並存</div>'}<div class="muted">${l.flows.map((z) => FLOW_ZH[z]).join('、')} · ${l.year}</div>${l.pending ? '<div class="pending-text">⚠ 待查證</div>' : ''}`))
         .on('mouseleave', hideTip).on('click', () => { hideTip(); showLink(l, t); });
       if (l.direction === 'forward') p.attr('marker-end', `url(#arr-${t.code}-${l.flows[0]})`);
     }
@@ -261,7 +295,7 @@ export function renderFlows(root: HTMLElement, t: Topic): () => void {
     const ls = filtered();
     (root.querySelector('#lcount') as HTMLElement).textContent = `顯示 ${ls.length} / ${all.length} 條連結`;
     drawMap(ls); drawLanes(ls); drawDis(ls); drawNsIssue(ls);
-    (bar.querySelector('[data-reset]') as HTMLButtonElement).disabled = !(f.flows.size || f.mechs.size || f.ns.size || f.cursor !== null);
+    (bar.querySelector('[data-reset]') as HTMLButtonElement).disabled = !(f.flows.size || f.mechs.size || f.ns.size || f.cursor !== null || f.pendingOnly);
   };
   bar.onclick = (ev) => {
     const jump = (ev.target as HTMLElement).closest('#nsJump');
@@ -275,7 +309,11 @@ export function renderFlows(root: HTMLElement, t: Topic): () => void {
     }
     const g = (b.parentElement as HTMLElement).dataset.group as 'flows' | 'mechs' | 'ns' | undefined;
     if (g) { const s = f[g]; const v = b.dataset.v!; if (s.has(v)) s.delete(v); else s.add(v); syncToggles(); update(); }
-    else if (b.hasAttribute('data-reset')) { f.flows.clear(); f.mechs.clear(); f.ns.clear(); stop(); setCursor(null); syncToggles(); }
+    else if (b.hasAttribute('data-reset')) {
+      f.flows.clear(); f.mechs.clear(); f.ns.clear(); f.pendingOnly = false;
+      const pb = root.querySelector('#lpend') as HTMLInputElement | null; if (pb) pb.checked = false;
+      stop(); setCursor(null); syncToggles();
+    }
   };
   const slider = root.querySelector('#lcursor') as HTMLInputElement;
   const yearLabel = root.querySelector('#lyear') as HTMLElement;
@@ -299,6 +337,11 @@ export function renderFlows(root: HTMLElement, t: Topic): () => void {
   };
   drawNsToggles();
   syncToggles();
+  const pendBox = root.querySelector('#lpend') as HTMLInputElement | null;
+  if (pendBox) pendBox.onchange = () => { f.pendingOnly = pendBox.checked; update(); };
+  const derBox = root.querySelector('#lderived') as HTMLInputElement | null;
+  if (derBox) derBox.onchange = () => { f.derived = derBox.checked; drawMap(filtered()); };
+  if (cav) renderMarkdown(root.querySelector('#cavMd') as HTMLElement, cav.detail, t);
   if (f.cursor !== null) setCursor(f.cursor); else update();
   let lastW = laneHost.clientWidth;
   const ro = new ResizeObserver(() => { if (laneHost.clientWidth === lastW) return; lastW = laneHost.clientWidth; map.invalidateSize(); drawLanes(filtered()); });

@@ -340,3 +340,15 @@ table.ns-cross td.off { font-weight: 700; color: var(--warning); }
 td.side-north { font-weight: 600; }
 td.side-unknown { color: var(--text-muted); }
 .cgroup { margin: 10px 0 4px; font-size: 0.95em; }
+
+/* ---------- 跨國連結：使用限制、待查證、推導 ---------- */
+.caveat-line { border-left: 4px solid var(--warning); background: var(--warning-bg); padding: 6px 10px; border-radius: 4px; font-size: 0.88em; margin: 0 0 8px; }
+details.caveat-more { border: 1px solid var(--warning); border-radius: 10px; padding: 8px 14px; margin-bottom: 12px; background: var(--surface-1); }
+details.caveat-more summary { cursor: pointer; font-weight: 600; color: var(--warning); }
+details.caveat-more .md { margin-top: 6px; }
+.pending-box { border: 1px solid var(--warning); background: var(--warning-bg); border-radius: 6px; padding: 6px 10px; margin: 8px 0; font-size: 0.9em; }
+.pending-box ul { margin: 4px 0 0; padding-left: 18px; }
+.derived-box { border: 1px dashed var(--text-secondary); border-radius: 6px; padding: 6px 10px; margin: 8px 0; font-size: 0.9em; }
+.dist-note { margin: 0; }
+.lane-arc.pending-halo { stroke: var(--warning); stroke-width: 6; stroke-opacity: 0.35; pointer-events: none; }
+.derived-key { display: inline-block; width: 26px; border-top: 2px dotted var(--text-secondary); vertical-align: middle; margin-right: 4px; }

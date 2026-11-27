@@ -16,6 +16,12 @@ export interface ExternalEvent {
   countries: string[]; lat: number | null; lon: number | null;
 }
 
+/** 推導的事件內負擔轉嫁：directed 時 from（外部行動者）→ to（受影響地）；座標為國家代表座標 [lat, lon] */
+export interface DerivedBurden {
+  event_id: string; from: string; to: string; directed: boolean; by: string[];
+  fromXY: [number, number]; toXY: [number, number]; year: number | null;
+}
+
 /** 跨國連結（data/links.csv）。year＝兩端事件 year_start 較晚者，視為連結成立的年份 */
 export interface Link {
   id: string; from_id: string; to_id: string; flows: string[]; mechanism: string; direction: 'forward' | 'mutual';
@@ -68,6 +74,10 @@ export interface TopicConfig {
   readingFacets: ReadingFacet[];
   conceptGroups: { label: string }[];
   otherLanguageTag: boolean;
+  /** 相關事件網絡頁首的補充說明 */
+  networkNote: string;
+  /** 推導負擔轉嫁的狀態（例如「待確認」；空字串＝已確認） */
+  derivedStatus: string;
 }
 
 /** 讀物標籤篩選：pattern 挑出 tags，values 為實際出現的值，names 為顯示名稱 */
@@ -85,7 +95,7 @@ export interface StatChart {
 
 export interface TopicStats {
   events: number; readings: number; concepts: number; docs: number; documents: number; regionCounts: Record<string, number>;
-  pending: { events: number; readings: number; concepts: number; documents: number };
+  pending: { events: number; readings: number; concepts: number; documents: number; links: number };
   subdirTabs: { dir: string; label: string; n: number }[];
   links: number;
   yearMin: number | null; yearMax: number | null; warnings: number;
@@ -101,6 +111,10 @@ export interface Topic extends TopicSummary {
   config: TopicConfig; charts: StatChart[]; external: Record<string, ExternalEvent>; links: Link[];
   /** 網站上有的主題代號（其他主題的 id 只在對方主題已上網站時才連結） */
   siteTopics: string[];
+  /** data/links-caveats.md：short＝一句話版本，detail＝詳細說明（Markdown） */
+  linksCaveats: { short: string; detail: string } | null;
+  /** 網站依 country 推導的事件內負擔轉嫁 */
+  derived: DerivedBurden[];
   /** 南北分類（當成議題，並列多種分類）；沒有 links.csv 或沒有設定時為 null */
   northSouth: {
     schemes: { key: string; label: string; short: string; source: string; url: string; basis: string; caveat: string }[];
