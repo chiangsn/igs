@@ -38,9 +38,9 @@
 | T057 | 1961 | United States | 《對外援助法》與美國國際開發署成立 (Foreign Assistance Act; USAID) | institution | aid; cold war; agriculture; education |
 | T079 | 1968–1972 | United States | 《全球概覽》創刊 (Whole Earth Catalog: Access to Tools) | publication | appropriate technology; environment; ICT |
 | T101 | 1976 | United States | 美國國家適當技術中心成立 (National Center for Appropriate Technology, NCAT) | institution | appropriate technology; energy |
-| T121 | 1988–1992 | United States;Taiwan | 美國「特別 301」與台灣列入優先觀察名單 (Special 301 and Taiwan's Priority Watch List listing) | policy | IP; trade |
+| T121 | 1988–1992 | Taiwan;United States | 美國「特別 301」與台灣列入優先觀察名單 (Special 301 and Taiwan's Priority Watch List listing) | policy | IP; trade |
 | T123 | 1995 | United States | 美國《墜入網路縫隙》報告 (NTIA, Falling Through the Net) | publication | ICT; data; communications |
-| T151 | 2019 | United States;China | 美國將華為列入實體清單 (Huawei Entity List designation) | policy | semiconductors; trade; ICT; industrial policy |
+| T151 | 2019 | China;United States | 美國將華為列入實體清單 (Huawei Entity List designation) | policy | semiconductors; trade; ICT; industrial policy |
 | T155 | 2020–2024 | United States;Taiwan | 台積電亞利桑那廠與美國《晶片與科學法》補助 (TSMC Arizona) | program | semiconductors; industrial policy; manufacturing |
-| T159 | 2022–2023 | United States;China | 美國對中國先進運算與半導體製造出口管制 (BIS October 7 rules) | policy | semiconductors; AI; trade; industrial policy |
-| T169 | 1986–1991 | United States;Japan | 美日半導體協定 (1986 U.S.–Japan Semiconductor Agreement) | treaty | semiconductors; trade; industrial policy |
+| T159 | 2022–2023 | China;United States | 美國對中國先進運算與半導體製造出口管制 (BIS October 7 rules) | policy | semiconductors; AI; trade; industrial policy |
+| T169 | 1986–1991 | Japan;United States | 美日半導體協定 (1986 U.S.–Japan Semiconductor Agreement) | treaty | semiconductors; trade; industrial policy |

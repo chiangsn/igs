@@ -47,28 +47,28 @@ swadeshi 與手紡車、人民科學運動、節儉創新（jugaad）、流通�
 
 | id | 年代 | 國家 | 事件 | 類型 | 領域 |
 |---|---|---|---|---|---|
-| T002 | 1853 | India | 印度第一條客運鐵路：孟買—塔納 (Bombay–Thane railway, GIPR) | technology | transport; infrastructure; colonialism; finance |
-| T010 | 1876–1880 | India | 1876–78 年大饑荒與 1880 年饑荒委員會 (Great Famine and the Indian Famine Commission) | policy | transport; agriculture; colonialism; infrastructure |
+| T002 | 1853 | India;United Kingdom | 印度第一條客運鐵路：孟買—塔納 (Bombay–Thane railway, GIPR) | technology | transport; infrastructure; colonialism; finance |
+| T010 | 1876–1880 | India;United Kingdom | 1876–78 年大饑荒與 1880 年饑荒委員會 (Great Famine and the Indian Famine Commission) | policy | transport; agriculture; colonialism; infrastructure |
 | T023 | 1909 | India;South Africa | 甘地《印度自治》與機器批判、手紡車運動 (Hind Swaraj, charkha and khadi) | publication | appropriate technology; manufacturing; colonialism; labor |
-| T041 | 1953–1961 | India | 西德援建 Rourkela 與英國財團承建 Durgapur 鋼鐵廠 (Rourkela & Durgapur Steel Plants) | technology | manufacturing; industrial policy; aid; cold war; trade |
+| T041 | 1953–1961 | India;Germany;United Kingdom | 西德援建 Rourkela 與英國財團承建 Durgapur 鋼鐵廠 (Rourkela & Durgapur Steel Plants) | technology | manufacturing; industrial policy; aid; cold war; trade |
 | T045 | 1954–1974 | India;Canada | 印度原子能計畫：Trombay 原子能機構與 CIRUS 反應爐 (Bhabha, Trombay, CIRUS) | program | nuclear; cold war; aid; education |
-| T046 | 1955–1959 | India | 蘇聯援建 Bhilai 鋼鐵廠 (Bhilai Steel Plant) | technology | manufacturing; industrial policy; aid; cold war |
-| T049 | 1956–1960 | India | 加拿大—印度 CIRUS 研究用反應爐 (CIRUS reactor) | technology | nuclear; aid; cold war |
-| T064 | 1962–1972 | India | IIT Kanpur 印美計畫 (Kanpur Indo-American Programme) | program | education; ICT; aid; cold war |
+| T046 | 1955–1959 | India;Soviet Union | 蘇聯援建 Bhilai 鋼鐵廠 (Bhilai Steel Plant) | technology | manufacturing; industrial policy; aid; cold war |
+| T049 | 1956–1960 | India;Canada | 加拿大—印度 CIRUS 研究用反應爐 (CIRUS reactor) | technology | nuclear; aid; cold war |
+| T064 | 1962–1972 | India;United States | IIT Kanpur 印美計畫 (Kanpur Indo-American Programme) | program | education; ICT; aid; cold war |
 | T066 | 1962–1983 | India | 喀拉拉科學文學協會與人民科學運動 (Kerala Sastra Sahitya Parishad, KSSP) | movement | education; environment; appropriate technology; energy |
-| T067 | 1963 | India | Thumba 赤道火箭發射站首次發射 (Thumba Equatorial Rocket Launching Station) | technology | space; cold war; education |
-| T068 | 1963–1970 | India | 印度綠色革命：引進墨西哥矮性小麥 (India's Green Revolution) | technology | agriculture; aid; cold war; trade |
+| T067 | 1963 | India;United States;France | Thumba 赤道火箭發射站首次發射 (Thumba Equatorial Rocket Launching Station) | technology | space; cold war; education |
+| T068 | 1963–1970 | India;Mexico | 印度綠色革命：引進墨西哥矮性小麥 (India's Green Revolution) | technology | agriculture; aid; cold war; trade |
 | T081 | 1968–1975 | India | 齋浦爾義肢與 BMVSS (Jaipur Foot / Bhagwan Mahaveer Viklang Sahayata Samiti) | technology | health; appropriate technology |
 | T087 | 1970–2005 | India | 印度 1970 年專利法 (Patents Act, 1970) | policy | IP; health; industrial policy |
 | T097 | 1974 | India | 印度科學研究院鄉村科技應用中心成立 (ASTRA, Indian Institute of Science) | institution | appropriate technology; energy; infrastructure |
 | T099 | 1975–1976 | India;United States | 衛星教學電視實驗 (Satellite Instructional Television Experiment, SITE) | program | space; communications; education; aid |
 | T111 | 1981–1991 | India;United States | 班加羅爾軟體業興起：Infosys 與德州儀器衛星連線 (Bangalore software: Infosys 1981, TI 1985) | technology | ICT; trade; communications; labor |
 | T116 | 1984–1989 | India | 遠程資訊發展中心 C-DOT 與鄉村數位交換機 (Centre for Development of Telematics) | institution | communications; ICT; appropriate technology; industrial policy |
-| T125 | 1997 | Bangladesh | 鄉村電話計畫與 GrameenPhone (Village Phone Program) | program | ICT; communications; finance; aid |
+| T125 | 1997 | Bangladesh;Norway | 鄉村電話計畫與 GrameenPhone (Village Phone Program) | program | ICT; communications; finance; aid |
 | T127 | 2001 | India | Cipla 以每人每年 350 美元提供愛滋三合一療法 (Cipla's US$350 triple-therapy offer) | program | health; IP; trade |
-| T130 | 2002 | India | 印度核准 Bt 抗蟲棉商業種植 (Approval of Bollgard Bt cotton in India) | technology | agriculture; IP; trade |
+| T130 | 2002 | India;United States | 印度核准 Bt 抗蟲棉商業種植 (Approval of Bollgard Bt cotton in India) | technology | agriculture; IP; trade |
 | T139 | 2009–2018 | India | 印度 Aadhaar 生物辨識身分系統與最高法院判決 | policy | data; ICT; finance |
-| T146 | 2016 | India | 印度禁止差別資費、終結 Free Basics (TRAI ruling on Free Basics) | policy | ICT; platform; standards |
+| T146 | 2016 | India;United States | 印度禁止差別資費、終結 Free Basics (TRAI ruling on Free Basics) | policy | ICT; platform; standards |
 | T172 | 1991 | India | 印度軟體科技園區 (Software Technology Parks of India, STPI) | institution | ICT; industrial policy; communications; trade |
 | T200 | 2011–2013 | Bangladesh;United States | 孟加拉行動金融服務 bKash (bKash mobile financial services) | technology | finance; ICT; platform |
 | T223 | 1991 | India | 印度 1991 年新工業政策：外國技術協議自動核准 (Statement on Industrial Policy 1991) | policy | industrial policy; trade; IP; finance |

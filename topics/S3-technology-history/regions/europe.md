@@ -32,15 +32,15 @@
 | id | 年代 | 國家 | 事件 | 類型 | 領域 |
 |---|---|---|---|---|---|
 | T016 | 1898–1899 | United Kingdom | 利物浦與倫敦熱帶醫學院成立 (Liverpool and London Schools of Tropical Medicine) | institution | health; colonialism; education |
-| T026 | 1920–1931 | Russia | 蘇聯全俄電氣化計畫 (GOELRO plan) | policy | energy; infrastructure; industrial policy |
-| T055 | 1960 | Russia | 莫斯科人民友誼大學（盧蒙巴大學）成立 (Patrice Lumumba Peoples' Friendship University) | institution | education; aid; cold war |
+| T026 | 1920–1931 | Soviet Union | 蘇聯全俄電氣化計畫 (GOELRO plan) | policy | energy; infrastructure; industrial policy |
+| T055 | 1960 | Soviet Union | 莫斯科人民友誼大學（盧蒙巴大學）成立 (Patrice Lumumba Peoples' Friendship University) | institution | education; aid; cold war |
 | T073 | 1966 | United Kingdom | 中間技術發展集團成立 (Intermediate Technology Development Group, ITDG) | institution | appropriate technology; aid; manufacturing |
 | T084 | 1970 | United Kingdom | 《蘇塞克斯宣言》(Sussex Manifesto: Science and Technology to Developing Countries during the Second Development Decade) | publication | aid; education; industrial policy |
 | T093 | 1973 | United Kingdom | 《小即是美》出版 (Small Is Beautiful: A Study of Economics As If People Mattered) | publication | appropriate technology; environment; energy |
-| T124 | 1995–2005 | Germany;India | 歐洲專利局撤銷印度苦楝專利 (Neem patent revocation, European Patent Office) | lawsuit | IP; agriculture; colonialism |
+| T124 | 1995–2005 | India;Germany | 歐洲專利局撤銷印度苦楝專利 (Neem patent revocation, European Patent Office) | lawsuit | IP; agriculture; colonialism |
 | T129 | 2001 | Estonia | 愛沙尼亞 X-Road 資料交換層 (X-Road / X-tee) | technology | ICT; data; infrastructure; standards |
 | T148 | 2016–2018 | Belgium | 歐盟《一般資料保護規則》(General Data Protection Regulation, GDPR) | policy | data; platform; standards; trade |
-| T158 | 2022–2023 | Ukraine | Starlink 在烏克蘭戰爭中的角色 (Starlink in Ukraine) | technology | space; communications; military |
-| T161 | 2023 | Netherlands | 荷蘭限制 ASML 先進曝光機出口 (Dutch export controls on DUV lithography) | policy | semiconductors; trade; standards |
+| T158 | 2022–2023 | Ukraine;United States | Starlink 在烏克蘭戰爭中的角色 (Starlink in Ukraine) | technology | space; communications; military |
+| T161 | 2023 | China;Netherlands;United States | 荷蘭限制 ASML 先進曝光機出口 (Dutch export controls on DUV lithography) | policy | semiconductors; trade; standards |
 | T162 | 2024 | Belgium | 歐盟《人工智慧法》(EU AI Act, Regulation 2024/1689) | policy | AI; data; standards; trade |
 | T175 | 1992–1994 | Russia;United States;Japan | 國際科學技術中心 (International Science and Technology Center, ISTC) | institution | nuclear; military; cold war; aid |

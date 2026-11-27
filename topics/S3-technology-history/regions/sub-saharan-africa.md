@@ -65,36 +65,36 @@
 
 | id | 年代 | 國家 | 事件 | 類型 | 領域 |
 |---|---|---|---|---|---|
-| T003 | 1854 | Nigeria | Baikie 尼日河航行與奎寧預防法 (Pleiad expedition and quinine prophylaxis) | technology | health; transport; colonialism |
-| T015 | 1896–1901 | Kenya;Uganda | 烏干達鐵路：蒙巴薩至基蘇木 (Uganda Railway) | technology | transport; infrastructure; labor; colonialism |
-| T021 | 1902–1916 | Tanzania | 阿瑪尼生物農業研究所 (Amani Biological-Agricultural Institute) | institution | agriculture; colonialism; education |
-| T029 | 1932–1948 | Mali | 尼日河管理局灌溉計畫 (Office du Niger) | program | water; agriculture; colonialism; labor |
-| T037 | 1950–1982 | South Africa | 南非 Sasol 煤製油 (South African Coal, Oil and Gas Corporation) | institution | energy; manufacturing; industrial policy |
+| T003 | 1854 | Nigeria;United Kingdom | Baikie 尼日河航行與奎寧預防法 (Pleiad expedition and quinine prophylaxis) | technology | health; transport; colonialism |
+| T015 | 1896–1901 | Kenya;Uganda;United Kingdom;India | 烏干達鐵路：蒙巴薩至基蘇木 (Uganda Railway) | technology | transport; infrastructure; labor; colonialism |
+| T021 | 1902–1916 | Tanzania;Germany | 阿瑪尼生物農業研究所 (Amani Biological-Agricultural Institute) | institution | agriculture; colonialism; education |
+| T029 | 1932–1948 | Mali;France | 尼日河管理局灌溉計畫 (Office du Niger) | program | water; agriculture; colonialism; labor |
+| T037 | 1950–1982 | South Africa;Germany | 南非 Sasol 煤製油 (South African Coal, Oil and Gas Corporation) | institution | energy; manufacturing; industrial policy |
 | T058 | 1961 | Liberia;Taiwan | 先鋒案與駐賴比瑞亞農耕隊 (Operation Vanguard) | program | agriculture; aid; cold war |
-| T060 | 1961–1966 | Ghana | Akosombo 水壩與 Volta 河計畫 (Volta River Project / VALCO) | technology | infrastructure; energy; manufacturing; aid; cold war |
-| T061 | 1961–1966 | Ghana;Russia | 恩克魯瑪的 Kwabenya 原子反應爐計畫 (Nkrumah's atomic reactor project) | program | nuclear; cold war; education; colonialism |
-| T069 | 1964 | Ghana | 周恩來「對外經濟技術援助八項原則」(Eight Principles for Economic Aid and Technical Assistance) | policy | aid; cold war; appropriate technology |
-| T075 | 1967–1976 | Tanzania;Zambia | 中國援建坦贊鐵路 (TAZARA Railway) | technology | transport; infrastructure; aid; cold war; colonialism |
-| T092 | 1972–1986 | Ghana | 庫馬西科技大學技術顧問中心與蘇阿梅中間技術移轉單位 (Technology Consultancy Centre, KNUST / Suame ITTU) | institution | appropriate technology; manufacturing; education |
+| T060 | 1961–1966 | Ghana;United States | Akosombo 水壩與 Volta 河計畫 (Volta River Project / VALCO) | technology | infrastructure; energy; manufacturing; aid; cold war |
+| T061 | 1961–1966 | Ghana;Soviet Union | 恩克魯瑪的 Kwabenya 原子反應爐計畫 (Nkrumah's atomic reactor project) | program | nuclear; cold war; education; colonialism |
+| T069 | 1964 | Ghana;China | 周恩來「對外經濟技術援助八項原則」(Eight Principles for Economic Aid and Technical Assistance) | policy | aid; cold war; appropriate technology |
+| T075 | 1967–1976 | Tanzania;Zambia;China | 中國援建坦贊鐵路 (TAZARA Railway) | technology | transport; infrastructure; aid; cold war; colonialism |
+| T092 | 1972–1986 | Ghana;United Kingdom | 庫馬西科技大學技術顧問中心與蘇阿梅中間技術移轉單位 (Technology Consultancy Centre, KNUST / Suame ITTU) | institution | appropriate technology; manufacturing; education |
 | T110 | 1981–1982 | Tanzania | 坦尚尼亞農業機械化與鄉村技術中心成立 (CAMARTEC) | institution | appropriate technology; agriculture; energy; water |
 | T112 | 1982–1995 | Kenya | 肯亞陶瓷爐 (Kenya Ceramic Jiko) 改良爐灶推廣 | technology | energy; appropriate technology; environment; health |
 | T126 | 1998–2001 | South Africa | 39 家藥廠控告南非政府《藥品法修正案》(PMA v. President of South Africa, Medicines Act lawsuit) | lawsuit | health; IP; trade |
-| T135 | 2007 | Kenya | 肯亞行動支付 M-Pesa | technology | finance; ICT; platform; aid |
+| T135 | 2007 | Kenya;United Kingdom | 肯亞行動支付 M-Pesa | technology | finance; ICT; platform; aid |
 | T137 | 2008 | Kenya | Ushahidi 群眾外包危機地圖 | technology | ICT; data; platform |
 | T138 | 2009 | Kenya;Tanzania;Mozambique;South Africa;India | SEACOM 東非海底光纜啟用 | technology | infrastructure; communications; ICT |
-| T143 | 2014–2015 | Kenya | 華為奈洛比「平安城市」監控系統 (Huawei Safe City, Nairobi) | technology | ICT; data; infrastructure; trade |
-| T153 | 2020–2021 | Kenya | Google Loon 高空氣球網路在肯亞 (Loon and Telkom Kenya) | technology | ICT; communications; infrastructure |
-| T160 | 2022–2024 | Kenya | 肯亞內容審查員控告 Meta 與 Sama (Motaung v. Meta and Sama) | lawsuit | labor; platform; AI |
+| T143 | 2014–2015 | Kenya;China | 華為奈洛比「平安城市」監控系統 (Huawei Safe City, Nairobi) | technology | ICT; data; infrastructure; trade |
+| T153 | 2020–2021 | Kenya;United States | Google Loon 高空氣球網路在肯亞 (Loon and Telkom Kenya) | technology | ICT; communications; infrastructure |
+| T160 | 2022–2024 | Kenya;United States | 肯亞內容審查員控告 Meta 與 Sama (Motaung v. Meta and Sama) | lawsuit | labor; platform; AI |
 | T163 | 2024 | Ghana;Ethiopia | 非洲聯盟《大陸人工智慧戰略》(AU Continental AI Strategy) | policy | AI; data; industrial policy |
 | T170 | 1989–1994 | South Africa | 南非拆除核武與國際原子能總署查核 (Dismantlement of South Africa's nuclear weapons) | policy | nuclear; military; cold war |
-| T179 | 1996–2000 | United States;Ghana;Madagascar;Eritrea | 美國國際開發署 Leland 計畫 (USAID Leland Initiative) | program | ICT; aid; infrastructure; communications |
+| T179 | 1996–2000 | Ghana;Madagascar;Eritrea;United States | 美國國際開發署 Leland 計畫 (USAID Leland Initiative) | program | ICT; aid; infrastructure; communications |
 | T187 | 2000–2015 | Rwanda | 盧安達國家資訊通信基礎建設計畫與《願景 2020》(NICI Plans and Vision 2020) | policy | ICT; industrial policy; infrastructure |
 | T190 | 2006–2014 | Ethiopia;China | 中興通訊與衣索比亞電信供應商融資案 (ZTE–Ethiopian Telecommunications Corporation deal) | program | ICT; communications; finance; aid |
 | T192 | 2007–2008 | Nigeria;China | 奈及利亞通訊衛星一號：中國整星出口與在軌失效 (NigComSat-1) | technology | space; communications; trade |
 | T197 | 2010–2013 | Kenya | 奈洛比 iHub 與「矽草原」(iHub Nairobi and Silicon Savannah) | institution | ICT; platform; finance |
 | T201 | 2012 | South Africa;Australia;New Zealand;Ghana;Kenya;Namibia;Botswana;Mozambique;Mauritius;Madagascar;Zambia | 平方公里陣列電波望遠鏡選址：南非與澳洲共同承辦 (Square Kilometre Array site decision) | program | space; infrastructure; education |
 | T210 | 1896–1937 | Senegal;France | 達卡巴斯德研究所與黃熱病疫苗 (Institut Pasteur de Dakar) | institution | health; colonialism; manufacturing |
-| T211 | 1907–1924 | Senegal;Mali | 達卡—尼日鐵路：提耶斯—卡耶斯段 (Chemin de fer Dakar–Niger, Thiès–Kayes) | technology | transport; infrastructure; colonialism |
+| T211 | 1907–1924 | Senegal;Mali;France | 達卡—尼日鐵路：提耶斯—卡耶斯段 (Chemin de fer Dakar–Niger, Thiès–Kayes) | technology | transport; infrastructure; colonialism |
 | T214 | 1959–1970 | Democratic Republic of the Congo;Belgium;United States | TRICO I：非洲第一座核子研究反應爐 (TRICO I reactor, Lovanium University) | technology | nuclear; education; colonialism; cold war |
 | T216 | 1968–1982 | Democratic Republic of the Congo | 英加一、二號水壩與英加—沙巴直流輸電線 (Inga I & II, Inga–Shaba HVDC) | technology | energy; infrastructure; industrial policy |
 | T217 | 1969–1979 | Mozambique;Portugal;South Africa | 卡霍拉巴薩水壩與對南非輸電 (Cahora Bassa Dam, ZAMCO, Apollo HVDC) | technology | energy; infrastructure; colonialism; cold war |

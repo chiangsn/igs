@@ -1,6 +1,6 @@
 # 資料品質報告
 
-> 由 `site/scripts/build-data.mjs` 於 build 時自動產生（2026-11-27 16:01 UTC）。請勿手動編輯；資料問題請轉告對應的主題 session 修正 `topics/` 下的檔案。
+> 由 `site/scripts/build-data.mjs` 於 build 時自動產生（2026-11-27 16:14 UTC）。請勿手動編輯；資料問題請轉告對應的主題 session 修正 `topics/` 下的檔案。
 
 ## 總覽
 
@@ -8,7 +8,7 @@
 |---|---|---|---|---|---|---|---|---|
 | S1 History of Global Environmental Justice | 312 | 122 | 36 | 0 | 70 | 20 | 17／0／1／0／6 | 0 |
 | S2 戰爭與其延伸影響 | 250 | 174 | 34 | 0 | 88 | 20 | 0／0／0／0／9 | 0 |
-| S3 科技全球發展史 | 238 | 295 | 41 | 0 | 0 | 18 | 0／0／0／0／0 | 2 |
+| S3 科技全球發展史 | 238 | 295 | 41 | 0 | 64 | 18 | 0／0／0／0／14 | 0 |
 | S4 永續發展的全球治理史 | 248 | 148 | 40 | 55 | 90 | 21 | 0／0／0／0／15 | 0 |
 
 ## S1：History of Global Environmental Justice
@@ -27,7 +27,7 @@
 - linked_ids 有 228 條只單向記錄；網絡圖一律合併為無向邊。
 - 南北分類（G77 成員）無法判斷的國家或地區：French Polynesia、Taiwan、Western Sahara、Soviet Union、Hong Kong；含這些國家的事件歸「無法判斷」。
 - 南北分類（世界銀行所得分組）無法判斷的國家或地區：Western Sahara、Soviet Union；含這些國家的事件歸「無法判斷」。
-- 南北分類：連結兩端涉及 66 個國家或地區，其中 13 個在不同分類下歸屬不同；兩種分類對連結的判斷有 12 條不一致。
+- 南北分類：連結兩端涉及 67 個國家或地區，其中 13 個在不同分類下歸屬不同；兩種分類對連結的判斷有 12 條不一致。
 - links.csv：70 列，網站使用 70 條。主要 flow：material 24、ideas 24、people 12、media 5、capital 4、technology 1。mechanism：scale_up 18、boomerang 8、memory 7、geopolitical 5、litigation 5、template 4、evasion 4、colonial 4、burden_shifting 3、commodity_chain 3、diffusion 3、translation 3、contestation 2、imposition 1。次要機制（mechanism_2）：commodity_chain 7、burden_shifting 5、colonial 4、litigation 4、diffusion 4、geopolitical 3、translation 2、memory 1、scale_up 1。跨主題 7 條。
 
 ### 待查證項目
@@ -91,12 +91,9 @@
 
 資料夾：`topics/S3-technology-history`
 
-### 警告（2）
+### 警告（0）
 
-| 位置 | 問題 |
-|---|---|
-| STATUS.md | 文件引用了不存在的 id：S3-146 |
-| data/README.md | 文件引用了不存在的 id：S3-146 |
+沒有發現格式問題。
 
 ### 說明
 
@@ -107,10 +104,27 @@
 - 讀物標籤篩選「三個概念」：3 個值，103 / 295 筆讀物至少有一個（technology transfer 52、appropriate technology 26、technopolitics 56）。
 - 讀物標籤篩選「時期」：5 個值，82 / 295 筆讀物至少有一個（classic 23、1970s-80s 19、1990s 6、2000s 3、contemporary 40）。
 - linked_ids 有 130 條只單向記錄；網絡圖一律合併為無向邊。
+- 南北分類（G77 成員）無法判斷的國家或地區：Western Sahara、Taiwan、Soviet Union、Greenland；含這些國家的事件歸「無法判斷」。
+- 南北分類（世界銀行所得分組）無法判斷的國家或地區：Western Sahara、Soviet Union；含這些國家的事件歸「無法判斷」。
+- 南北分類：連結兩端涉及 57 個國家或地區，其中 7 個在不同分類下歸屬不同；兩種分類對連結的判斷有 10 條不一致。
+- links.csv：64 列，網站使用 64 條。主要 flow：ideas 22、technology 19、people 9、capital 9、material 5。mechanism：geopolitical 17、diffusion 11、template 8、commodity_chain 6、colonial 5、scale_up 5、imposition 5、translation 4、contestation 2、boomerang 1。次要機制（mechanism_2）：commodity_chain 5、colonial 3、geopolitical 2、litigation 1、scale_up 1、boomerang 1。跨主題 7 條。
 
 ### 待查證項目
 
-- （無）
+- 跨國連結 `S3-L003`（S3-T009 → S3-T027）
+- 跨國連結 `S3-L006`（S3-T017 → S3-T024）
+- 跨國連結 `S3-L009`（S3-T025 → S3-T032）
+- 跨國連結 `S3-L024`（S3-T056 → S3-T070）
+- 跨國連結 `S3-L033`（S3-T072 → S3-T094）
+- 跨國連結 `S3-L034`（S3-T074 → S3-T109）
+- 跨國連結 `S3-L036`（S3-T093 → S3-T101）
+- 跨國連結 `S3-L038`（S4-T099 → S3-T224）
+- 跨國連結 `S3-L042`（S3-T169 → S3-T113）
+- 跨國連結 `S3-L046`（S1-T250 → S3-T130）
+- 跨國連結 `S3-L051`（S3-T127 → S3-T128）
+- 跨國連結 `S3-L059`（S3-T144 → S3-T159）
+- 跨國連結 `S3-L060`（S3-T151 → S3-T155）
+- 跨國連結 `S3-L063`（S3-T157 → S3-T209）
 
 ## S4：永續發展的全球治理史
 

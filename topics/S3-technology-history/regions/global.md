@@ -38,12 +38,12 @@
 
 | id | 年代 | 國家 | 事件 | 類型 | 領域 |
 |---|---|---|---|---|---|
-| T006 | 1870–1872 | United Kingdom;Egypt;Yemen;India | 英國—印度海底電報電纜與東方電報公司 (Britain–India submarine telegraph, Eastern Telegraph Co.) | technology | communications; ICT; colonialism; finance |
-| T025 | 1913–1951 | United States;Guyana | 洛克斐勒基金會國際衛生委員會／國際衛生部與鉤蟲防治 (Rockefeller International Health Commission/Board) | institution | health; aid; education |
+| T006 | 1870–1872 | India;Egypt;Yemen;United Kingdom | 英國—印度海底電報電纜與東方電報公司 (Britain–India submarine telegraph, Eastern Telegraph Co.) | technology | communications; ICT; colonialism; finance |
+| T025 | 1913–1951 | Guyana;United States | 洛克斐勒基金會國際衛生委員會／國際衛生部與鉤蟲防治 (Rockefeller International Health Commission/Board) | institution | health; aid; education |
 | T035 | 1950–1951 | Sri Lanka | 可倫坡計畫 (Colombo Plan) | program | aid; education; cold war; colonialism |
 | T038 | 1953 | United States | 艾森豪「原子用於和平」演說 (Atoms for Peace) | policy | nuclear; cold war; aid; energy |
 | T050 | 1957 | Austria | 國際原子能總署成立 (International Atomic Energy Agency, IAEA) | institution | nuclear; standards; aid; cold war |
-| T065 | 1962–1978 | Russia;Mongolia;Cuba;Vietnam | 經濟互助委員會納入蒙古、古巴、越南 (Comecon expansion to non-European members) | policy | aid; trade; industrial policy; cold war |
+| T065 | 1962–1978 | Mongolia;Cuba;Vietnam;Soviet Union | 經濟互助委員會納入蒙古、古巴、越南 (Comecon expansion to non-European members) | policy | aid; trade; industrial policy; cold war |
 | T088 | 1971 | United States | 國際農業研究諮詢組織成立 (CGIAR) | institution | agriculture; aid |
 | T098 | 1974 | United States | 聯合國《建立新國際經濟秩序宣言》(Declaration on the Establishment of a New International Economic Order, NIEO) | policy | trade; industrial policy; colonialism |
 | T103 | 1976–1985 | Switzerland | 聯合國貿發會議《國際技術移轉行為守則》談判 (UNCTAD Draft International Code of Conduct on the Transfer of Technology) | treaty | trade; IP; industrial policy |
@@ -58,6 +58,6 @@
 | T164 | 2024 | United States | 聯合國《全球數位契約》(Global Digital Compact) | treaty | ICT; AI; data; standards |
 | T171 | 1990 | United States;United Kingdom;Sweden;Canada;Brazil;Nicaragua;Australia | 進步傳播協會成立 (Association for Progressive Communications, APC) | institution | ICT; communications; aid |
 | T180 | 1996–1997 | Singapore | WTO《資訊科技協定》(Information Technology Agreement, ITA) | treaty | trade; ICT; semiconductors |
-| T181 | 1997–2010 | Japan;China;India;Brazil | 《京都議定書》清潔發展機制與技術移轉 (Clean Development Mechanism and technology transfer) | policy | environment; energy; trade; aid |
+| T181 | 1997–2010 | China;India;Brazil;Japan | 《京都議定書》清潔發展機制與技術移轉 (Clean Development Mechanism and technology transfer) | policy | environment; energy; trade; aid |
 | T212 | 1942–1953 | France | 殖民地科學研究署到 ORSTOM (Office de la recherche scientifique coloniale / ORSTOM) | institution | colonialism; agriculture; education |
-| T213 | 1959–1999 | France;Senegal;Côte d'Ivoire | 法國合作部與「技術合作者」(Ministère de la Coopération, coopérants techniques) | institution | aid; education; colonialism; cold war |
+| T213 | 1959–1999 | Senegal;Côte d'Ivoire;France | 法國合作部與「技術合作者」(Ministère de la Coopération, coopérants techniques) | institution | aid; education; colonialism; cold war |

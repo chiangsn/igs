@@ -36,14 +36,14 @@
 
 | id | 年代 | 國家 | 事件 | 類型 | 領域 |
 |---|---|---|---|---|---|
-| T004 | 1859–1869 | Egypt | 蘇伊士運河通航 (Suez Canal) | technology | transport; infrastructure; trade; finance; colonialism |
-| T017 | 1898–1902 | Egypt | 亞斯文低壩 (Aswan Low Dam) | technology | water; agriculture; infrastructure; colonialism; finance |
+| T004 | 1859–1869 | Egypt;France | 蘇伊士運河通航 (Suez Canal) | technology | transport; infrastructure; trade; finance; colonialism |
+| T017 | 1898–1902 | Egypt;United Kingdom | 亞斯文低壩 (Aswan Low Dam) | technology | water; agriculture; infrastructure; colonialism; finance |
 | T019 | 1900–1908 | Syria;Jordan;Saudi Arabia | 漢志鐵路 (Hejaz Railway) | technology | transport; infrastructure; communications; military |
-| T024 | 1911–1925 | Sudan | 杰濟拉棉花灌溉計畫與森納爾壩 (Gezira Scheme, Sennar Dam) | program | agriculture; water; colonialism; finance |
-| T043 | 1954–1969 | Egypt;Germany;Russia | 埃及赫勒萬鋼鐵廠 (Egyptian Iron & Steel Co., Helwan) | institution | manufacturing; industrial policy; cold war; aid |
-| T048 | 1956–1959 | Iran | Lilienthal 與胡齊斯坦開發計畫 (Development and Resources Corporation in Khuzestan) | program | water; energy; agriculture; infrastructure; aid |
-| T051 | 1957–1967 | Iran | 美國提供德黑蘭研究用反應爐 (Tehran Research Reactor) | technology | nuclear; aid; cold war |
-| T052 | 1958–1970 | Egypt | 蘇聯技術援助亞斯文高壩 (Soviet aid to the Aswan High Dam) | technology | infrastructure; water; energy; aid; cold war |
+| T024 | 1911–1925 | Sudan;United Kingdom | 杰濟拉棉花灌溉計畫與森納爾壩 (Gezira Scheme, Sennar Dam) | program | agriculture; water; colonialism; finance |
+| T043 | 1954–1969 | Egypt;Soviet Union;Germany | 埃及赫勒萬鋼鐵廠 (Egyptian Iron & Steel Co., Helwan) | institution | manufacturing; industrial policy; cold war; aid |
+| T048 | 1956–1959 | Iran;United States | Lilienthal 與胡齊斯坦開發計畫 (Development and Resources Corporation in Khuzestan) | program | water; energy; agriculture; infrastructure; aid |
+| T051 | 1957–1967 | Iran;United States | 美國提供德黑蘭研究用反應爐 (Tehran Research Reactor) | technology | nuclear; aid; cold war |
+| T052 | 1958–1970 | Egypt;Soviet Union | 蘇聯技術援助亞斯文高壩 (Soviet aid to the Aswan High Dam) | technology | infrastructure; water; energy; aid; cold war |
 | T076 | 1967–1979 | Iran;United States;Germany | 伊朗巴勒維時期核計畫起源 (Tehran Research Reactor, AEOI, Bushehr) | program | nuclear; energy; cold war; trade |
 | T082 | 1969–1973 | Egypt | 法赫米《窮人的建築》與新古爾納實驗 (Hassan Fathy, Architecture for the Poor / New Gourna) | publication | appropriate technology; infrastructure |
 | T140 | 2011 | Egypt | 埃及斷網（阿拉伯之春）(Egypt internet shutdown) | policy | ICT; communications; infrastructure |
@@ -56,4 +56,4 @@
 | T203 | 2014–2021 | United Arab Emirates;United States;Japan | 阿聯酋火星任務「希望號」與知識移轉夥伴關係 (Emirates Mars Mission / Hope probe) | program | space; education; industrial policy |
 | T215 | 1963–1978 | Algeria;France | 阿爾及利亞「工業化產業」策略與 Sonatrach (Industries industrialisantes, Sonatrach) | policy | industrial policy; energy; manufacturing |
 | T228 | 1920–1956 | Morocco;France | 摩洛哥謝里夫磷酸鹽局成立與胡里卜蓋磷礦開採 (Office Chérifien des Phosphates, OCP) | institution | mining; colonialism; agriculture; infrastructure |
-| T231 | 1972 | Western Sahara | 布克拉磷礦輸送帶系統完工 (Bou Craa conveyor belt) | technology | mining; infrastructure; fertilizer |
+| T231 | 1972 | Western Sahara;Spain;Morocco | 布克拉磷礦輸送帶系統完工 (Bou Craa conveyor belt) | technology | mining; infrastructure; fertilizer |

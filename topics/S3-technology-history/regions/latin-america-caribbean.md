@@ -51,8 +51,8 @@
 |---|---|---|---|---|---|
 | T012 | 1880–1914 | Argentina;United Kingdom | 英國資本與阿根廷鐵路擴張 (British capital and Argentine railways) | technology | transport; finance; trade; infrastructure |
 | T022 | 1904–1914 | Panama;United States | 巴拿馬運河與金銀工資制 (Panama Canal, gold and silver rolls) | technology | transport; infrastructure; labor; health |
-| T032 | 1943–1966 | Mexico | 洛克斐勒墨西哥農業計畫與 CIMMYT (Mexican Agricultural Program → CIMMYT) | program | agriculture; aid; cold war |
-| T042 | 1954 | Colombia | 考卡河谷自治區域公司與「Lilienthal 計畫」(Corporación Autónoma Regional del Cauca, CVC) | institution | water; energy; agriculture; infrastructure |
+| T032 | 1943–1966 | Mexico;United States | 洛克斐勒墨西哥農業計畫與 CIMMYT (Mexican Agricultural Program → CIMMYT) | program | agriculture; aid; cold war |
+| T042 | 1954 | Colombia;United States | 考卡河谷自治區域公司與「Lilienthal 計畫」(Corporación Autónoma Regional del Cauca, CVC) | institution | water; energy; agriculture; infrastructure |
 | T071 | 1965–1994 | Mexico;United States | 墨西哥邊境工業化計畫與加工裝配廠 (Programa de Industrialización Fronteriza / maquiladoras) | program | manufacturing; trade; labor |
 | T077 | 1968 | Argentina | 薩巴托三角模型 (Sabato Triangle) | publication | industrial policy; education; nuclear |
 | T083 | 1969–1994 | Brazil | 巴西航空工業公司（Embraer）成立 (Embraer) | institution | transport; industrial policy; military; education |
@@ -62,12 +62,12 @@
 | T100 | 1975–1990 | Brazil | 巴西國家酒精計畫 (Proálcool) | program | energy; agriculture; transport; industrial policy |
 | T105 | 1976–2007 | Argentina | 阿根廷 INVAP 與研究用反應爐出口 (INVAP, Bariloche) | institution | nuclear; trade; industrial policy |
 | T117 | 1984–1992 | Brazil | 巴西《資訊法》市場保留政策 (Lei de Informática 7.232/1984) | policy | ICT; industrial policy; trade; IP |
-| T132 | 2005–2012 | Peru | 一童一筆電計畫與秘魯評估 (One Laptop per Child; Una Laptop por Niño) | program | ICT; education; aid; appropriate technology |
-| T134 | 2007 | Brazil | 巴西對 efavirenz 發布強制授權 (Brazil's compulsory licence on efavirenz) | policy | health; IP |
+| T132 | 2005–2012 | Peru;United States | 一童一筆電計畫與秘魯評估 (One Laptop per Child; Una Laptop por Niño) | program | ICT; education; aid; appropriate technology |
+| T134 | 2007 | Brazil;United States | 巴西對 efavirenz 發布強制授權 (Brazil's compulsory licence on efavirenz) | policy | health; IP |
 | T136 | 2007–2009 | Uruguay | 烏拉圭 Ceibal 計畫 (Plan Ceibal) | program | ICT; education; infrastructure |
 | T142 | 2014 | Brazil | 巴西網路公民權利框架法 (Marco Civil da Internet, Lei 12.965/2014) | policy | ICT; data; standards |
 | T152 | 2020 | Brazil | 巴西央行即時支付系統 Pix | technology | finance; ICT; infrastructure; platform |
 | T176 | 1992 | Chile | 智利大學網路 REUNA 接入網際網路 (REUNA Internet connection) | technology | ICT; education; communications |
 | T184 | 1988–2003 | Brazil;China | 中巴地球資源衛星計畫 (CBERS / China–Brazil Earth Resources Satellite) | program | space; data; environment |
 | T189 | 2003–2016 | Brazil | 巴西聯邦政府自由軟體政策 (Software Livre no Governo Federal) | policy | ICT; IP; standards; industrial policy |
-| T225 | 1997–1998 | Brazil | 巴西《電信總法》與 Telebrás 系統民營化 (Lei Geral de Telecomunicações; privatização da Telebrás) | policy | communications; ICT; industrial policy; finance |
+| T225 | 1997–1998 | Brazil;Spain | 巴西《電信總法》與 Telebrás 系統民營化 (Lei Geral de Telecomunicações; privatização da Telebrás) | policy | communications; ICT; industrial policy; finance |

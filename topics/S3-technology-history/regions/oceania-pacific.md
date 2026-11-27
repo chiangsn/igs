@@ -34,9 +34,9 @@
 
 | id | 年代 | 國家 | 事件 | 類型 | 領域 |
 |---|---|---|---|---|---|
-| T013 | 1882–1920 | Fiji;Australia;India | 澳洲殖民製糖公司（CSR）在斐濟與印度契約勞工 (CSR in Fiji and girmit) | institution | manufacturing; agriculture; labor; colonialism |
-| T020 | 1902 | Canada;Kiribati;Fiji;Australia;New Zealand | 太平洋電纜與「全紅線」完成 (Pacific Cable, All Red Line) | technology | communications; ICT; colonialism; infrastructure |
-| T150 | 2018–2019 | Australia;Papua New Guinea;Solomon Islands | 珊瑚海海底光纜 (Coral Sea Cable System) | technology | infrastructure; communications; aid; trade |
+| T013 | 1882–1920 | Fiji;India;Australia | 澳洲殖民製糖公司（CSR）在斐濟與印度契約勞工 (CSR in Fiji and girmit) | institution | manufacturing; agriculture; labor; colonialism |
+| T020 | 1902 | Fiji;Kiribati;Australia;New Zealand;Canada;United Kingdom | 太平洋電纜與「全紅線」完成 (Pacific Cable, All Red Line) | technology | communications; ICT; colonialism; infrastructure |
+| T150 | 2018–2019 | Papua New Guinea;Solomon Islands;Australia | 珊瑚海海底光纜 (Coral Sea Cable System) | technology | infrastructure; communications; aid; trade |
 | T157 | 2022 | Tonga | 東加火山爆發切斷海底光纜 (Tonga cable cut) | disaster | infrastructure; communications; environment |
 | T167 | 1971 | United States | 泛太平洋衛星教育通訊實驗 (PEACESAT) | program | communications; space; education |
 | T193 | 2007 | Papua New Guinea;Jamaica;Ireland | Digicel 進入巴布亞紐幾內亞行動通訊市場 (Digicel PNG launch) | technology | communications; ICT; trade |

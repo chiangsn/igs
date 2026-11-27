@@ -23,11 +23,11 @@
 
 | id | 年代 | 國家 | 事件 | 類型 | 領域 |
 |---|---|---|---|---|---|
-| T141 | 2011–2013 | Sweden | Facebook 呂勒奧北極圈資料中心 (Luleå data center) | technology | data; energy; infrastructure; platform |
+| T141 | 2011–2013 | Sweden;United States | Facebook 呂勒奧北極圈資料中心 (Luleå data center) | technology | data; energy; infrastructure; platform |
 | T165 | 1951–2003 | Greenland;Denmark;United States | 圖勒空軍基地與 Inughuit 遷村 (Thule Air Base and the Inughuit relocation) | other | military; cold war; colonialism |
-| T166 | 1957–1993 | Canada;United States;Greenland | 遠程預警雷達線 (Distant Early Warning Line, DEW Line) | technology | military; cold war; communications; colonialism |
+| T166 | 1957–1993 | Canada;Greenland;United States | 遠程預警雷達線 (Distant Early Warning Line, DEW Line) | technology | military; cold war; communications; colonialism |
 | T168 | 1980–1991 | Canada | Inukshuk 計畫與因紐特廣播公司 (Inukshuk Project / Inuit Broadcasting Corporation) | institution | communications; space; education |
-| T183 | 1957–1959 | Russia | 列寧號核動力破冰船與北方海航道 (Nuclear icebreaker Lenin) | technology | nuclear; transport; cold war; infrastructure |
+| T183 | 1957–1959 | Soviet Union | 列寧號核動力破冰船與北方海航道 (Nuclear icebreaker Lenin) | technology | nuclear; transport; cold war; infrastructure |
 | T186 | 1997–2004 | Norway;United States | 斯瓦巴衛星站與海底光纜 (SvalSat and the Svalbard fibre cable) | institution | space; data; infrastructure |
 | T195 | 2008 | Norway | 斯瓦巴全球種子庫啟用 (Svalbard Global Seed Vault) | institution | agriculture; environment; IP |
 | T207 | 2021 | Greenland;Denmark;Australia;China | 格陵蘭禁止鈾礦開採與 Kvanefjeld 稀土計畫受阻 (Greenland uranium ban and Kvanefjeld) | policy | environment; trade; industrial policy; nuclear |

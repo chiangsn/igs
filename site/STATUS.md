@@ -9,6 +9,48 @@
 - S1 資料管線結果：282 事件、107 讀物、36 概念、20 份文件，**0 則格式警告**（見 `data-report.md`）。
 - `package-lock.json` 已 commit；`render.yaml` 使用 `npm ci`，Node 24.22.1（與本機相同）。
 
+## 2026-11-28 跨國連結第二版 B 部分：接上 S3
+
+### 1. 做了什麼
+
+- **S3（第一次標記）**：64 條、跨主題 7、待查證 14，第二版格式（有 `mechanism_2`）。「跨國連結」分頁自動出現，使用限制的一句話與「使用前請讀」都有顯示，網絡圖移到「相關事件網絡」，頁首的 `networkNote` 用 S3 `STATUS.md` 提供的文字。
+- **推導的事件內負擔轉嫁：S3 不開啟**（依 S3 建議：多國事件的外部行動者多半是援助國或技術提供者，依 `country` 順序推導會把援助畫成轉嫁）。S3 另提出 9 筆確實屬於轉嫁的事件，可改用清單開啟，見第 5 節，**待使用者決定**。
+- 關於 S3 提到 `country-coords.json` 缺 55 個國家：網站上事件的點位用的是各事件自己的 `lat`／`lon`，`country-coords.json` 只用於推導的負擔轉嫁線。S3 不開啟推導，所以不需要補；若改用清單開啟，只需補清單中用到的國家。
+- S3 改了 `timeline.csv` 與 11 份區域報告（`country` 順序、重複事件的互相引用），一併上網站。
+
+### 2. 怎麼確認是對的
+
+- 以 S1–S4 最新資料跑 `npm run build`：4 個主題 **0 則警告**（S3 先前 2 則 `S3-146` 的說明文字已由 S3 改寫）。`data-report.md` 總覽：S3 64 條（待查證 14）。
+- 預覽：S3 分頁順序「總覽、時間軸與地圖、跨國連結、三個概念、概念系譜、讀物、相關事件網絡、文件」；三行使用限制、「使用前請讀」、只看待查證（14）、包含次要機制；沒有推導開關；三個概念頁不變。手機寬度沒有水平捲動，console 沒有錯誤。
+- 線上確認上一批（6be1d71）：S1 70 條、S2 88 條、S4 90 條，S1 推導標「待確認」。
+
+### 3. 結論
+
+四個主題的跨國連結都已接上網站（等這次 push）。
+
+### 4. 未解問題
+
+- 若用 S3 的清單開啟推導，依「`country` 的第一個是受影響地、其餘是外部行動者」，T166 DEW Line（`Canada;Greenland;United States`）會畫出 Greenland → Canada，但格陵蘭也是受影響地。需要排除這筆，或請 S3 調整 country 順序／把格陵蘭的部分當成另一件事。
+
+### 5. 要交給誰／需要使用者決定的事
+
+- **使用者決定是否對 S3 以清單開啟推導**（預設不開）。若開啟，網站會照下表畫有方向的線（其餘國家 → 第一個國家），並補上這些國家的座標：
+
+| id | 事件 | country | 會畫出的線 |
+|---|---|---|---|
+| S3-T022 | 巴拿馬運河與金銀工資制 | Panama; United States | United States → Panama |
+| S3-T027 | 米其林印度支那橡膠園 | Vietnam; France | France → Vietnam |
+| S3-T029 | 尼日河管理局灌溉計畫 | Mali; France | France → Mali |
+| S3-T160 | 肯亞內容審查員控告 Meta 與 Sama | Kenya; United States | United States → Kenya |
+| S3-T165 | 圖勒空軍基地與 Inughuit 遷村 | Greenland; Denmark; United States | Denmark → Greenland、United States → Greenland |
+| S3-T166 | 遠程預警雷達線（DEW Line） | Canada; Greenland; United States | Greenland → Canada（有問題，見第 4 節）、United States → Canada |
+| S3-T198 | 富士康深圳龍華園區員工連續跳樓 | China; Taiwan; United States | Taiwan → China、United States → China |
+| S3-T217 | 卡霍拉巴薩水壩與對南非輸電 | Mozambique; Portugal; South Africa | Portugal → Mozambique、South Africa → Mozambique |
+| S3-T230 | 布干維爾島潘古納銅礦 | Papua New Guinea; Australia | Australia → Papua New Guinea |
+
+- **S1 的推導清單（48 筆）仍待使用者確認**（見下一節）。
+- **使用者**：同意 push（檔案清單見對話）。
+
 ## 2026-11-28 跨國連結第二版 B 部分：接上 S1（補標）、S2、S4
 
 ### 1. 做了什麼
@@ -30,7 +72,7 @@
 
 ### 3. 結論
 
-S1、S2、S4 的跨國連結已接上網站。剩 S3。
+S1、S2、S4 的跨國連結已接上網站。剩 S3（已於下一節接上）。
 
 ### 4. 未解問題
 

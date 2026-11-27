@@ -33,21 +33,21 @@
 
 | id | 年代 | 國家 | 事件 | 類型 | 領域 |
 |---|---|---|---|---|---|
-| T009 | 1876–1877 | Brazil;United Kingdom;Sri Lanka;Malaysia;Singapore | Wickham 橡膠種子轉移：亞馬遜—邱園—亞洲殖民地 (Hevea seed transfer via Kew) | technology | agriculture; colonialism; trade; IP |
-| T011 | 1880–1909 | Indonesia | 茂物（Buitenzorg）植物園在 Treub 主持下轉型為熱帶研究中心 ('s Lands Plantentuin Buitenzorg) | institution | agriculture; colonialism; education |
-| T014 | 1891 | Vietnam | 西貢巴斯德研究所：第一所海外巴斯德研究所 (Institut Pasteur de Saigon) | institution | health; colonialism |
+| T009 | 1876–1877 | Brazil;Sri Lanka;Malaysia;Singapore;United Kingdom | Wickham 橡膠種子轉移：亞馬遜—邱園—亞洲殖民地 (Hevea seed transfer via Kew) | technology | agriculture; colonialism; trade; IP |
+| T011 | 1880–1909 | Indonesia;Netherlands | 茂物（Buitenzorg）植物園在 Treub 主持下轉型為熱帶研究中心 ('s Lands Plantentuin Buitenzorg) | institution | agriculture; colonialism; education |
+| T014 | 1891 | Vietnam;France | 西貢巴斯德研究所：第一所海外巴斯德研究所 (Institut Pasteur de Saigon) | institution | health; colonialism |
 | T027 | 1925–1930 | Vietnam;France | 米其林印度支那橡膠園與富凜（Phú Riềng）罷工 (Michelin rubber plantations) | program | agriculture; labor; colonialism; manufacturing |
 | T053 | 1959–1975 | Vietnam;Taiwan | 中華民國駐越南農業技術團 (ROC agricultural mission to South Vietnam) | program | agriculture; aid; cold war |
-| T056 | 1960–1966 | Philippines | 國際稻米研究所與 IR8「奇蹟米」(IRRI and IR8) | technology | agriculture; aid; cold war |
-| T062 | 1961–1970 | Singapore | 新加坡經濟發展局與跨國電子業 (Economic Development Board) | institution | industrial policy; manufacturing; trade; labor |
+| T056 | 1960–1966 | Philippines;United States | 國際稻米研究所與 IR8「奇蹟米」(IRRI and IR8) | technology | agriculture; aid; cold war |
+| T062 | 1961–1970 | Singapore;United States | 新加坡經濟發展局與跨國電子業 (Economic Development Board) | institution | industrial policy; manufacturing; trade; labor |
 | T070 | 1965–1984 | Indonesia | 印尼 Bimas 稻作集約化計畫 (Bimas program) | program | agriculture; finance; aid |
 | T090 | 1972 | Malaysia;United States | 檳城峇六拜自由貿易區與英特爾海外首廠 (Bayan Lepas FTZ & Intel Penang) | policy | semiconductors; trade; labor; manufacturing |
 | T096 | 1973–1984 | Philippines | 菲律賓 Masagana 99 稻米增產計畫 (Masagana 99) | program | agriculture; finance; aid |
-| T104 | 1976–2000 | Indonesia;Spain | 印尼國營飛機公司 IPTN 與哈比比技術戰略 (IPTN Nurtanio) | institution | transport; industrial policy; IP; military |
+| T104 | 1976–2000 | Indonesia;Germany;Spain | 印尼國營飛機公司 IPTN 與哈比比技術戰略 (IPTN Nurtanio) | institution | transport; industrial policy; IP; military |
 | T114 | 1984 | Malaysia | 第三世界網絡在檳城成立 (Third World Network) | institution | IP; trade; health; environment |
-| T133 | 2006–2007 | Thailand | 泰國對愛滋與心血管藥品發布政府使用強制授權 (Thailand's compulsory licences on efavirenz, lopinavir/ritonavir, clopidogrel) | policy | health; IP |
-| T149 | 2016–2018 | Myanmar | Facebook 與緬甸羅興亞危機 (UN Fact-Finding Mission on Myanmar) | publication | platform; ICT; data |
+| T133 | 2006–2007 | Thailand;United States | 泰國對愛滋與心血管藥品發布政府使用強制授權 (Thailand's compulsory licences on efavirenz, lopinavir/ritonavir, clopidogrel) | policy | health; IP |
+| T149 | 2016–2018 | Myanmar;United States | Facebook 與緬甸羅興亞危機 (UN Fact-Finding Mission on Myanmar) | publication | platform; ICT; data |
 | T154 | 2020–2022 | Indonesia | 印尼禁止鎳礦出口與 WTO 爭端 (Indonesia nickel ore export ban, DS592) | policy | industrial policy; trade; manufacturing; energy |
 | T178 | 1996–1997 | Malaysia | 馬來西亞多媒體超級走廊 (Multimedia Super Corridor, MSC) | policy | ICT; industrial policy; infrastructure |
 | T194 | 2008–2009 | Vietnam;South Korea | 三星電子北寧省安豐手機廠 (Samsung Electronics Vietnam, Yen Phong, Bac Ninh) | technology | manufacturing; ICT; trade; labor |
-| T199 | 2010 | Philippines;India;United States | 菲律賓客服中心就業人數超越印度 (Philippines overtakes India in voice BPO) | other | ICT; labor; trade |
+| T199 | 2010 | Philippines;United States;India | 菲律賓客服中心就業人數超越印度 (Philippines overtakes India in voice BPO) | other | ICT; labor; trade |

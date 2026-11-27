@@ -90,17 +90,17 @@
 | T008 | 1872–1876 | Japan;France | 富岡製絲場與法國技師 (Tomioka Silk Mill) | technology | manufacturing; industrial policy; trade; labor |
 | T018 | 1900–1907 | Taiwan;Japan | 台灣製糖株式會社與橋仔頭新式製糖工場 (Taiwan Sugar Company, Kyoshito mill) | institution | manufacturing; agriculture; colonialism; transport; finance; industrial policy |
 | T028 | 1926 | Taiwan;Japan | 蓬萊米命名與台中 65 號育種 (Ponlai rice) | technology | agriculture; colonialism; trade |
-| T031 | 1937–1941 | North Korea;China | 水豐水壩（鴨綠江）(Sup'ung Dam) | technology | energy; infrastructure; industrial policy; colonialism |
-| T033 | 1948–1965 | China;Taiwan | 中國農村復興聯合委員會（農復會）(Sino-American Joint Commission on Rural Reconstruction, JCRR) | institution | agriculture; aid; cold war |
+| T031 | 1937–1941 | North Korea;China;Japan | 水豐水壩（鴨綠江）(Sup'ung Dam) | technology | energy; infrastructure; industrial policy; colonialism |
+| T033 | 1948–1965 | Taiwan;China;United States | 中國農村復興聯合委員會（農復會）(Sino-American Joint Commission on Rural Reconstruction, JCRR) | institution | agriculture; aid; cold war |
 | T036 | 1950–1968 | Japan | 日本《外資法》與技術引進審查 (Foreign Investment Law, 1950) | policy | industrial policy; IP; trade; finance |
 | T039 | 1953–1955 | Japan;United States | 東京通信工業（Sony）取得西電電晶體授權 (Sony–Western Electric transistor license) | technology | semiconductors; IP; ICT; industrial policy |
-| T040 | 1953–1960 | China | 蘇聯援建「156 項工程」(156 Projects) | program | industrial policy; manufacturing; aid; cold war |
+| T040 | 1953–1960 | China;Soviet Union | 蘇聯援建「156 項工程」(156 Projects) | program | industrial policy; manufacturing; aid; cold war |
 | T044 | 1954–1974 | Japan | 日本加入可倫坡計畫與海外技術協力事業團 (Japan in the Colombo Plan; OTCA) | institution | aid; education; industrial policy |
 | T047 | 1955–1970 | China | 中國「兩彈一星」(Two Bombs, One Satellite) | program | nuclear; space; military; cold war |
-| T054 | 1960 | China | 蘇聯撤回在華專家 (Withdrawal of Soviet experts from China) | policy | industrial policy; nuclear; cold war; aid |
+| T054 | 1960 | China;Soviet Union | 蘇聯撤回在華專家 (Withdrawal of Soviet experts from China) | policy | industrial policy; nuclear; cold war; aid |
 | T059 | 1961–1964 | Japan | 東海道新幹線通車與世界銀行貸款 (Tokaido Shinkansen) | technology | transport; infrastructure; finance |
 | T063 | 1962 | Japan | 赤松要「雁行型態論」英文發表 (Akamatsu, Flying Geese Pattern) | publication | industrial policy; trade; manufacturing |
-| T072 | 1966 | South Korea | 韓國科學技術研究院成立 (Korea Institute of Science and Technology, KIST) | institution | industrial policy; education; aid; cold war |
+| T072 | 1966 | South Korea;United States | 韓國科學技術研究院成立 (Korea Institute of Science and Technology, KIST) | institution | industrial policy; education; aid; cold war |
 | T074 | 1966 | Taiwan | 高雄加工出口區設立 (Kaohsiung Export Processing Zone) | policy | trade; manufacturing; labor; industrial policy |
 | T078 | 1968 | China | 中國「赤腳醫生」推廣為全國政策 (Barefoot Doctors) | program | health; appropriate technology |
 | T080 | 1968–1973 | South Korea;Japan | 浦項綜合製鐵（POSCO）創立與第一期完工 (Pohang Iron and Steel) | institution | manufacturing; industrial policy; aid; colonialism |
