@@ -64,15 +64,19 @@ id,title,authors,year,type,language,level,source,url,access,summary,tags
 - `id`：`<主題編號>-T<流水號>`，例如 `S1-T042`
 - `region` 只能用以下固定分類：East Asia / Southeast Asia / South Asia / Middle East & North Africa / Sub-Saharan Africa / Europe / North America / Latin America & Caribbean / Oceania & Pacific / Arctic / Global
 - 可在 `linked_ids` 引用其他主題的 id，避免重複蒐集
+- `country`：多國時以 `;` 分隔，**受影響地在前，外部的主要行動者（企業母國、援助國、宗主國、出兵國）在後**，例如 Koko 寫 `Nigeria; Italy`。網站依這個順序推導事件內的負擔轉嫁（2026-11-27 新增）
 - `type` 只能用：movement / disaster / lawsuit / policy / treaty / conference / publication / war / institution / program / technology / other（後五項為 2026-11-26 新增，SZ 的驗證清單需同步）
 - `id` 一旦發出就不重新編號，新增的一律接在檔尾
 
 ### 跨國連結（`data/links.csv`）
 
-欄位：`id,from_id,to_id,flow,mechanism,direction,note_zh,sources`
-- 只收跨國的連結：兩個事件在不同國家，或一端是 `Global` 事件。同一國家內的前後發展留在 `linked_ids`
-- `flow`（可以填多個，以 `;` 分隔）：people / capital / technology / material / media / ideas
-- `mechanism`（只能填一個）：diffusion / burden_shifting / imposition / template / translation / commodity_chain / boomerang / scale_up / colonial / geopolitical / litigation / memory
+欄位：`id,from_id,to_id,flow,mechanism,mechanism_2,direction,note_zh,sources`
+- 只收跨國的連結：兩個事件在不同國家，或一端是 `Global` 事件。同一國家內的前後發展、兩端都是 Global 的制度沿革、比較案例（彼此沒有流動，只是同類型）、跨主題重複收錄的同一事件，都不收，留在 `linked_ids`
+- `flow`（可以填多個，以 `;` 分隔，第一個是主要的流動）：people / capital / technology / material / media / ideas
+- `mechanism`（只能填一個）：diffusion / burden_shifting / imposition / template / translation / contestation / evasion / commodity_chain / boomerang / scale_up / colonial / geopolitical / litigation / memory（contestation、evasion 為 2026-11-27 第二版新增，SZ 的驗證清單需同步）
+- `mechanism_2`：選填，另一個也成立的機制，最多一個，用同一份清單
+- `direction`：forward / mutual（mutual 只用於互相影響）
+- 標完後另寫 `data/links-caveats.md`（使用限制說明），格式照 S1
 - 定義、判斷原則與例子見根目錄的 `link-typology.md`，標記前必讀
 
 ### 歷史分期的寫法（網站會自動解析，格式要一字不差）

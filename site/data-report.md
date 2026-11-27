@@ -1,6 +1,6 @@
 # 資料品質報告
 
-> 由 `site/scripts/build-data.mjs` 於 build 時自動產生（2026-11-27 06:54 UTC）。請勿手動編輯；資料問題請轉告對應的主題 session 修正 `topics/` 下的檔案。
+> 由 `site/scripts/build-data.mjs` 於 build 時自動產生（2026-11-27 15:33 UTC）。請勿手動編輯；資料問題請轉告對應的主題 session 修正 `topics/` 下的檔案。
 
 ## 總覽
 
@@ -28,7 +28,7 @@
 - 南北分類（G77 成員）無法判斷的國家或地區：French Polynesia、Taiwan、Western Sahara、Hong Kong；含這些國家的事件歸「無法判斷」。
 - 南北分類（世界銀行所得分組）無法判斷的國家或地區：Western Sahara；含這些國家的事件歸「無法判斷」。
 - 南北分類：連結兩端涉及 73 個國家或地區，其中 16 個在不同分類下歸屬不同；兩種分類對連結的判斷有 18 條不一致。
-- links.csv：85 列，網站使用 85 條。主要 flow：ideas 38、material 26、people 7、capital 6、technology 4、media 4。mechanism：scale_up 18、commodity_chain 11、burden_shifting 8、boomerang 8、memory 8、colonial 7、litigation 7、geopolitical 6、translation 5、diffusion 4、template 2、imposition 1。跨主題 10 條。
+- links.csv：85 列，網站使用 85 條。主要 flow：ideas 38、material 26、people 7、capital 6、technology 4、media 4。mechanism：scale_up 18、commodity_chain 11、burden_shifting 8、boomerang 8、memory 8、colonial 7、litigation 7、geopolitical 6、translation 5、diffusion 4、template 2、imposition 1。沒有 mechanism_2 欄（link-typology 第一版格式），次要機制視為全部留空。跨主題 10 條。
 
 ### 待查證項目
 

@@ -10,10 +10,10 @@
 
 | 編號 | 主題 | 資料夾 | 交接檔 | 狀態 |
 |---|---|---|---|---|
-| S1 | History of Global Environmental Justice | `topics/S1-global-env-justice` | `prompts/S1-global-env-justice.md`；`prompts/S1-verification-and-links.md`（第四輪：補查證、試標跨國連結） | 第四輪完成：312 事件全部有非 Wikipedia 來源（更正 42 筆）、122 讀物（中文 15.6%）、跨國連結 85 條；仍待查證：事件 17、連結 9、概念 1。第四輪成果尚未 commit，網站仍是試標的 50 條 |
-| S2 | 戰爭與其延伸影響 | `topics/S2-war` | `prompts/S2-war.md` | 第三輪完成：249 事件、174 讀物（中文 30%）、34 概念；無待查證，剩人工核對清單 12 項 |
-| S3 | 科技全球發展史 | `topics/S3-technology-history` | `prompts/S3-technology-history.md` | 第六輪完成：238 事件全部逐筆核對、待查證 0；295 讀物（中文 37%、intro 103、公開取得 119，intro 摘要全數核對）、41 概念；已上網站（706e917），「三個概念」的 issue 分組草案待使用者確認 |
-| S4 | 永續發展的全球治理史 | `topics/S4-sustainable-development-governance` | `prompts/S4-sustainable-development-governance.md` | 三輪完成並補強東南亞與中東北非：248 事件、148 讀物（中文 16.9%）、40 概念、55 一手文件、14 專題單元；不排課程結構，以專題單元發展 |
+| S1 | History of Global Environmental Justice | `topics/S1-global-env-justice` | `prompts/S1-global-env-justice.md`；`prompts/S1-verification-and-links.md`（第四輪：補查證、試標跨國連結，已完成）；`prompts/S1-links-v2.md`（依連結指南第二版補標） | 第四輪完成：312 事件全部有非 Wikipedia 來源（更正 42 筆）、122 讀物（中文 15.6%）、跨國連結 85 條；仍待查證：事件 17、連結 9、概念 1。第四輪成果已上網站 |
+| S2 | 戰爭與其延伸影響 | `topics/S2-war` | `prompts/S2-war.md`；`prompts/S2-links.md`（標記跨國連結） | 第三輪完成：249 事件、174 讀物（中文 30%）、34 概念；無待查證，剩人工核對清單 12 項 |
+| S3 | 科技全球發展史 | `topics/S3-technology-history` | `prompts/S3-technology-history.md`；`prompts/S3-links.md`（標記跨國連結） | 第六輪完成：238 事件全部逐筆核對、待查證 0；295 讀物（中文 37%、intro 103、公開取得 119，intro 摘要全數核對）、41 概念；已上網站（706e917），「三個概念」的 issue 分組草案待使用者確認 |
+| S4 | 永續發展的全球治理史 | `topics/S4-sustainable-development-governance` | `prompts/S4-sustainable-development-governance.md`；`prompts/S4-links.md`（標記跨國連結） | 三輪完成並補強東南亞與中東北非：248 事件、148 讀物（中文 16.9%）、40 概念、55 一手文件、14 專題單元；不排課程結構，以專題單元發展 |
 
 ## 綜合任務
 
@@ -21,7 +21,7 @@
 |---|---|---|---|---|
 | S0 | 技術顧問與助理：撰寫交接檔、維護 `CLAUDE.md`、本表、`狀態摘要.md` | 根目錄 | — | 進行中 |
 | SY | 課程大綱：整理既有大綱與學生蒐集的大綱、發展本院大綱 | `syllabi/` | 尚未撰寫 | 未開始 |
-| SZ | 視覺化網站；專案中唯一做 git commit/push 的 session（GitHub chiangsn/igs → Render Blueprint） | `site/` | `prompts/SZ-visualization-site.md`；`prompts/SZ-S2-visualization.md`（S2 上網站，已完成）；`prompts/SZ-S4-visualization.md`（S4 上網站，已完成）；`prompts/SZ-links-views.md`（跨國連結新視圖，已完成）；`prompts/SZ-S3-visualization.md`（S3 上網站，已完成）；`prompts/SZ-S1-round4-update.md`（S1 第四輪上網站、使用限制、推導負擔轉嫁） | 進行中：已上線（igs-site.onrender.com），呈現 S1–S4；跨國連結新視圖已上線，但仍是 S1 試標的 50 條。S1 的 85 條與使用限制說明（`links-caveats.md`）的任務檔已備妥 |
+| SZ | 視覺化網站；專案中唯一做 git commit/push 的 session（GitHub chiangsn/igs → Render Blueprint） | `site/` | `prompts/SZ-visualization-site.md`；`prompts/SZ-S2-visualization.md`（S2 上網站，已完成）；`prompts/SZ-S4-visualization.md`（S4 上網站，已完成）；`prompts/SZ-links-views.md`（跨國連結新視圖，已完成）；`prompts/SZ-S3-visualization.md`（S3 上網站，已完成）；`prompts/SZ-S1-round4-update.md`（S1 第四輪上網站、使用限制、推導負擔轉嫁，已完成）；`prompts/SZ-links-v2.md`（連結指南第二版，並陸續接上 S2–S4 的連結） | 進行中：已上線（igs-site.onrender.com），呈現 S1–S4；S1 第四輪已上線（3dc1c9f、58e69a7）：85 條跨國連結、使用限制、待查證標記、推導的事件內負擔轉嫁 |
 
 ## 預定議題（尚未啟動，使用者通知後才開始蒐集）
 
@@ -45,4 +45,6 @@
 - 2026-11-27：檢查等級依 meta 標準第 8 節整理，全部屬於第 3 級。網站不標示各主題的審閱狀態：已有「內部用途」說明和「待查證」標記，網站僅供內部使用。（使用者決定）
 - 2026-11-27：採用 meta 標準第 9 節的「收工」規則：使用者說「收工」時，S0 更新 `狀態摘要.md`、本表的決策紀錄與 session 狀態，三行回報。（meta 標準，使用者指示）
 - 2026-11-27：S1 試標後確認分類可用，並定下三項做法：比較案例不收進 `links.csv`；事件內部的負擔轉嫁由網站依多國 `country` 推導；規避或違反全球規範的連結暫標 `burden_shifting` 並在 `note_zh` 註明。網站要在每個連結視圖頂端呈現 `links-caveats.md` 的使用限制（僅供內部參考，不能當成教學資料）。S1 對分類的修訂建議（反制全球會議、次要機制、ideas 區辨力、mutual 的兩種意義等）待 S0 整理後請使用者決定。（使用者在 S1 決定）
+- 2026-11-27：網站推導事件內負擔轉嫁的規則與 20 筆事件清單（見 `site/STATUS.md`）經使用者確認；推導只畫在流向地圖、預設關閉。（使用者在 SZ 決定）
+- 2026-11-27：依 S1 的試標與全面標記回報修訂 `link-typology.md`（第二版）：新增選填欄位 `mechanism_2`；新增 `contestation`（反制與另立框架）、`evasion`（規避與違規），機制共 14 類；`country` 規定受影響地在前、外部的主要行動者在後；比較案例、只是並存的事件、跨主題重複事件都不收；mutual 只用於互相影響；ideas 只在有明確觀念移動時標；並補上 template、colonial／geopolitical、memory／diffusion 的判準。每個主題標完要寫 `links-caveats.md`。S1 需回頭補標，SZ 需更新驗證。（使用者決定全部照 S0 建議）
 - 2026-11-27：南北分類當成一個議題，G77 成員與世界銀行所得分組兩種並列，網站可切換，並說明兩者的依據與爭議。（使用者在 SZ 決定）

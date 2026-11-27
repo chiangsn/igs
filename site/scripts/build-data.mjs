@@ -48,6 +48,8 @@ const SCHEMAS = {
     file: 'data/links.csv',
     columns: ['id', 'from_id', 'to_id', 'flow', 'mechanism', 'direction', 'note_zh', 'sources'],
     required: ['id', 'from_id', 'to_id', 'flow', 'mechanism', 'direction'],
+    // link-typology 第二版新增的選填欄位；第一版的檔案沒有這一欄，視為全部留空
+    optional: ['mechanism_2'],
   },
   documents: {
     file: 'data/documents.csv',
@@ -71,8 +73,9 @@ const ENUMS = {
     access: ['open', 'library', 'paywall'],
   },
   links: {
-    mechanism: ['diffusion', 'burden_shifting', 'imposition', 'template', 'translation', 'commodity_chain',
-      'boomerang', 'scale_up', 'colonial', 'geopolitical', 'litigation', 'memory'],
+    // link-typology 第二版：14 類（contestation、evasion 為第二版新增）
+    mechanism: ['diffusion', 'burden_shifting', 'imposition', 'template', 'translation', 'contestation', 'evasion',
+      'commodity_chain', 'boomerang', 'scale_up', 'colonial', 'geopolitical', 'litigation', 'memory'],
     direction: ['forward', 'mutual'],
   },
 };
@@ -486,11 +489,18 @@ function buildTopic(folder, registry, config) {
     if (!r.sources) warn(code, label, '沒有來源（sources）');
     if (!r.note_zh) warn(code, label, '沒有說明（note_zh）');
     if (r.from_id && r.from_id === r.to_id) warn(code, label, 'from_id 與 to_id 相同');
+    // 次要機制：選填；不在清單或與主要機制相同時警告並略過（連結本身照常顯示）
+    let m2 = (r.mechanism_2 ?? '').trim();
+    if (m2.includes(';')) { warn(code, label, '`mechanism_2` 最多只能填一個，網站略過次要機制'); m2 = ''; }
+    else if (m2 && !ENUMS.links.mechanism.includes(m2)) { warn(code, label, `\`mechanism_2\` 值「${m2}」不在規定選項，網站略過次要機制`); m2 = ''; }
+    else if (m2 && m2 === r.mechanism) { warn(code, label, '`mechanism_2` 不能和 `mechanism` 相同，網站略過次要機制'); m2 = ''; }
     return {
       id: r.id, from_id: r.from_id, to_id: r.to_id, flows: flows.filter((f) => FLOWS.includes(f)), mechanism: r.mechanism,
-      direction: r.direction, note: r.note_zh, sources: splitSources(r.sources), pending: hasPending(r), label,
+      mechanism2: m2, direction: r.direction, note: r.note_zh, sources: splitSources(r.sources), pending: hasPending(r), label,
     };
   });
+  // 有 mechanism_2 欄＝第二版格式（mutual 只用於互相影響）；沒有＝第一版（mutual 也可能是同時並存）
+  const linksVersion = lk ? (lk.length && 'mechanism_2' in lk[0] ? 2 : 1) : 0;
   for (const d of new Set(dup(linksRaw.map((e) => e.id)))) warn(code, 'links.csv', `id 重複：${d}`);
 
   // documents（選用檔，沒有就不顯示「一手文件」分頁）
@@ -540,7 +550,7 @@ function buildTopic(folder, registry, config) {
   }
 
   return { code, folder, name, status: reg?.status ?? '', periods, events, readings, concepts, documents, docs, config: cfg, charts: stats, linksCaveats, derived,
-    linksRaw, has: { timeline: !!tl, readings: !!rd, concepts: !!cc, documents: !!dc, links: !!lk } };
+    linksRaw, linksVersion, has: { timeline: !!tl, readings: !!rd, concepts: !!cc, documents: !!dc, links: !!lk } };
 }
 
 // ---------- 跨主題檢查 ----------
@@ -704,7 +714,7 @@ function resolveLinks(topics) {
     }
     if (t.linksRaw.length) {
       const tally = (vals) => [...vals.reduce((m, v) => m.set(v, (m.get(v) ?? 0) + 1), new Map())].sort((x, y) => y[1] - x[1]).map(([k, n]) => `${k} ${n}`).join('、');
-      note(t.code, `links.csv：${t.linksRaw.length} 列，網站使用 ${out.length} 條。主要 flow：${tally(out.map((l) => l.flows[0]))}。mechanism：${tally(out.map((l) => l.mechanism))}。跨主題 ${out.filter((l) => [l.from_id, l.to_id].some((id) => !id.startsWith(t.code + '-'))).length} 條。`);
+      note(t.code, `links.csv：${t.linksRaw.length} 列，網站使用 ${out.length} 條。主要 flow：${tally(out.map((l) => l.flows[0]))}。mechanism：${tally(out.map((l) => l.mechanism))}。${t.linksVersion === 2 ? `次要機制（mechanism_2）：${out.filter((l) => l.mechanism2).length ? tally(out.filter((l) => l.mechanism2).map((l) => l.mechanism2)) : '都留空'}。` : '沒有 mechanism_2 欄（link-typology 第一版格式），次要機制視為全部留空。'}跨主題 ${out.filter((l) => [l.from_id, l.to_id].some((id) => !id.startsWith(t.code + '-'))).length} 條。`);
     }
     delete t.linksRaw;
   }

@@ -203,6 +203,12 @@ const endHtml = (id: string, t: Topic) => {
   return `${a}<div class="muted small">${esc(id)} · ${yearText(e)} · ${esc(regionZh(e.region))}${e.countries.length ? ' · ' + esc(e.countries.join('、')) : ''}</div>`;
 };
 
+/** mutual 的說法：第二版只用於互相影響；第一版也可能是同時並存 */
+export const mutualLabel = (t: Topic) => (t.linksVersion >= 2 ? '雙向（互相影響）' : '雙向或並存');
+export const mutualNote = (t: Topic) => (t.linksVersion >= 2
+  ? '「雙向」：兩事件互相影響，包括共同行動、互相聲援（link-typology 第二版）。'
+  : '「雙向或並存」：兩事件互相影響，或同時並存、分不出先後（這份資料是 link-typology 第一版格式，mutual 同時用於這兩種情況）。');
+
 /** 連結中標「待查證」的部分：sources 中含「待查證」的項目，以及說明中含「待查證」的句子 */
 export function pendingParts(l: Link): string[] {
   const fromSources = l.sources.filter((x) => x.includes('待查證'));
@@ -232,10 +238,11 @@ export function showLink(l: Link, t: Topic) {
     <button class="drawer-close" aria-label="關閉">×</button>
     <div class="muted small">${esc(l.id)} · 跨國連結 · ${l.year}</div>
     <h2>${esc(MECH_ZH[l.mechanism] ?? l.mechanism)} ${pendingBadge(l.pending)}</h2>
+    ${l.mechanism2 ? `<div class="muted">次要機制：<b>${esc(MECH_ZH[l.mechanism2] ?? l.mechanism2)}</b>（<code>${esc(l.mechanism2)}</code>）</div>` : ''}
     <div class="chips">${l.flows.map((f, i) => `<span class="chip${i ? ' ghost' : ''}"><i class="sw" style="background:${slotVar(FLOWS.indexOf(f))}"></i>${esc(FLOW_ZH[f] ?? f)}${i ? '' : '（主要）'}</span>`).join('')}
-      <span class="chip ghost">${l.direction === 'forward' ? '單向 →' : '雙向或並存'}</span>${l.ns && t.northSouth ? t.northSouth.schemes.map((sc) => `<span class="chip ghost" title="${esc(sc.label)}">${esc(sc.short)}：${esc(l.ns![sc.key] ?? '')}</span>`).join('') : ''}</div>
+      <span class="chip ghost">${l.direction === 'forward' ? '單向 →' : mutualLabel(t)}</span>${l.ns && t.northSouth ? t.northSouth.schemes.map((sc) => `<span class="chip ghost" title="${esc(sc.label)}">${esc(sc.short)}：${esc(l.ns![sc.key] ?? '')}</span>`).join('') : ''}</div>
     ${l.pending ? `<div class="pending-box"><b>⚠ 待查證的部分</b><ul>${pendingParts(l).map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''}
-    ${l.direction === 'mutual' ? '<p class="muted small">「雙向或並存」：兩事件互相影響，或同時並存、分不出先後（link-typology 的 mutual 同時用於這兩種情況）。</p>' : ''}
+    ${l.direction === 'mutual' ? `<p class="muted small">${mutualNote(t)}</p>` : ''}
     <h4>${l.direction === 'forward' ? '從' : '一端'}</h4>${endHtml(l.from_id, t)}
     <h4>${l.direction === 'forward' ? '到' : '另一端'}</h4>${endHtml(l.to_id, t)}
     ${l.note ? `<h4>說明</h4><p>${linkifyIds(esc(l.note).replace(/待查證/g, '<span class="pending-text">待查證</span>'), t)}</p>` : ''}
@@ -262,7 +269,7 @@ export function showEvent(e: EventItem, t: Topic) {
     <h4>來源</h4><ul class="sources">${e.sources.map((s) => `<li>${sourceHtml(s)}</li>`).join('') || '<li class="muted">無</li>'}</ul>
     ${myLinks.length ? `<h4>跨國連結（${myLinks.length}）</h4><ul class="linked">${myLinks.map((l) => {
       const other = endpoint(l.from_id === e.id ? l.to_id : l.from_id, t);
-      return `<li><i class="sw" style="background:${slotVar(FLOWS.indexOf(l.flows[0]))}"></i><a href="#" data-link="${l.id}">${esc(MECH_ZH[l.mechanism] ?? l.mechanism)}</a> ${l.direction === 'forward' ? (l.from_id === e.id ? '→' : '←') : '—（雙向或並存）'} ${esc(other?.name ?? '')} ${pendingBadge(l.pending)}</li>`;
+      return `<li><i class="sw" style="background:${slotVar(FLOWS.indexOf(l.flows[0]))}"></i><a href="#" data-link="${l.id}">${esc(MECH_ZH[l.mechanism] ?? l.mechanism)}</a> ${l.direction === 'forward' ? (l.from_id === e.id ? '→' : '←') : `—（${mutualLabel(t)}）`} ${esc(other?.name ?? '')} ${pendingBadge(l.pending)}</li>`;
     }).join('')}</ul>` : ''}
     ${inTopic.length ? `<h4>相關事件（${inTopic.length}）</h4><ul class="linked">${inTopic.map((id) => {
       const x = byId.get(id)!;

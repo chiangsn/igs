@@ -24,7 +24,10 @@ export interface DerivedBurden {
 
 /** 跨國連結（data/links.csv）。year＝兩端事件 year_start 較晚者，視為連結成立的年份 */
 export interface Link {
-  id: string; from_id: string; to_id: string; flows: string[]; mechanism: string; direction: 'forward' | 'mutual';
+  id: string; from_id: string; to_id: string; flows: string[]; mechanism: string;
+  /** 次要機制（link-typology 第二版，選填；空字串＝沒有） */
+  mechanism2: string;
+  direction: 'forward' | 'mutual';
   note: string; sources: string[]; pending: boolean; year: number;
   /** 南北分類：分類 key → 南南／南北／北北／南—全球／北—全球／全球—全球／無法判斷（site/north-south.json 設定後才有） */
   ns?: Record<string, string>;
@@ -111,6 +114,8 @@ export interface Topic extends TopicSummary {
   config: TopicConfig; charts: StatChart[]; external: Record<string, ExternalEvent>; links: Link[];
   /** 網站上有的主題代號（其他主題的 id 只在對方主題已上網站時才連結） */
   siteTopics: string[];
+  /** links.csv 的格式版本：2＝有 mechanism_2 欄（mutual 只用於互相影響）；1＝第一版；0＝沒有 links.csv */
+  linksVersion: number;
   /** data/links-caveats.md：short＝一句話版本，detail＝詳細說明（Markdown） */
   linksCaveats: { short: string; detail: string } | null;
   /** 網站依 country 推導的事件內負擔轉嫁 */
@@ -173,10 +178,11 @@ export const LANG_DETAIL_ZH: Record<string, string> = {
 // 跨國連結的詞彙（link-typology.md）
 export const FLOWS = ['people', 'capital', 'technology', 'material', 'media', 'ideas'];
 export const FLOW_ZH: Record<string, string> = { people: '人', capital: '資本', technology: '技術', material: '物質', media: '影像與敘事', ideas: '觀念與規範' };
-export const MECHANISMS = ['diffusion', 'burden_shifting', 'imposition', 'template', 'translation', 'commodity_chain',
-  'boomerang', 'scale_up', 'colonial', 'geopolitical', 'litigation', 'memory'];
+export const MECHANISMS = ['diffusion', 'burden_shifting', 'imposition', 'template', 'translation', 'contestation', 'evasion',
+  'commodity_chain', 'boomerang', 'scale_up', 'colonial', 'geopolitical', 'litigation', 'memory'];
 export const MECH_ZH: Record<string, string> = {
   diffusion: '傳播與學習', burden_shifting: '負擔轉嫁', imposition: '強加與條件', template: '模板採納', translation: '在地轉譯',
+  contestation: '反制與另立框架', evasion: '規避與違規',
   commodity_chain: '商品鏈與跨國企業', boomerang: '串連與迴力鏢', scale_up: '由地方到全球', colonial: '帝國與殖民的延續',
   geopolitical: '地緣政治介入', litigation: '跨國司法', memory: '記憶的相互引用',
 };

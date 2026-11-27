@@ -1,6 +1,7 @@
 # 跨國連結的編碼指南（`data/links.csv`）
 
 > S0 撰寫，2026-11-27。使用者決定採用。所有主題 session 標記跨國連結時照這份做。
+> 2026-11-27 第二版：依 S1 試標與全面標記的回報修訂，修訂經使用者決定。重點是新增 `mechanism_2` 欄位、`evasion` 和 `contestation` 兩種機制，並補上收錄範圍、`country` 寫法和判斷原則。
 > 理論依據：Appadurai 的 scapes、世界體系與生態不平等交換、McMichael 的 globalization project、世界社會理論、glocalization 與 vernacularization、全球商品鏈、Keck & Sikkink 的 boomerang pattern、後殖民研究、Rothberg 的 multidirectional memory。
 
 ## 1. 為什麼需要
@@ -19,29 +20,46 @@
 1. 兩個事件發生在**不同國家**；
 2. 一端是 `Global` 事件（國際公約、國際會議、國際組織），另一端是某個國家或區域的事件。
 
-同一國家內的前後發展，例如同一案件的上訴，不收進 `links.csv`，留在 `linked_ids` 就好。
+以下不收進 `links.csv`：
 
-## 3. 欄位
+- **同一國家內的前後發展**，例如同一案件的上訴。留在 `linked_ids`。
+- **兩端都是 `Global` 的連結**，例如斯德哥爾摩會議 → 里約會議。全球層次內部的制度沿革留在 `linked_ids`。
+- **比較案例**：兩事件只是同類型、可以拿來比較，彼此沒有人、物、錢、觀念的流動，例如茅茅起義和霧社事件。比較關係留在 `linked_ids`，不新增「比較」機制。
+- **只是同時並存、沒有互相影響的事件**，也算比較案例。
+- **跨主題重複收錄的同一事件**，例如諾魯磷礦同時是 S1-T200 和 S3-T229。改在雙方的 `linked_ids` 互相引用，並在各自的 `data/README.md` 列出「與其他主題重複的事件」。
+
+**事件內的跨國關係不用另外建連結。**一筆多國事件本身就是負擔轉嫁時，例如 Koko（義大利 → 奈及利亞），不用為起點另建事件，由網站依 `country` 推導，見第 3 節。
+
+## 3. `timeline.csv` 的 `country` 寫法
+
+同國判斷和網站推導都只看 `country`，所以要照以下寫法：
+
+- **受影響地在前，外部的主要行動者在後**，以 `;` 分隔。外部的主要行動者包括企業母國、援助國、宗主國、出兵國。例如 Koko 寫 `Nigeria; Italy`，蘇聯援建的亞斯文高壩寫 `Egypt; Soviet Union`。
+- **跨國組織或聯盟**寫出主要的創始國或所在國；太多時寫最主要的幾個，並在 `actors` 說明。
+- **邊界案例**在連結的 `note_zh` 註明。
+
+## 4. 欄位
 
 ```
-id,from_id,to_id,flow,mechanism,direction,note_zh,sources
+id,from_id,to_id,flow,mechanism,mechanism_2,direction,note_zh,sources
 ```
 
 | 欄位 | 說明 |
 |---|---|
 | `id` | `<主題編號>-L<流水號>`，例如 `S1-L001`，發出後不重新編號 |
 | `from_id`、`to_id` | timeline 的事件 id，可以引用其他主題，例如 `S2-T141` |
-| `flow` | 流動的是什麼，見第 4 節。可以填多個，以 `;` 分隔，第一個是主要的 |
-| `mechanism` | 怎麼連起來的，見第 5 節。**只能填一個**，選最主要的 |
-| `direction` | `forward`（從 from 到 to）或 `mutual`（雙向、互相影響） |
-| `note_zh` | 一到兩句說明這條連結是怎麼發生的。另一個機制也成立時，寫在這裡 |
-| `sources` | 至少一個能支持「這兩件事有關聯」的來源。只是推論、找不到來源的，標「待查證」 |
+| `flow` | 流動的是什麼，見第 5 節。可以填多個，以 `;` 分隔，**第一個必須是主要的流動** |
+| `mechanism` | 怎麼連起來的，見第 6 節。**只能填一個**，選最主要的 |
+| `mechanism_2` | 選填。另一個也成立的機制，最多一個，不能和 `mechanism` 相同。沒有就留空 |
+| `direction` | `forward`（從 from 到 to）或 `mutual`（互相影響，見第 7 節第 6 點） |
+| `note_zh` | 一到兩句說明這條連結是怎麼發生的 |
+| `sources` | 至少一個能支持「這兩件事有關聯」的來源，不能只引用兩個事件各自的來源。只是推論、找不到來源的，標「待查證」 |
 
-## 4. `flow`：流動的是什麼
+## 5. `flow`：流動的是什麼
 
 | 值 | 中文 | 對應的 scape | 例子 |
 |---|---|---|---|
-| `people` | 人 | ethnoscape | 難民、移工、流亡者、傳教士、維和部隊 |
+| `people` | 人 | ethnoscape | 難民、移工、流亡者、傳教士、維和部隊、跨國移動的專家 |
 | `capital` | 資本 | financescape | 援助、貸款、投資、債務、賠償 |
 | `technology` | 技術 | technoscape | 技術移轉、武器、農業技術、生產設備 |
 | `material` | 物質 | （本專案補上） | 商品、資源、污染、廢棄物、病原體、物種 |
@@ -50,15 +68,19 @@ id,from_id,to_id,flow,mechanism,direction,note_zh,sources
 
 **物質一定要標。**Appadurai 的架構偏重文化，沒有物質這一類。但環境、戰爭與發展的跨國連結，很多是物質的流動，例如廢棄物、礦產、毒物、核分裂物質。
 
-## 5. `mechanism`：怎麼連起來的
+**ideas 要節制。**只有明確的觀念、規範或框架跨國移動時才標，例如某項原則、某個法律概念、某種診斷框架。不能因為兩件事「有影響」就標 ideas。S1 試標時 85 條中有 55 條含 ideas，區辨力很低。
+
+## 6. `mechanism`：怎麼連起來的
 
 | 值 | 中文 | 判斷方式 | 例子 |
 |---|---|---|---|
 | `diffusion` | 傳播與學習 | 行動者之間互相啟發、模仿，屬於水平的連結，沒有上對下的權力關係 | Chipko 影響其他森林運動 |
 | `burden_shifting` | 負擔轉嫁 | 污染、風險、廢棄物、危險產業從較有權力的一方移到較弱勢的一方 | Koko 毒廢棄物事件；RCA 移到台灣 |
 | `imposition` | 強加與條件 | 國際機構或強國以援助、貸款、制裁為條件，要求對方採用某種規則 | 結構調整 → 北非麵包暴動 |
-| `template` | 模板採納 | 各國照著同一套全球模式建立制度，重點是「照抄」，不是同儕之間的互相學習 | 斯德哥爾摩會議後，各國成立環境部會 |
-| `translation` | 在地轉譯 | 全球框架進入某地時被改寫、挪用，產生新的意義 | 台灣自訂 T-SDGs |
+| `template` | 模板採納 | 照著一套既有的制度模式建立制度，重點是「照抄」，不是同儕之間的互相學習 | 斯德哥爾摩會議後，各國成立環境部會；Escazú 照 Aarhus |
+| `translation` | 在地轉譯 | 接受全球框架，但進入某地時被改寫、挪用，產生新的意義 | 台灣自訂 T-SDGs |
+| `contestation` | 反制與另立框架 | 在地或跨國行動者拒絕某個全球規範、會議或制度，另立一套框架或議程來對抗它 | 哥本哈根會議失敗 → 玻利維亞 Tiquipaya 人民氣候大會 |
+| `evasion` | 規避與違規 | 事件鑽了全球規範的漏洞，或違反它；全球規範已經存在，卻沒有被遵守 | 電子廢棄物利用巴塞爾公約的漏洞流入迦納 Agbogbloshie |
 | `commodity_chain` | 商品鏈與跨國企業 | 兩個事件透過同一條供應鏈或同一家企業相連 | 橙劑與化學公司；剛果鈷礦與電子產品 |
 | `boomerang` | 串連與迴力鏢 | 在地行動者繞過本國政府，透過跨國網絡或盟友回頭施壓；也包括跨國聲援 | Ogoni 運動；La Via Campesina |
 | `scale_up` | 由地方到全球 | 地方事件推動了國際規範、公約或制度的建立 | Bhopal、Koko → 巴塞爾公約 |
@@ -67,18 +89,50 @@ id,from_id,to_id,flow,mechanism,direction,note_zh,sources
 | `litigation` | 跨國司法 | 到別國法院或國際法庭提告，或由國際司法機構處理 | Bhopal 案在美國法院；Shell 案在荷蘭法院 |
 | `memory` | 記憶的相互引用 | 一地的苦難記憶、紀念方式或正義框架，被用來理解或處理另一地的事件 | 大屠殺記憶影響其他種族滅絕的認定 |
 
-## 6. 判斷原則
+共 14 類。`contestation` 和 `evasion` 是第二版新增的。
 
-1. **只標一個主要機制。**兩個都成立時，選「如果拿掉，這條連結就不存在」的那一個，另一個寫進 `note_zh`。例如橙劑：主要是 `geopolitical`，`commodity_chain` 寫在備註。
-2. **`diffusion` 和 `template` 的分辨：**有明確的全球模式、很多國家照同一套做，就標 `template`；兩個運動之間互相學習，就標 `diffusion`。
-3. **`burden_shifting` 和 `commodity_chain` 的分辨：**重點是風險或污染被轉嫁，標 `burden_shifting`；重點是同一家企業或同一條供應鏈，標 `commodity_chain`。
-4. **`scale_up` 和 `template` 方向相反：**地方 → 全球是 `scale_up`，全球 → 各國是 `template`、`imposition` 或 `translation`。
-5. **方向：**有清楚的先後和影響方向，就填 `forward`，`from_id` 填源頭；互相影響或分不出先後，填 `mutual`。
-6. **不需要標記南北關係。**南南、南北這類區分由網站依國家自動推導，主題 session 不用標。
+## 7. 判斷原則
 
-## 7. 給網站（SZ）
+1. **主要機制與次要機制**：兩個都成立時，選「如果拿掉，這條連結就不存在」的那一個填 `mechanism`，另一個填 `mechanism_2`。例如橙劑：`mechanism` 是 `geopolitical`，`mechanism_2` 是 `commodity_chain`。
+2. **`diffusion` 和 `template` 的分辨**：模仿的對象是制度文本（條約、法律、機構章程），就標 `template`，不論對象是全球性的還是區域性的；兩個運動之間互相學習組織方式或策略，就標 `diffusion`。
+3. **`burden_shifting` 和 `commodity_chain` 的分辨**：重點是風險或污染被轉嫁，標 `burden_shifting`；重點是同一家企業或同一條供應鏈，標 `commodity_chain`。
+4. **全球規範與地方事件的四種方向**：
+   - 地方 → 全球，推動規範建立：`scale_up`；
+   - 全球 → 各國，照抄、被迫採用或改寫：`template`、`imposition`、`translation`；
+   - 拒絕全球規範、另立框架：`contestation`；
+   - 規範已經存在，卻被鑽漏洞或違反：`evasion`。
+   - `evasion` 和 `burden_shifting` 常同時成立，例如廢棄物鑽漏洞流向南方：連結的另一端是全球規範時，`mechanism` 標 `evasion`，`mechanism_2` 標 `burden_shifting`。
+5. **`translation` 和 `contestation` 的分辨**：接受全球框架、再改寫成在地版本，標 `translation`；拒絕它、另立一套，標 `contestation`。
+6. **方向**：
+   - 有清楚的先後和影響方向，填 `forward`，`from_id` 填源頭；
+   - 互相影響，包括共同行動、互相聲援，填 `mutual`；
+   - 只是同時並存、沒有互相影響的，屬於比較案例，不收。
+7. **`colonial` 和 `geopolitical` 的分辨**：看事情為什麼發生在那裡。
+   - 取決於殖民或託管的主權，例如法國在阿爾及利亞的核試，標 `colonial`；
+   - 取決於冷戰同盟、軍事協定或基地協議，標 `geopolitical`；
+   - 兩者都成立時，另一個填 `mechanism_2`。
+8. **`memory` 和 `diffusion` 的分辨**：專家或運動者跨國移動時，常兩者都有。
+   - 移動的是某次災難的受害框架或法律前例，例如原田正純把水俣病的診斷帶到加拿大，標 `memory`；
+   - 移動的是組織方式或抗爭策略，標 `diffusion`。
+9. **不需要標記南北關係**：南南、南北這類區分由網站依國家自動推導，主題 session 不用標。
 
-- 跨國流向地圖：弧線顏色代表 `flow`，可以依 `mechanism` 篩選，用 `direction` 畫箭頭。
-- 區域泳道弧線圖：可以依 `mechanism` 篩選。
-- 斷裂圖（Appadurai 的 disjuncture）：區域 × 分期的小圖，每一格顯示各種 `flow` 的連結數量或比重。
-- 南南、南北的分類由網站設定，並在頁面上說明分類依據。
+## 8. 使用限制說明（`data/links-caveats.md`）
+
+每個主題標完連結後，都要寫一份 `data/links-caveats.md`，格式照 S1 的那一份：
+
+- 開頭是「一句話版本」，網站會放在每個連結視圖的頂端；
+- 後面是詳細說明，至少包括：
+  - 數量反映的是可查的文獻，不是實際；
+  - 這個主題特有的偏誤，例如 Global 事件偏多；
+  - 排除了哪些候選、有沒有逐一搜尋；
+  - 來源的層級。
+
+## 9. 給網站（SZ）
+
+- **跨國流向地圖**：弧線顏色代表第一個 `flow`，可以依 `mechanism` 篩選，用 `direction` 畫箭頭。
+- **區域泳道弧線圖**：可以依 `mechanism` 篩選。
+- **斷裂圖**（Appadurai 的 disjuncture）：區域 × 分期的小圖，每一格顯示各種 `flow` 的連結數量或比重。
+- **次要機制**：依 `mechanism` 篩選時，可以選擇是否包含 `mechanism_2`。
+- **事件內的負擔轉嫁**：依 `country` 推導，規則見 `site/README.md`。
+- **南南、南北的分類**：由網站設定，並在頁面上說明分類依據。
+- **使用限制**：讀取各主題的 `data/links-caveats.md`。
