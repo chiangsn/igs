@@ -7,6 +7,7 @@ import { regionZh } from '../data';
 import { renderConcepts } from './concepts';
 import { renderDocuments } from './documents';
 import { renderExplore } from './explore';
+import { renderFlows } from './flows';
 import { renderIssues } from './issues';
 import { renderNetwork } from './network';
 import { renderReadings } from './readings';
@@ -19,11 +20,13 @@ const thesisKey = (t: Topic) => (t.config.thesis.view === 'regions' ? 'regions' 
 export function topicTabs(t: Topic): [string, string][] {
   const c = t.config;
   return [
-    ['', '總覽'], ['explore', '時間軸與地圖'], ['network', '網絡圖'], [thesisKey(t), c.thesis.label],
+    // 有 links.csv 時，「跨國連結」取代網絡圖的位置，網絡圖改名後移到後面
+    ['', '總覽'], ['explore', '時間軸與地圖'], t.has.links ? ['links', '跨國連結'] : ['network', '網絡圖'], [thesisKey(t), c.thesis.label],
     ...(t.charts.length ? [['stats', '統計趨勢'] as [string, string]] : []),
     ['concepts', '概念系譜'], ['readings', '讀物'],
     ...(t.has.documents ? [['documents', '一手文件'] as [string, string]] : []),
     ...c.subdirs.filter((d) => d.tab).map((d) => [d.dir, d.label] as [string, string]),
+    ...(t.has.links ? [['network', '相關事件網絡'] as [string, string]] : []),
     ['docs', '文件'],
   ];
 }
@@ -48,6 +51,7 @@ export function renderTopic(root: HTMLElement, t: Topic, tab: string, rest: stri
   switch (tab) {
     case 'explore': return renderExplore(host, t);
     case 'network': return renderNetwork(host, t);
+    case 'links': return renderFlows(host, t);
     case 'regions': case 'thesis':
       if (t.config.thesis.view === 'issues') renderIssues(host, t); else renderRegions(host, t);
       break;

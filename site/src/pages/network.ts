@@ -31,7 +31,8 @@ export function renderNetwork(root: HTMLElement, t: Topic) {
   root.innerHTML = `
     <div id="fb"></div>
     <div class="card">
-      <div class="card-head"><h3>事件連結網絡</h3><span id="netStats" class="muted"></span></div>
+      <div class="card-head"><h3>${t.has.links ? '相關事件網絡' : '事件連結網絡'}</h3><span id="netStats" class="muted"></span></div>
+      ${t.has.links ? `<p class="small network-caveat">這張圖根據 timeline 的 <code>linked_ids</code>：只記錄兩個事件「有關」，沒有連結的類型和方向。要看跨國連結的流動與機制，請到<a href="#/t/${t.code}/links">跨國連結</a>分頁。</p>` : ''}
       <p class="muted small">每個點是一個事件，依區域聚集；線為 <code>linked_ids</code> 記錄的連結（合併為無向）。<b class="cross-key">深色粗線</b>＝跨區域連結，淺色細線＝同區域。點的大小＝連結數。滑過節點可看鄰居，點擊看詳情。</p>
       <div id="legend"></div>
       <label class="check"><input type="checkbox" id="isolated"> 顯示沒有連結的事件</label>

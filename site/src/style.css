@@ -307,3 +307,35 @@ table.heat tr.sum-row th { text-align: left; }
 .lane-switch { display: inline-flex; align-items: center; gap: 6px; }
 .filterbar select { max-width: 100%; min-width: 0; text-overflow: ellipsis; }
 .filterbar > * { min-width: 0; }
+
+/* ---------- 跨國連結 ---------- */
+.sw { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 5px; vertical-align: baseline; }
+.card.intro p { margin: 0 0 6px; }
+.small-play { width: 30px; height: 30px; font-size: 0.8em; }
+.arc-arrow span { display: inline-block; font-size: 11px; line-height: 12px; text-shadow: 0 0 2px var(--surface-1); }
+.global-mark span { display: block; width: 10px; height: 10px; border: 2px solid var(--text-primary); background: var(--surface-1); transform: rotate(0); }
+.key-global { display: inline-block; padding: 0 3px; border: 2px solid var(--text-secondary); }
+.key-ext { border-bottom: 1px dashed var(--text-secondary); }
+.lane-arcs { overflow-x: auto; max-width: 100%; }
+.lane-density { fill: var(--text-muted); fill-opacity: 0.18; }
+.lane-arc { fill: none; stroke-width: 2; stroke-opacity: 0.85; cursor: pointer; }
+.lane-arc:hover { stroke-width: 3.5; stroke-opacity: 1; }
+.lane-end { fill: var(--text-primary); stroke: var(--surface-1); stroke-width: 1.5; }
+.lane-end.ext { fill: var(--surface-1); stroke: var(--text-primary); stroke-dasharray: 2 2; }
+table.dis { border-collapse: collapse; }
+table.dis th, table.dis td { border: 1px solid var(--border); padding: 4px 6px; text-align: center; vertical-align: bottom; }
+table.dis th { font-size: 0.85em; white-space: nowrap; }
+table.dis tbody th { text-align: left; }
+.dis-mini { display: block; margin: 0 auto; }
+.dis-n { font-size: 10px; color: var(--text-muted); }
+.ns-note { margin: 0; }
+.network-caveat { border-left: 3px solid var(--accent); padding: 4px 10px; background: var(--surface-2); border-radius: 4px; }
+.ns-schemes { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin: 8px 0; }
+.ns-scheme { border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; background: var(--surface-2); }
+.ns-scheme h4 { margin: 0 0 4px; }
+.ns-scheme p { margin: 4px 0; }
+table.ns-cross td { text-align: center; min-width: 52px; border: 1px solid var(--border); }
+table.ns-cross td.diag { background: var(--surface-2); }
+table.ns-cross td.off { font-weight: 700; color: var(--warning); }
+td.side-north { font-weight: 600; }
+td.side-unknown { color: var(--text-muted); }

@@ -1,6 +1,6 @@
 // 共用 UI 工具：元素建立、色彩、徽章、事件詳情面板、tooltip
-import type { EventItem, Topic } from './data';
-import { regionZh, TYPE_ZH } from './data';
+import type { EventItem, ExternalEvent, Link, Topic } from './data';
+import { FLOW_ZH, FLOWS, MECH_ZH, regionZh, TYPE_ZH } from './data';
 
 export function esc(s: unknown): string {
   return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!));
@@ -123,6 +123,7 @@ export const eventHref = (id: string) => `#/t/${id.split('-')[0]}/explore?event=
 /** id 的連結：本主題只連到存在的 id；其他主題的 id 直接連過去（是否存在由 build 的資料品質報告檢查）。不連結時回傳 null */
 export function idLink(h: IdHit, t: Topic): { href: string; cls: string; event?: string } | null {
   const own = h.code === t.code;
+  if (!own && !t.siteTopics.includes(h.code)) return null;
   if (h.kind === 'event') {
     if (!own) return { href: eventHref(h.id), cls: 'ref-event ext' };
     return t.events.some((e) => e.id === h.id) ? { href: '#', cls: 'ref-event', event: h.id } : null;
@@ -158,10 +159,10 @@ export function bindEventRefs(root: HTMLElement, t: Topic) {
 let drawer: HTMLElement | null = null;
 let drawerTopic: Topic | null = null;
 
-export function showEvent(e: EventItem, t: Topic) {
+function ensureDrawer(t: Topic): HTMLElement {
   drawerTopic = t;
   if (!drawer) {
-    const d = el('aside', { class: 'drawer', role: 'dialog', 'aria-label': '事件詳情' });
+    const d = el('aside', { class: 'drawer', role: 'dialog', 'aria-label': '詳情' });
     drawer = d;
     document.body.appendChild(d);
     d.addEventListener('click', (ev) => {
@@ -172,11 +173,57 @@ export function showEvent(e: EventItem, t: Topic) {
         ev.preventDefault();
         const x = drawerTopic.events.find((y) => y.id === a.dataset.event);
         if (x) showEvent(x, drawerTopic);
+        return;
+      }
+      const lk = target.closest('[data-link]') as HTMLElement | null;
+      if (lk && drawerTopic) {
+        ev.preventDefault();
+        const l = drawerTopic.links.find((y) => y.id === lk.dataset.link);
+        if (l) showLink(l, drawerTopic);
       }
     });
     document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape') closeDrawer(); });
   }
+  return drawer;
+}
+
+/** 連結兩端的事件：本主題的事件或其他主題的摘要 */
+export function endpoint(id: string, t: Topic): (EventItem | ExternalEvent) & { ext: boolean } | null {
+  const e = t.events.find((x) => x.id === id);
+  if (e) return { ...e, ext: false };
+  const x = t.external[id];
+  return x ? { ...x, ext: true } : null;
+}
+
+const endHtml = (id: string, t: Topic) => {
+  const e = endpoint(id, t);
+  if (!e) return `<span class="muted">${esc(id)}</span>`;
+  const a = e.ext ? `<span class="topic-chip">${esc((e as ExternalEvent).topic)}</span> <a href="${eventHref(id)}">${esc(e.name)}</a>`
+    : `<a href="#" data-event="${id}">${esc(e.name)}</a>`;
+  return `${a}<div class="muted small">${esc(id)} · ${yearText(e)} · ${esc(regionZh(e.region))}${e.countries.length ? ' · ' + esc(e.countries.join('、')) : ''}</div>`;
+};
+
+/** 跨國連結的詳情（links.csv 的一列） */
+export function showLink(l: Link, t: Topic) {
+  const d = ensureDrawer(t);
+  d.innerHTML = `
+    <button class="drawer-close" aria-label="關閉">×</button>
+    <div class="muted small">${esc(l.id)} · 跨國連結 · ${l.year}</div>
+    <h2>${esc(MECH_ZH[l.mechanism] ?? l.mechanism)} ${pendingBadge(l.pending)}</h2>
+    <div class="chips">${l.flows.map((f, i) => `<span class="chip${i ? ' ghost' : ''}"><i class="sw" style="background:${slotVar(FLOWS.indexOf(f))}"></i>${esc(FLOW_ZH[f] ?? f)}${i ? '' : '（主要）'}</span>`).join('')}
+      <span class="chip ghost">${l.direction === 'forward' ? '單向 →' : '雙向 ↔'}</span>${l.ns && t.northSouth ? t.northSouth.schemes.map((sc) => `<span class="chip ghost" title="${esc(sc.label)}">${esc(sc.short)}：${esc(l.ns![sc.key] ?? '')}</span>`).join('') : ''}</div>
+    <h4>${l.direction === 'forward' ? '從' : '一端'}</h4>${endHtml(l.from_id, t)}
+    <h4>${l.direction === 'forward' ? '到' : '另一端'}</h4>${endHtml(l.to_id, t)}
+    ${l.note ? `<h4>說明</h4><p>${linkifyIds(esc(l.note).replace(/待查證/g, '<span class="pending-text">待查證</span>'), t)}</p>` : ''}
+    <h4>來源</h4><ul class="sources">${l.sources.map((s) => `<li>${s.includes('待查證') ? `<span class="pending-text">${esc(s)}</span>` : sourceHtml(s)}</li>`).join('') || '<li class="muted">無</li>'}</ul>`;
+  d.classList.add('open');
+}
+
+export function showEvent(e: EventItem, t: Topic) {
+  ensureDrawer(t);
+  if (!drawer) return;
   const byId = new Map(t.events.map((x) => [x.id, x]));
+  const myLinks = (t.links ?? []).filter((l) => l.from_id === e.id || l.to_id === e.id);
   const linked = new Set([...e.linked_ids, ...t.events.filter((x) => x.linked_ids.includes(e.id)).map((x) => x.id), ...(e.backlinks ?? [])]);
   linked.delete(e.id);
   const inTopic = [...linked].filter((id) => byId.has(id));
@@ -189,6 +236,10 @@ export function showEvent(e: EventItem, t: Topic) {
     ${e.actors ? `<h4>行動者</h4><p>${esc(e.actors)}</p>` : ''}
     ${e.outcome ? `<h4>結果與影響</h4><p>${linkifyIds(esc(e.outcome), t)}</p>` : ''}
     <h4>來源</h4><ul class="sources">${e.sources.map((s) => `<li>${sourceHtml(s)}</li>`).join('') || '<li class="muted">無</li>'}</ul>
+    ${myLinks.length ? `<h4>跨國連結（${myLinks.length}）</h4><ul class="linked">${myLinks.map((l) => {
+      const other = endpoint(l.from_id === e.id ? l.to_id : l.from_id, t);
+      return `<li><i class="sw" style="background:${slotVar(FLOWS.indexOf(l.flows[0]))}"></i><a href="#" data-link="${l.id}">${esc(MECH_ZH[l.mechanism] ?? l.mechanism)}</a> ${l.direction === 'forward' ? (l.from_id === e.id ? '→' : '←') : '↔'} ${esc(other?.name ?? '')}</li>`;
+    }).join('')}</ul>` : ''}
     ${inTopic.length ? `<h4>相關事件（${inTopic.length}）</h4><ul class="linked">${inTopic.map((id) => {
       const x = byId.get(id)!;
       return `<li><a href="#" data-event="${id}">${esc(x.name)}</a> <span class="muted small">${yearText(x)} · ${esc(regionZh(x.region))}</span></li>`;

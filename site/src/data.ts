@@ -13,6 +13,15 @@ export interface EventItem {
 /** 其他主題事件的摘要（跨主題連結用） */
 export interface ExternalEvent {
   id: string; topic: string; name: string; year_start: number | null; year_end: number | null; region: string; type: string;
+  countries: string[]; lat: number | null; lon: number | null;
+}
+
+/** 跨國連結（data/links.csv）。year＝兩端事件 year_start 較晚者，視為連結成立的年份 */
+export interface Link {
+  id: string; from_id: string; to_id: string; flows: string[]; mechanism: string; direction: 'forward' | 'mutual';
+  note: string; sources: string[]; pending: boolean; year: number;
+  /** 南北分類：分類 key → 南南／南北／北北／南—全球／北—全球／全球—全球／無法判斷（site/north-south.json 設定後才有） */
+  ns?: Record<string, string>;
 }
 
 export interface Reading {
@@ -68,17 +77,26 @@ export interface TopicStats {
   events: number; readings: number; concepts: number; docs: number; documents: number; regionCounts: Record<string, number>;
   pending: { events: number; readings: number; concepts: number; documents: number };
   subdirTabs: { dir: string; label: string; n: number }[];
+  links: number;
   yearMin: number | null; yearMax: number | null; warnings: number;
 }
 
 export interface TopicSummary {
   code: string; folder: string; name: string; status: string; stats: TopicStats;
-  has: { timeline: boolean; readings: boolean; concepts: boolean; documents: boolean }; periodCount: number;
+  has: { timeline: boolean; readings: boolean; concepts: boolean; documents: boolean; links: boolean }; periodCount: number;
 }
 
 export interface Topic extends TopicSummary {
   periods: Period[]; events: EventItem[]; readings: Reading[]; concepts: Concept[]; documents: PrimaryDoc[]; docs: Doc[];
-  config: TopicConfig; charts: StatChart[]; external: Record<string, ExternalEvent>;
+  config: TopicConfig; charts: StatChart[]; external: Record<string, ExternalEvent>; links: Link[];
+  /** 網站上有的主題代號（其他主題的 id 只在對方主題已上網站時才連結） */
+  siteTopics: string[];
+  /** 南北分類（當成議題，並列多種分類）；沒有 links.csv 或沒有設定時為 null */
+  northSouth: {
+    schemes: { key: string; label: string; short: string; source: string; url: string; basis: string; caveat: string }[];
+    /** 連結兩端涉及的國家在各分類下的歸屬：north / south / unknown */
+    countries: ({ country: string } & Record<string, string>)[];
+  } | null;
 }
 
 export interface CrossLink { from: ExternalEvent; to: ExternalEvent }
@@ -124,5 +142,15 @@ export const TYPE_ZH: Record<string, string> = {
   book: '書', chapter: '章節', article: '論文', report: '報告', news: '新聞', dataset: '資料集', other: '其他',
 };
 export const LANG_ZH: Record<string, string> = { en: '英文', zh: '中文', other: '其他語言' };
+// 跨國連結的詞彙（link-typology.md）
+export const FLOWS = ['people', 'capital', 'technology', 'material', 'media', 'ideas'];
+export const FLOW_ZH: Record<string, string> = { people: '人', capital: '資本', technology: '技術', material: '物質', media: '影像與敘事', ideas: '觀念與規範' };
+export const MECHANISMS = ['diffusion', 'burden_shifting', 'imposition', 'template', 'translation', 'commodity_chain',
+  'boomerang', 'scale_up', 'colonial', 'geopolitical', 'litigation', 'memory'];
+export const MECH_ZH: Record<string, string> = {
+  diffusion: '傳播與學習', burden_shifting: '負擔轉嫁', imposition: '強加與條件', template: '模板採納', translation: '在地轉譯',
+  commodity_chain: '商品鏈與跨國企業', boomerang: '串連與迴力鏢', scale_up: '由地方到全球', colonial: '帝國與殖民的延續',
+  geopolitical: '地緣政治介入', litigation: '跨國司法', memory: '記憶的相互引用',
+};
 export const LEVEL_ZH: Record<string, string> = { intro: '入門', intermediate: '中階', advanced: '進階' };
 export const ACCESS_ZH: Record<string, string> = { open: '公開取得', library: '需圖書館', paywall: '付費' };

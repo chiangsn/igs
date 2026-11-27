@@ -1,6 +1,6 @@
 # 資料品質報告
 
-> 由 `site/scripts/build-data.mjs` 於 build 時自動產生（2026-11-26 14:49 UTC）。請勿手動編輯；資料問題請轉告對應的主題 session 修正 `topics/` 下的檔案。
+> 由 `site/scripts/build-data.mjs` 於 build 時自動產生（2026-11-27 03:58 UTC）。請勿手動編輯；資料問題請轉告對應的主題 session 修正 `topics/` 下的檔案。
 
 ## 總覽
 
@@ -23,6 +23,11 @@
 - concepts.csv 有 9 筆 `origin_region` 不是單一固定分類（含多區域或括號補充），網站以字串中出現的固定分類歸類。CLAUDE.md 未規範此欄，僅供參考。
 - 歷史分期：名稱取自 `overview.md` 的「第 N 期」標題，年份邊界取自 `data/README.md` 的分期分布（6 期）。
 - linked_ids 有 228 條只單向記錄；網絡圖一律合併為無向邊。
+- 文件引用了還沒放上網站的主題的 id（不檢查、不連結）：S3-T009、S3-T052、S3-T102、S3-T231。
+- links.csv 有 4 條連到還沒放上網站的主題，暫不顯示：S1-L018（S3-T009）、S1-L020（S3-T102）、S1-L024（S3-T231）、S1-L028（S3-T052）。該主題上網站後會自動出現。
+- 南北分類（G77 成員）無法判斷的國家或地區：French Polynesia、Taiwan、Hong Kong；含這些國家的事件歸「無法判斷」。
+- 南北分類：連結兩端涉及 48 個國家或地區，其中 7 個在不同分類下歸屬不同；兩種分類對連結的判斷有 9 條不一致。
+- links.csv：50 列，網站使用 46 條。主要 flow：ideas 20、material 14、capital 4、people 4、technology 2、media 2。mechanism：scale_up 10、commodity_chain 5、boomerang 5、colonial 4、litigation 4、memory 4、burden_shifting 3、geopolitical 3、diffusion 3、translation 2、template 2、imposition 1。跨主題 3 條。
 
 ### 待查證項目
 
@@ -65,6 +70,10 @@
 - 概念 回饋金（compensation-for-siting）
 - 概念 Nuclear colonialism（核殖民主義）
 - 概念 Green colonialism / green extractivism（綠色殖民主義／綠色採掘主義）
+- 跨國連結 `S1-L011`（S1-T096 → S1-T118）
+- 跨國連結 `S1-L019`（S1-T056 → S1-T087）
+- 跨國連結 `S1-L045`（S1-T158 → S1-T133）
+- 跨國連結 `S1-L047`（S1-T252 → S1-T021）
 
 ## S2：戰爭與其延伸影響
 

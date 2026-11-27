@@ -29,6 +29,8 @@
 - 工作回報：每個 session 在自己的工作資料夾維護 `STATUS.md`，**等同 meta 標準的 `REPORT.md`**，每段工作結束時更新。內容要有：做了什麼、怎麼確認是對的（可以重做的檢查）、結論、未解問題、要交給誰或需要使用者決定的事
 - meta 交接：根目錄的 `meta-S0_handoff.md`（meta 只新增列，S0 只填「處理狀態」；目前尚未建立）
 - RA 準則：根目錄的 `instruction.md`（有 RA 時；目前沒有）
+- 檢查等級：視覺化網站第 3 級；主題資料（S1–S4，含 S2 的統計摘要腳本）第 3 級，內容查證照「主題 session 工作守則」；目前沒有第 1、2 級的部分（依 meta 標準第 8 節）。網站若加入登入或學生資料，改為第 1 級；`links.csv` 等編碼結果若要寫進論文，該分析改為第 2 級
+- 收工：使用者說「收工」時，照 meta 標準第 9 節更新狀態摘要、decisions（本專案為 `REGISTRY.md` 的決策紀錄）、待辦，三行回報
 
 ## 主題資料夾的標準輸出（`topics/<編號-slug>/`）
 
@@ -64,6 +66,14 @@ id,title,authors,year,type,language,level,source,url,access,summary,tags
 - 可在 `linked_ids` 引用其他主題的 id，避免重複蒐集
 - `type` 只能用：movement / disaster / lawsuit / policy / treaty / conference / publication / war / institution / program / technology / other（後五項為 2026-11-26 新增，SZ 的驗證清單需同步）
 - `id` 一旦發出就不重新編號，新增的一律接在檔尾
+
+### 跨國連結（`data/links.csv`）
+
+欄位：`id,from_id,to_id,flow,mechanism,direction,note_zh,sources`
+- 只收跨國的連結：兩個事件在不同國家，或一端是 `Global` 事件。同一國家內的前後發展留在 `linked_ids`
+- `flow`（可以填多個，以 `;` 分隔）：people / capital / technology / material / media / ideas
+- `mechanism`（只能填一個）：diffusion / burden_shifting / imposition / template / translation / commodity_chain / boomerang / scale_up / colonial / geopolitical / litigation / memory
+- 定義、判斷原則與例子見根目錄的 `link-typology.md`，標記前必讀
 
 ### 歷史分期的寫法（網站會自動解析，格式要一字不差）
 

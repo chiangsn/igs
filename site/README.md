@@ -21,7 +21,7 @@ site/
    ├─ charts.ts             統計趨勢圖（折線＋範圍色帶、堆疊面積、橫條、直條）
    └─ pages/                home、topic（分頁框架＋總覽＋文件）、explore（地圖＋時間軸）、
                             network、regions、issues（關鍵字論點視圖）、stats、concepts、readings、
-                            documents、links（跨主題連結）、quality
+                            documents、links（跨主題連結）、flows（跨國連結三種視圖）、quality
 ```
 
 ### 技術選擇與理由
@@ -169,6 +169,62 @@ Markdown、事件 `outcome`、概念定義中的 id 會自動變成連結：`S4-
 - 統計資料照 S2 的做法：小型摘要 CSV ＋ `data/sources-stats.md`（來源、版本、授權、引用格式）。
 - 子資料夾不需設定就會出現在「文件」；要獨立分頁時告訴 SZ。
 - 讀物若有自己的分類標籤，用固定前綴（例如 S4 的 `hist:`）或固定格式（`M01`），網站就能做成篩選。
+
+## 跨國連結（`data/links.csv`）
+
+規格見 `CLAUDE.md`「跨國連結」與根目錄的 `link-typology.md`。任何主題有了 `data/links.csv`，網站就會自動：
+
+- 在主題頁加上「跨國連結」分頁，放在原本網絡圖的位置；網絡圖改名為「相關事件網絡」、移到「文件」前面，頁首註明它根據的是沒有類型的 `linked_ids`。
+- 在事件詳情加一節「跨國連結」，點擊可看連結詳情；首頁的主題卡顯示連結數。
+
+沒有 `links.csv` 的主題，頁面和以前一樣。
+
+### 讀取與驗證（寫進 `data-report.md`）
+
+| 檢查 | 結果 |
+|---|---|
+| 欄位：`id,from_id,to_id,flow,mechanism,direction,note_zh,sources` | 缺必要欄位 → build 失敗；其他 → 警告 |
+| `id` 格式 `<主題>-L###`、重複 | 警告 |
+| `flow` 每個值都要在 6 類中（可多個，第一個為主要） | 警告；不合法的值略過，沒有合法值的連結不顯示 |
+| `mechanism` 只能一個、要在 12 類中；`direction` 為 `forward` 或 `mutual` | 警告，該連結不顯示 |
+| `from_id`、`to_id` 要存在（在任何主題的 timeline） | 警告，該連結不顯示 |
+| 跨國：一端是 `Global` 就算；否則兩端 `country` 集合不能完全相同（部分重疊視為跨國，例如 Nigeria → Nigeria;Netherlands）；有一端 `country` 空白時無法判斷 | 警告（連結照常顯示） |
+| `sources`、`note_zh` 空白 | 警告；含「待查證」的連結列在報告的待查證項目 |
+
+報告的「說明」另列各主題的 flow 與 mechanism 分布、跨主題連結數。連結的**年份**取兩端事件 `year_start` 較晚者，視為連結成立的時間。
+
+### 三種視圖（共用篩選：flow、mechanism、年份滑桿與播放；南北分類設定後才出現）
+
+- **跨國流向地圖**：弧線連接兩端事件的座標，顏色＝主要 flow，`forward` 畫箭頭。全球層級的事件畫在會議或公約通過地，以方框標示、弧線用虛線；其他主題的事件用虛線圓圈。點弧線開連結詳情（說明、來源、兩端事件）。
+- **區域泳道弧線圖**：每個區域一條泳道（Global 在最上方），橫軸為年代。泳道底部淺色長條是該區域全部事件的十年分布，弧線為連結（同區域的跨國連結畫在泳道上方）。
+- **斷裂圖**：區域 × 分期，每格六根柱子代表六種 flow，可切換連結數／比重。一條連結算進兩端事件的區域（同區域算一次）與連結年份所在的分期；多個 flow 都算。主題沒有分期時改用年代。
+
+### 南北分類（`site/north-south.json`）：當成一個議題
+
+使用者決定（2026-11-27）把南北分類當成議題：不選定單一分類，而是並列兩種，讓頁面呈現分類本身造成的差異。
+
+- **G77 成員**（`rule: members-south`）：成員歸南方，不是成員的聯合國會員國歸北方。名單照 g77.org 的 Member States 頁面抄錄（134 個）。
+- **世界銀行所得分組**（`rule: list-north`）：FY2027 高所得經濟體歸北方，其餘歸南方。名單照 World Bank Country and Lending Groups 頁面抄錄（87 個）。
+
+`north-south.json` 的格式：
+
+```json
+{ "schemes": [
+  { "key": "g77", "label": "G77 成員", "short": "G77", "source": "…", "url": "…", "rule": "members-south",
+    "basis": "一句話說明分類依據", "caveat": "一句話說明這種分類的爭議",
+    "official": ["…照來源原文抄錄的名單…"],
+    "aliases": { "Vietnam": "Viet Nam" },
+    "unclassified": ["Taiwan", "Soviet Union", "…"] }
+] }
+```
+
+- `official` 照來源原文，不改寫；timeline 的國名寫法不同時，用 `aliases` 對應（例如 `South Korea` → `Korea, Rep.`）。
+- `unclassified`：該分類無法判斷的國家或地區，例如歷史政體（Soviet Union、Ottoman Empire）、不在名單上的屬地、不是聯合國會員的台灣（G77 分類）。
+- 名單以外、也不在 `unclassified` 的國家依 `rule` 歸到另一邊，所以**新主題出現新國名時要檢查**：`data-report.md` 會列出各分類「無法判斷」的國家，以及兩種分類歸屬不同的國家數。
+- 事件的歸屬：`region` 為 `Global` → 全球；`country` 全部屬北方 → 北；全部屬南方 → 南；**南北混合、或有國家無法判斷 → 無法判斷**（不用多數決，避免把跨國事件硬歸一邊）。
+- 連結的分類依兩端組合：南南、南北、北北、南—全球、北—全球、全球—全球、無法判斷。
+- 頁面：篩選列可切換分類（G77／世銀）並篩選類別；頁尾「南北分類：一個議題」列出兩種分類的依據、爭議與來源，一張兩種分類的交叉表（對角線外＝分類造成的差異），以及兩種分類歸屬不同的國家。連結詳情同時顯示兩種分類的結果。
+- 更新名單：世界銀行每年 7 月 1 日更新分組；G77 成員資格偶有變動。更新時改 `official`、`source` 的讀取日期即可。
 
 ## 新增主題
 

@@ -43,6 +43,12 @@ const SCHEMAS = {
     optional: ['module', 'timeline_ids'],
   },
   // 一手文件（S4 交接檔規定的欄位；其他主題若有同名檔也適用）
+  // 跨國連結（CLAUDE.md「跨國連結」、link-typology.md）
+  links: {
+    file: 'data/links.csv',
+    columns: ['id', 'from_id', 'to_id', 'flow', 'mechanism', 'direction', 'note_zh', 'sources'],
+    required: ['id', 'from_id', 'to_id', 'flow', 'mechanism', 'direction'],
+  },
   documents: {
     file: 'data/documents.csv',
     columns: ['id', 'year', 'title', 'issuing_body', 'doc_type', 'module', 'significance_zh', 'url', 'access', 'sources'],
@@ -64,7 +70,14 @@ const ENUMS = {
   documents: {
     access: ['open', 'library', 'paywall'],
   },
+  links: {
+    mechanism: ['diffusion', 'burden_shifting', 'imposition', 'template', 'translation', 'commodity_chain',
+      'boomerang', 'scale_up', 'colonial', 'geopolitical', 'litigation', 'memory'],
+    direction: ['forward', 'mutual'],
+  },
 };
+// flow 可填多個（第一個為主要），逐一檢查
+export const FLOWS = ['people', 'capital', 'technology', 'material', 'media', 'ideas'];
 
 const PENDING = '待查證';
 const structural = []; // 會讓 build 失敗
@@ -391,6 +404,26 @@ function buildTopic(folder, registry, config) {
   const nonStd = concepts.filter((c) => c.origin_raw && !REGIONS.includes(c.origin_raw)).length;
   if (nonStd) note(code, `concepts.csv 有 ${nonStd} 筆 \`origin_region\` 不是單一固定分類（含多區域或括號補充），網站以字串中出現的固定分類歸類。CLAUDE.md 未規範此欄，僅供參考。`);
 
+  // links（選用檔）：這裡只做單列檢查；事件 id 與跨國規則要等所有主題讀完，在 resolveLinks 檢查
+  const lk = fs.existsSync(path.join(dir, SCHEMAS.links.file)) ? readCsv(code, dir, 'links') : null;
+  const linksRaw = (lk ?? []).map((r) => {
+    const label = `links.csv 第 ${r.__line} 列（${r.id || '無 id'}）`;
+    if (r.id && !new RegExp(`^${code}-L\\d+$`).test(r.id)) warn(code, label, `id 格式應為 \`${code}-L###\``);
+    checkEnums(code, 'links', r, label);
+    if (r.mechanism.includes(';')) warn(code, label, '`mechanism` 只能填一個');
+    const flows = splitList(r.flow);
+    const bad = flows.filter((f) => !FLOWS.includes(f));
+    if (bad.length) warn(code, label, `\`flow\` 值「${bad.join('、')}」不在規定選項（${FLOWS.join(' / ')}）`);
+    if (!r.sources) warn(code, label, '沒有來源（sources）');
+    if (!r.note_zh) warn(code, label, '沒有說明（note_zh）');
+    if (r.from_id && r.from_id === r.to_id) warn(code, label, 'from_id 與 to_id 相同');
+    return {
+      id: r.id, from_id: r.from_id, to_id: r.to_id, flows: flows.filter((f) => FLOWS.includes(f)), mechanism: r.mechanism,
+      direction: r.direction, note: r.note_zh, sources: splitSources(r.sources), pending: hasPending(r), label,
+    };
+  });
+  for (const d of new Set(dup(linksRaw.map((e) => e.id)))) warn(code, 'links.csv', `id 重複：${d}`);
+
   // documents（選用檔，沒有就不顯示「一手文件」分頁）
   const dc = fs.existsSync(path.join(dir, SCHEMAS.documents.file)) ? readCsv(code, dir, 'documents') : null;
   const documents = (dc ?? []).map((r) => {
@@ -436,34 +469,42 @@ function buildTopic(folder, registry, config) {
   }
 
   return { code, folder, name, status: reg?.status ?? '', periods, events, readings, concepts, documents, docs, config: cfg, charts: stats,
-    has: { timeline: !!tl, readings: !!rd, concepts: !!cc, documents: !!dc } };
+    linksRaw, has: { timeline: !!tl, readings: !!rd, concepts: !!cc, documents: !!dc, links: !!lk } };
 }
 
 // ---------- 跨主題檢查 ----------
 function crossChecks(topics) {
+  const codes = new Set(topics.map((t) => t.code));
   const eventIds = new Set(topics.flatMap((t) => t.events.map((e) => e.id)));
   const readingIds = new Set(topics.flatMap((t) => t.readings.map((r) => r.id)));
   const documentIds = new Set(topics.flatMap((t) => t.documents.map((d) => d.id)));
   for (const t of topics) {
     let asym = 0;
+    const offLinked = new Set();
     const byId = new Map(t.events.map((e) => [e.id, e]));
     for (const e of t.events) {
       for (const l of e.linked_ids) {
-        if (!eventIds.has(l)) warn(t.code, `timeline.csv（${e.id}）`, `linked_ids 指向不存在的 id：${l}`);
+        if (!codes.has(l.split('-')[0])) offLinked.add(l);
+        else if (!eventIds.has(l)) warn(t.code, `timeline.csv（${e.id}）`, `linked_ids 指向不存在的 id：${l}`);
         else if (l === e.id) warn(t.code, `timeline.csv（${e.id}）`, 'linked_ids 指向自己');
         else if (byId.has(l) && !byId.get(l).linked_ids.includes(e.id)) asym++;
       }
     }
     if (asym) note(t.code, `linked_ids 有 ${asym} 條只單向記錄；網絡圖一律合併為無向邊。`);
+    if (offLinked.size) note(t.code, `linked_ids 引用了還沒放上網站的主題的 id（不檢查）：${[...offLinked].sort().join('、')}。`);
     // 文件中的 T### / S1-T### / S1-### / S4-D### 引用
     const missing = new Map();
+    const offsite = new Set();
     for (const d of t.docs) {
       for (const h of scanIds(d.md, t.code)) {
         const known = h.kind === 'event' ? eventIds : h.kind === 'reading' ? readingIds : documentIds;
-        if (!known.has(h.id)) missing.set(`${d.file}: ${h.id}`, true);
+        // 引用的是還沒放上網站的主題（例如 S3）：不算錯誤，只在說明中列出
+        if (!codes.has(h.code)) offsite.add(h.id);
+        else if (!known.has(h.id)) missing.set(`${d.file}: ${h.id}`, true);
       }
     }
     for (const k of missing.keys()) warn(t.code, k.split(':')[0], `文件引用了不存在的 id：${k.split(': ')[1]}`);
+    if (offsite.size) note(t.code, `文件引用了還沒放上網站的主題的 id（不檢查、不連結）：${[...offsite].sort().join('、')}。`);
     for (const c of t.concepts) {
       for (const s of c.sources) {
         const m = s.match(/^(S\d+-\d{3,})\b/);
@@ -493,6 +534,111 @@ function scanIds(text, code) {
   return hits;
 }
 
+// ---------- 跨國連結（links.csv）：事件 id 與跨國規則 ----------
+// 跨國的判斷：一端是 Global 就算；否則兩端的 country 集合不能完全相同（部分重疊視為跨國，例如
+// Nigeria → Nigeria;Netherlands）。country 空白又不是 Global 時無法判斷，列警告。
+// 南北分類（site/north-south.json）：當成一個議題，可並列多種分類（目前 G77 成員、世界銀行所得分組）。
+// 每種分類先把 country 經 aliases 對應到來源名稱，再依 rule 判斷：
+//   members-south：在 official 名單 → 南；不在 → 北
+//   list-north：在 official 名單 → 北；不在 → 南
+// unclassified 中的國家或地區一律「無法判斷」。
+// 事件的歸屬：region 為 Global → global；country 全部屬北方 → north；全部屬南方 → south；
+// 南北混合或有國家無法判斷 → unknown（不用多數決）。連結的分類依兩端組合，見 nsOfLink。
+function loadNorthSouth() {
+  const text = read(path.join(SITE, 'north-south.json'));
+  if (text === null) return [];
+  let j;
+  try { j = JSON.parse(text); } catch (e) { structural.push(`site/north-south.json 無法解析（${e.message}）`); return []; }
+  return (j.schemes ?? []).map((sc) => {
+    const official = new Set(sc.official ?? []);
+    for (const [from, to] of Object.entries(sc.aliases ?? {})) {
+      if (!official.has(to) && sc.rule !== 'list-north') console.log(`north-south.json（${sc.key}）：別名「${from}」對應的「${to}」不在 official 名單中`);
+    }
+    const unclassified = new Set(sc.unclassified ?? []);
+    const side = (c) => {
+      if (unclassified.has(c)) return 'unknown';
+      const inList = official.has(sc.aliases?.[c] ?? c);
+      if (sc.rule === 'members-south') return inList ? 'south' : 'north';
+      return inList ? 'north' : 'south';
+    };
+    return { ...sc, side };
+  });
+}
+function nsOfEvent(e, sc) {
+  if (e.region === 'Global') return 'global';
+  if (!e.countries.length) return 'unknown';
+  const sides = e.countries.map(sc.side);
+  if (sides.every((x) => x === 'north')) return 'north';
+  if (sides.every((x) => x === 'south')) return 'south';
+  return 'unknown';
+}
+function nsOfLink(a, b) {
+  const k = [a, b].sort().join('-');
+  return {
+    'south-south': '南南', 'north-south': '南北', 'north-north': '北北',
+    'global-south': '南—全球', 'global-north': '北—全球', 'global-global': '全球—全球',
+  }[k] ?? '無法判斷';
+}
+
+function resolveLinks(topics) {
+  const ns = loadNorthSouth();
+  const all = new Map();
+  for (const t of topics) for (const e of t.events) all.set(e.id, e);
+  for (const t of topics) {
+    const out = [];
+    const offsiteLinks = [];
+    for (const l of t.linksRaw) {
+      const a = all.get(l.from_id); const b = all.get(l.to_id);
+      const off = [l.from_id, l.to_id].filter((id) => !topics.some((x) => id.startsWith(x.code + '-')));
+      if (off.length) {
+        offsiteLinks.push(`${l.id}（${off.join('、')}）`);
+        continue;
+      }
+      if (!a || !b) {
+        warn(t.code, l.label, `${!a ? `from_id「${l.from_id}」` : ''}${!a && !b ? '、' : ''}${!b ? `to_id「${l.to_id}」` : ''}不存在（各主題 timeline 都找不到），網站略過這條連結`);
+        continue;
+      }
+      if (a.region !== 'Global' && b.region !== 'Global') {
+        if (!a.countries.length || !b.countries.length) warn(t.code, l.label, '有一端的 country 空白，無法判斷是否跨國');
+        else {
+          const sa = [...a.countries].sort().join(';'); const sb = [...b.countries].sort().join(';');
+          if (sa === sb) warn(t.code, l.label, `兩端都在 ${a.countries.join('、')}，不是跨國連結（同一國家內的發展留在 linked_ids）`);
+        }
+      }
+      if (!l.flows.length) { warn(t.code, l.label, '沒有有效的 flow，網站略過這條連結'); continue; }
+      if (!ENUMS.links.mechanism.includes(l.mechanism) || !ENUMS.links.direction.includes(l.direction)) {
+        warn(t.code, l.label, 'mechanism 或 direction 不是規定的值，網站略過這條連結'); continue;
+      }
+      const { label: _l, ...rest } = l;
+      out.push({ ...rest, year: Math.max(a.year_start ?? -Infinity, b.year_start ?? -Infinity),
+        ...(ns.length ? { ns: Object.fromEntries(ns.map((sc) => [sc.key, nsOfLink(nsOfEvent(a, sc), nsOfEvent(b, sc))])) } : {}) });
+    }
+    t.links = out;
+    if (offsiteLinks.length) note(t.code, `links.csv 有 ${offsiteLinks.length} 條連到還沒放上網站的主題，暫不顯示：${offsiteLinks.join('、')}。該主題上網站後會自動出現。`);
+    t.northSouth = null;
+    if (ns.length && out.length) {
+      // 連結兩端涉及的國家，各分類的歸屬（頁面上的「兩種分類的差異」表）
+      const countries = new Set();
+      for (const l of out) for (const id of [l.from_id, l.to_id]) { const e = all.get(id); if (e.region !== 'Global') for (const c of e.countries) countries.add(c); }
+      t.northSouth = {
+        schemes: ns.map(({ key, label, short, source, url, basis, caveat }) => ({ key, label, short, source, url, basis, caveat })),
+        countries: [...countries].sort().map((c) => ({ country: c, ...Object.fromEntries(ns.map((sc) => [sc.key, sc.side(c)])) })),
+      };
+      for (const sc of ns) {
+        const unk = [...countries].filter((c) => sc.side(c) === 'unknown');
+        if (unk.length) note(t.code, `南北分類（${sc.label}）無法判斷的國家或地區：${unk.join('、')}；含這些國家的事件歸「無法判斷」。`);
+      }
+      const diff = t.northSouth.countries.filter((r) => new Set(ns.map((sc) => r[sc.key])).size > 1);
+      note(t.code, `南北分類：連結兩端涉及 ${countries.size} 個國家或地區，其中 ${diff.length} 個在不同分類下歸屬不同；兩種分類對連結的判斷有 ${out.filter((l) => new Set(Object.values(l.ns)).size > 1).length} 條不一致。`);
+    }
+    if (t.linksRaw.length) {
+      const tally = (vals) => [...vals.reduce((m, v) => m.set(v, (m.get(v) ?? 0) + 1), new Map())].sort((x, y) => y[1] - x[1]).map(([k, n]) => `${k} ${n}`).join('、');
+      note(t.code, `links.csv：${t.linksRaw.length} 列，網站使用 ${out.length} 條。主要 flow：${tally(out.map((l) => l.flows[0]))}。mechanism：${tally(out.map((l) => l.mechanism))}。跨主題 ${out.filter((l) => [l.from_id, l.to_id].some((id) => !id.startsWith(t.code + '-'))).length} 條。`);
+    }
+    delete t.linksRaw;
+  }
+}
+
 // ---------- 跨主題連結 ----------
 // 每個事件加上 backlinks（其他主題中連到它的事件）；每個主題附上 external（用到的其他主題事件摘要），
 // 讓網絡圖與事件詳情不必載入其他主題的整份 JSON 也能顯示與跳轉。
@@ -513,11 +659,14 @@ function crossTopicLinks(topics) {
   }
   const brief = (id) => {
     const { t, e } = all.get(id);
-    return { id, topic: t.code, name: e.name, year_start: e.year_start, year_end: e.year_end, region: e.region, type: e.type };
+    return { id, topic: t.code, name: e.name, year_start: e.year_start, year_end: e.year_end, region: e.region, type: e.type,
+      countries: e.countries, lat: e.lat, lon: e.lon };
   };
   for (const t of topics) {
     const ids = new Set();
     for (const e of t.events) for (const l of [...e.linked_ids, ...e.backlinks]) if (all.has(l) && all.get(l).t !== t) ids.add(l);
+    // links.csv 兩端若有其他主題的事件，也放進 external
+    for (const l of t.linksRaw) for (const id of [l.from_id, l.to_id]) if (all.has(id) && all.get(id).t !== t) ids.add(id);
     t.external = Object.fromEntries([...ids].sort().map((id) => [id, brief(id)]));
   }
   // 頁面用：兩端的摘要
@@ -531,6 +680,7 @@ function stats(t) {
   return {
     events: t.events.length, readings: t.readings.length, concepts: t.concepts.length, docs: t.docs.length,
     documents: t.documents.length, regionCounts,
+    links: (t.links ?? []).length,
     subdirTabs: t.config.subdirs.filter((d) => d.tab).map((d) => ({ dir: d.dir, label: d.label, n: t.docs.filter((x) => x.group === d.dir).length })),
     pending: {
       events: t.events.filter((e) => e.pending).length,
@@ -571,6 +721,7 @@ function renderReport(topics, generatedAt) {
       ...t.readings.filter((x) => x.pending).map((x) => `- 讀物 \`${x.id}\` ${x.title}`),
       ...t.concepts.filter((x) => x.pending).map((x) => `- 概念 ${x.concept}`),
       ...t.documents.filter((x) => x.pending).map((x) => `- 一手文件 \`${x.id}\` ${x.title}`),
+      ...(t.links ?? []).filter((x) => x.pending).map((x) => `- 跨國連結 \`${x.id}\`（${x.from_id} → ${x.to_id}）`),
     ];
     L.push(...(pend.length ? pend : ['- （無）']), '');
   }
@@ -592,6 +743,9 @@ function main() {
   const topics = folders.map((f) => buildTopic(f, registry, config));
   crossChecks(topics);
   const crossLinks = crossTopicLinks(topics);
+  resolveLinks(topics);
+  // 網站上有哪些主題（前端只連結這些主題的 id）
+  for (const t of topics) t.siteTopics = topics.map((x) => x.code);
   for (const t of topics) t.stats = stats(t);
 
   const generatedAt = new Date().toISOString().replace('T', ' ').slice(0, 16) + ' UTC';

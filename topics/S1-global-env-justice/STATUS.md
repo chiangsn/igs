@@ -190,3 +190,91 @@
 ### 驗證
 - 新增 30 筆的 Wikipedia 網址全數存在；其他 75 個網址中 2 個 404 已移除，其餘可連線或屬網站擋自動連線、逾時。
 - 新增事件中 4 筆有細節待查證，列在 `verification-todo.md` 第 G 節；timeline 待查證總數 18 → 22 筆。
+
+---
+
+# 第四輪：補查證與跨國連結（依 `prompts/S1-verification-and-links.md`，2026-11-27 起）
+
+> 節次名稱依 S0 任務檔。上方「第二輪」至「第五輪」是本 session 在首次交付後的內部查證輪次，與本節是不同的編號系統。
+
+## 回報一：試標 50 條跨國連結（B.1）
+
+### 做了什麼
+1. 用 `data/scripts/candidates.py` 從 timeline 的 `linked_ids` 取出候選：去重後共 475 對連結，其中 178 對同國（不收），297 對跨國或一端為 Global。
+2. 逐對判斷是否有**實質關聯**，挑出 50 條，盡量涵蓋 12 種機制與 6 種流動，另外引用 S2、S3、S4 的事件 7 條（S2-T058、S2-T204、S3-T009、S3-T052、S3-T102、S3-T231、S4-T099）。
+3. **每條都先搜尋「兩事件之間的關聯」的來源再寫入**，而不是只引用兩個事件各自的來源。搜尋後放棄的候選：Tambogrande → Esquel（找不到「受啟發」的來源，只有時間與形式上的平行）、Love Canal → Khian Sea（找不到「美國管制推高處理成本」的直接來源）、宇井純 → Bukit Merah（找不到日本運動者直接介入的來源）、Texaco ↔ Oilwatch（兩端國家欄位都是 Ecuador，依規則不收）。
+4. 寫入 `data/links.csv`，並在 `data/README.md` 加上欄位說明與分布表。
+
+### 怎麼確認是對的（可重做）
+- `data/scripts/validate_links.py`（執行：`python data/scripts/validate_links.py`）：所有 id 都存在於 S1–S4 的 timeline；`flow`、`mechanism`、`direction` 都在詞彙表內；沒有同國連結（兩端 `country` 集合相同且都不是 Global 者視為同國）；沒有重複連結；每條都有 `note_zh` 與來源。結果：50 條，0 個錯誤。
+- 來源：50 條原本引用 85 個網址，全部以 HTTP 請求檢查：1 個回傳 404（Norton Rose Fulbright 的 Vedanta 案評析）已移除，該連結仍有 BHRRC 來源；3 個逾時（巴基斯坦外交部、CMAJ、envjustice.org），都在搜尋結果中出現，保留；其餘可連線或屬網站擋自動連線（403）。沒有任何一條只靠 Wikipedia。
+- 4 條的關聯本身仍標「待查證」：S1-L011（日本公害輸出與 Bukit Merah）、S1-L019（Vedanta 的 Niyamgiri 端來源）、S1-L045（RCA 與三星：只確認韓國研討會引用 RCA 案）、S1-L047（Tiquipaya 協定是否直接提及「生態債」）。
+
+### 各機制、各流動的數量
+
+| 機制 | 條數 | | 流動（可多值） | 條數 | 為主要流動 |
+|---|---|---|---|---|---|
+| scale_up 由地方到全球 | 10 | | ideas | 32 | 20 |
+| commodity_chain 商品鏈與跨國企業 | 7 | | material | 21 | 16 |
+| boomerang 串連與迴力鏢 | 5 | | capital | 10 | 4 |
+| colonial 帝國與殖民的延續 | 5 | | people | 9 | 4 |
+| geopolitical 地緣政治介入 | 4 | | technology | 5 | 4 |
+| litigation 跨國司法 | 4 | | media | 4 | 2 |
+| memory 記憶的相互引用 | 4 | | | | |
+| diffusion 傳播與學習 | 3 | | | | |
+| burden_shifting 負擔轉嫁 | 3 | | | | |
+| translation 在地轉譯 | 2 | | | | |
+| template 模板採納 | 2 | | | | |
+| imposition 強加與條件 | 1 | | | | |
+
+方向：forward 37 條、mutual 13 條。flow × mechanism 的交叉表見 `data/README.md`。
+
+### 難以判斷的案例
+
+| 連結 | 在哪兩個機制之間猶豫 | 為什麼 | 最後的決定 |
+|---|---|---|---|
+| S1-L007 美國 EJ 原則 → 峇里氣候正義原則 | scale_up / diffusion | 峇里原則自述以 EJ 原則為藍本（像 diffusion），但承接的是國際聯盟發布的全球性原則 | scale_up：去處是國際規範文本 |
+| S1-L006 水俣病 → 水俣公約 | scale_up / memory | 公約以地名命名、意在紀念，患者團體卻批評命名掩蓋未解的問題 | scale_up：拿掉水俣病，汞公約仍可能存在，但這條連結的核心是在地災難推動國際公約；memory 寫在備註 |
+| S1-L017 Arlit ↔ Mounana | commodity_chain / colonial | 同一家法國企業（Areva），但兩地都是前法國殖民地 | commodity_chain：兩事件之所以相連，是同一家企業 |
+| S1-L023 Banaba ↔ 諾魯 | colonial / commodity_chain | 同一個英國磷酸鹽委員會，同時也是殖民體制 | colonial：委員會本身是殖民機構 |
+| S1-L029 橙劑 → 美國《橙劑法》 | geopolitical / burden_shifting | 美國補償本國退伍軍人、越南受害者求償被駁回，是風險承擔的不對稱 | geopolitical：沒有越戰就沒有這條連結；不對稱寫在備註 |
+| S1-L013 Probo Koala ↔ 巴塞爾公約 | burden_shifting / litigation | 歐洲廢棄物轉往象牙海岸是負擔轉嫁，後續又有荷蘭法院定罪 | burden_shifting；litigation 寫在備註 |
+| S1-L041 台塑：越南 ↔ 路易斯安那 | boomerang / commodity_chain | 同一家企業，但這兩端之間實際發生的是社群互相聲援 | boomerang：連結的內容是跨國聲援 |
+| S1-L036 Narmada → Arun III | boomerang / scale_up | Inspection Panel 是 Narmada 推動出來的（scale_up），尼泊爾團體再用它繞過本國政府（boomerang） | boomerang：兩事件之間是後者使用前者留下的機制 |
+| S1-L042 水俣 → Grassy Narrows | memory / diffusion | 移動的是醫師（people）和水俣病的診斷框架 | memory：用一地的受害框架來理解另一地 |
+| S1-L045 RCA → 三星 | memory / diffusion | 韓國以 RCA 案為前例理解三星白血病，也可能有運動經驗交流 | memory；diffusion 待查證後再決定 |
+| S1-L048 Aarhus → Escazú | template / diffusion | 指南定義 template 為「全球模式」，但 Aarhus 是另一個區域條約；兩者又都實施里約第 10 原則這個全球模式 | template：Escazú 的結構幾乎照 Aarhus |
+| S1-L047 巴黎協定 → 台灣《氣候變遷因應法》 | template / translation | 台灣不是締約方，卻把 2050 淨零寫進法律以「與國際接軌」，又自行加入公正轉型與原住民族諮商 | template：修法說明的重點是接軌 |
+
+### 分類本身的問題（給使用者與 S0）
+
+1. **很多 `linked_ids` 是「比較案例」，不是連結。**我當初建 timeline 時，有不少 `linked_ids` 是「同類型、可以拿來比較」的案例，例如茅茅起義 ↔ 霧社事件、Chico Mendes ↔ Berta Cáceres、Mariana ↔ Derna 潰壩、Marikana ↔ Soma 礦災。它們之間沒有人、物、錢、觀念的流動，放不進 12 種機制裡的任何一種。初步瀏覽 297 對候選，估計約一半屬於這類。這些我沒有收進 `links.csv`。**建議 S0**：在 `link-typology.md` 明文規定「比較案例不收」，比較關係留在 `linked_ids`；不建議新增「比較」機制，否則會稀釋跨國連結的意義。
+2. **負擔轉嫁常常發生在「同一個事件裡」。**Koko（義大利 → 奈及利亞）、Khian Sea（美國 → 海地）、RCA（美國 → 台灣）、台塑汞污泥（台灣 → 柬埔寨）在 timeline 都是一筆多國事件，沒有「另一端事件」可以連。結果 `burden_shifting` 只有 3 條，而且都是「事件 ↔ 巴塞爾公約」，嚴重低估了 S1 最核心的機制。**建議 S0** 從下列做法擇一：(a) 允許事件內的跨國轉嫁由網站依多國 `country` 欄位推導；(b) 在 `links.csv` 允許「起點國家」欄位；(c) 請主題 session 為起點補建事件，例如「義大利廢棄物出口商」。我傾向 (a)，不用新增事件。
+3. **「事件 ↔ 全球規範」不一定是 scale_up。**像 Agbogbloshie、Probo Koala 與巴塞爾公約的關係，是事件鑽了公約的漏洞或違反公約，方向和 scale_up 相反，但也不是 template、imposition 或 translation。目前勉強標為 burden_shifting。**建議 S0** 在指南中說明這類「規避或違反全球規範」的連結該如何標。
+4. **同國判斷只看 `country` 欄位，會漏掉外部行動者。**蘇聯援建亞斯文高壩（S3-T052 → S1-T060）的兩端欄位都沒有蘇聯；RCA 技術移轉與 RCA 污染（S3-T102 ↔ S1-T158）實質上都在台灣，只是一端多列了美國。反過來，Oilwatch 由 15 國團體創立，國家欄位卻只填 Ecuador，因此和 Texaco 案的連結被判為同國。**建議 S0** 說明同國判斷是否以「行動者所屬國家」為準，或接受這類邊界案例由 session 在 `note_zh` 註明。
+5. **template 與 diffusion 在區域層級分不清。**指南把 template 定義為「全球模式」，但 Aarhus → Escazú 是區域條約之間的照抄。建議指南補一句：模仿對象若是制度文本（條約、法律），即使不是全球性的也算 template。
+6. **memory 與 diffusion 在「專家移動」時重疊。**原田正純到加拿大，同時帶去人（people）和水俣病的框架。我採用的判準是：移動的是某次災難的受害框架或法律前例 → memory；移動的是組織方式或抗爭策略 → diffusion。建議寫進指南。
+7. **imposition 在 S1 很少**（只有 S4 的結構調整 → Cochabamba 水戰爭一條）。這反映主題特性，不是分類問題：環境正義的跨國連結以負擔轉嫁、串連、由地方到全球為主。
+8. **12 種機制沒有放不進去的「實質連結」。**除了第 1 點的比較案例與第 3 點的規避規範，我試標的實質連結都能找到合適的機制，只是有上表的猶豫。
+
+### 對「跨國連結」理解的改變（給使用者）
+試標前，我以為 S1 的跨國性主要表現在「運動之間互相學習」。標記後發現，有來源支持的連結中，最多的是由地方到全球（scale_up）和商品鏈（commodity_chain），運動之間互相學習（diffusion）反而最難找到直接證據：多數「啟發」只是時間和形式上的平行。這支持 overview 的論點（各地運動平行發展、後來在全球層次匯流），但也提醒我，timeline 中原本寫的不少「連結」其實是我做的比較，不是史實上的關聯。
+
+### 停在這裡
+依任務檔，試標後先停下，等使用者確認分類可用，再進行 B.2 全面標記。我沒有修改 `link-typology.md`。
+
+## 使用者回覆試標（2026-11-27）
+- **照 S1 的建議進行**：比較案例不收進 `links.csv`；事件內的負擔轉嫁採做法 (a)，由網站依多國 `country` 欄位推導；規避或違反全球規範的連結暫標 `burden_shifting` 並在 `note_zh` 註明。接著進行 A1 與 B.2。
+- **使用者指示：網站要呈現這些可能的問題**，讓教學者知道跨國連結只是內部參考，不能當成教學資料。S1 已把所有限制寫成 `data/links-caveats.md`，含建議放在各連結視圖頂端的一句話說明。
+
+### 補充給 S0 的分類問題（試標回報未列的部分）
+1. **數量反映證據，不反映實際**：有文獻的關係（公約自述起源）容易收錄，運動之間的互相啟發難有書面證據。網站呈現分布時要說明。
+2. **Global 事件多會放大 scale_up**：S1 的 timeline 有 30 筆公約與會議。
+3. **只能標一個機制，資訊損失大**：建議考慮增加「次要機制」欄位（需改欄位規格，最好在 S2–S4 標記前定案）。
+4. **ideas 區辨力低**：50 條中 32 條含 ideas；建議只在觀念是主要流動時才標，或網站只依第一個 flow 上色。
+5. **colonial 與 geopolitical 在冷戰殖民地核試重疊**：需要一條判準。
+6. **mutual 意義不單一**：「互相影響」與「同時並存」都用 mutual，建議區分。
+
+### 要交給誰
+- **SZ**：依 `data/links-caveats.md` 在跨國連結頁面呈現使用限制。S1 不寫 `site/`，請使用者或 S0 轉交（例如寫進 SZ 的後續任務檔）。
+- **S0**：上列分類問題，以及試標回報中的第 2、3、4、5、6 點，供修訂 `link-typology.md` 時參考。
