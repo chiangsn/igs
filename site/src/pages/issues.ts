@@ -45,6 +45,13 @@ export function renderIssues(root: HTMLElement, t: Topic) {
       <p class="muted small">每一期開始的事件中，至少標了該群組一個關鍵字的比例（一筆事件可同時屬於多個群組，所以各線相加會超過 100%）。滑過看筆數。</p>
       <div class="legend">${groups.map((g, i) => `<span class="legend-item"><i style="background:${slotVar(i)}"></i>${esc(g.label)}</span>`).join('')}</div>
       <div id="trend" class="chart-svg"></div></div>` : ''}
+    ${t.config.thesis.groupRegion ? `<div class="card"><h3>各群組在各區域的比重</h3>
+      <p class="muted small">每個區域的事件中，至少標了該群組一個關鍵字的比例（格子內為筆數，顏色依比例）。一筆事件可同時屬於多個群組。</p>
+      <div id="groupRegion"></div></div>` : ''}
+    ${t.config.thesis.readingTagTrend ? `<div class="card"><h3>${esc(t.config.thesis.readingTagTrend.title)}</h3>
+      <p class="muted small">直接用主題 session 在讀物 <code>tags</code> 上標的標籤，不經過上面的 issue 分組。每十年一格，長條為該年代出版、帶有該標籤的讀物數；一筆讀物可帶多個標籤。讀物的出版年代反映的是學術討論何時出現，不是事件發生的時間。</p>
+      <div class="legend">${t.config.thesis.readingTagTrend.tags.map((x, i) => `<span class="legend-item"><i style="background:${slotVar(i)}"></i>${esc(t.config.thesis.readingTagTrend!.labels[x] ?? x)}</span>`).join('')}</div>
+      <div id="readTrend" class="chart-svg"></div></div>` : ''}
     <div class="card"><div class="card-head"><h3>關鍵字 × ${t.periods.some((p) => p.start !== null || p.end !== null) ? '歷史分期' : '年代'}</h3>
       <div class="seg" id="mode"><button class="on" data-v="n">件數</button><button data-v="pct">占該欄事件比例</button></div></div>
       <p class="muted small">格子＝該時期開始的事件中，標了這個關鍵字的筆數。各時期事件數不同，切換成「比例」可以比較各期的重心。</p><div id="heatP"></div></div>
@@ -128,10 +135,14 @@ export function renderIssues(root: HTMLElement, t: Topic) {
     const y = d3.scaleLinear().domain([0, 1]).range([H - M.b, M.t]);
     const svg = d3.select(trendHost).append('svg').attr('width', W).attr('height', H).attr('role', 'img').attr('aria-label', '各群組在各期的比重');
     svg.append('g').attr('class', 'axis grid').attr('transform', `translate(${M.l},0)`).call(d3.axisLeft(y).ticks(5).tickSize(-(W - M.l - M.r)).tickFormat(d3.format('.0%')));
+    // 刻度間距窄時只標期數（例如「1」），夠寬才加年份
+    const step = x.step();
     svg.append('g').attr('class', 'axis').attr('transform', `translate(0,${H - M.b})`)
-      .call(d3.axisBottom(x).tickFormat((j) => periodCols[+j].label));
-    svg.append('g').selectAll('text.sub').data(periodCols).join('text').attr('class', 'axis-note').attr('text-anchor', 'middle')
-      .attr('x', (_c, j) => x(j)!).attr('y', H - 6).text((c) => c.sub);
+      .call(d3.axisBottom(x).tickFormat((j) => (step < 52 ? String(+j + 1) : periodCols[+j].label)));
+    if (step >= 88) {
+      svg.append('g').selectAll('text.sub').data(periodCols).join('text').attr('class', 'axis-note').attr('text-anchor', 'middle')
+        .attr('x', (_c, j) => x(j)!).attr('y', H - 6).text((c) => c.sub);
+    }
     groups.forEach((g, gi) => {
       const pts = periodCols.map((_c, j) => [x(j)!, y(share(g, j))] as [number, number]);
       svg.append('path').attr('d', d3.line()(pts)).style('stroke', slotVar(gi)).attr('class', 'series-line');
@@ -142,6 +153,49 @@ export function renderIssues(root: HTMLElement, t: Topic) {
           .on('mouseleave', hideTip);
       });
     });
+  }
+
+  // ---- 各群組在各區域的比重 ----
+  const grHost = root.querySelector('#groupRegion') as HTMLElement | null;
+  if (grHost) {
+    const regs = LANES.filter((r) => ev.some((e) => e.region === r));
+    const regEv = regs.map((r) => ev.filter((e) => e.region === r));
+    const color = d3.scaleSequential(d3.interpolateRgb('#cde2fb', '#104281')).domain([0, 1]);
+    grHost.innerHTML = `<div class="table-wrap"><table class="heat"><thead><tr><th></th>${regs.map((r) => `<th>${esc(regionZh(r))}</th>`).join('')}</tr>
+      <tr class="col-n"><th class="muted small">該區域事件數</th>${regEv.map((x) => `<td class="muted small">${x.length}</td>`).join('')}</tr></thead><tbody>${
+      groups.map((g, gi) => `<tr><th><i class="sw" style="background:${slotVar(gi)}"></i>${esc(g.label)}</th>${regEv.map((x, j) => {
+        const n = x.filter((e) => has(e, g)).length; const v = x.length ? n / x.length : 0;
+        const dark = n && d3.hsl(color(v)).l < 0.55;
+        return `<td style="background:${n ? color(v) : 'transparent'};color:${dark ? '#fff' : '#0b0b0b'}" title="${esc(g.label)} · ${esc(regionZh(regs[j]))}：${n} / ${x.length} 筆（${Math.round(v * 100)}%）">${n ? `${Math.round(v * 100)}%` : ''}</td>`;
+      }).join('')}</tr>`).join('')
+    }</tbody></table></div>`;
+  }
+
+  // ---- 讀物標籤依出版年代 ----
+  const rtHost = root.querySelector('#readTrend') as HTMLElement | null;
+  const rt = t.config.thesis.readingTagTrend;
+  if (rtHost && rt) {
+    const rs = t.readings.filter((r) => r.year !== null && r.tags.some((x) => rt.tags.includes(x)));
+    if (!rs.length) rtHost.innerHTML = '<p class="empty">沒有帶這些標籤的讀物。</p>';
+    else {
+      const decades = d3.range(Math.floor(d3.min(rs, (r) => r.year!)! / 10) * 10, d3.max(rs, (r) => r.year!)! + 1, 10);
+      const cnt = (tag: string, d: number) => rs.filter((r) => r.tags.includes(tag) && Math.floor(r.year! / 10) * 10 === d).length;
+      const W = Math.max(rtHost.clientWidth, 300); const H = 220; const M = { l: 36, r: 10, t: 10, b: 26 };
+      const x0 = d3.scaleBand<number>().domain(decades).range([M.l, W - M.r]).padding(0.18);
+      const x1 = d3.scaleBand<string>().domain(rt.tags).range([0, x0.bandwidth()]).padding(0.12);
+      const y = d3.scaleLinear().domain([0, d3.max(decades, (d) => d3.max(rt.tags, (tag) => cnt(tag, d)))! || 1]).nice().range([H - M.b, M.t]);
+      const svg = d3.select(rtHost).append('svg').attr('width', W).attr('height', H).attr('role', 'img').attr('aria-label', rt.title);
+      svg.append('g').attr('class', 'axis grid').attr('transform', `translate(${M.l},0)`).call(d3.axisLeft(y).ticks(4).tickSize(-(W - M.l - M.r)).tickFormat(d3.format('d')));
+      const every = Math.ceil(decades.length / Math.floor(W / 52));
+      svg.append('g').attr('class', 'axis').attr('transform', `translate(0,${H - M.b})`)
+        .call(d3.axisBottom(x0).tickValues(decades.filter((_d, i) => i % every === 0)).tickFormat((d) => `${d}s`));
+      for (const d of decades) rt.tags.forEach((tag, i) => {
+        const v = cnt(tag, d); if (!v) return;
+        svg.append('rect').attr('x', x0(d)! + x1(tag)!).attr('y', y(v)).attr('width', x1.bandwidth()).attr('height', y(0) - y(v)).attr('rx', 1.5)
+          .style('fill', slotVar(i))
+          .on('mousemove', (e) => showTip(e, `<div class="tip-title">${esc(rt.labels[tag] ?? tag)} · ${d} 年代</div>${v} 筆讀物`)).on('mouseleave', hideTip);
+      });
+    }
   }
 
   // ---- 南方的回應：區域 × 分期 ----

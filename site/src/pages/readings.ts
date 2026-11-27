@@ -1,6 +1,6 @@
 // 讀物資料庫：搜尋與多重篩選
 import type { Reading, ReadingFacet, Topic } from '../data';
-import { ACCESS_ZH, LANG_ZH, LEVEL_ZH, regionZh, TYPE_ZH } from '../data';
+import { ACCESS_ZH, LANG_DETAIL_ZH, LANG_ZH, LEVEL_ZH, regionZh, TYPE_ZH } from '../data';
 import { esc, pendingBadge } from '../ui';
 
 interface RF { q: string; language: string; level: string; access: string; type: string; tag: string; region: string; pendingOnly: boolean; sort: string;
@@ -29,7 +29,7 @@ export function renderReadings(root: HTMLElement, t: Topic, params: URLSearchPar
   root.innerHTML = `
     <div class="filterbar"><div class="frow wrap">
       <input type="search" data-k="q" class="search wide" placeholder="搜尋書名、作者、摘要、出處…" value="${esc(f.q)}">
-      ${opt('language', '語言', uniq((r) => [r.language]), (v) => LANG_ZH[v] ?? v)}
+      ${opt('language', '語言', uniq((r) => [langKey(r)]), langName)}
       ${opt('level', '程度', uniq((r) => [r.level]), (v) => LEVEL_ZH[v] ?? v)}
       ${opt('access', '取得方式', uniq((r) => [r.access]), (v) => ACCESS_ZH[v] ?? v)}
       ${opt('type', '類型', uniq((r) => [r.type]), (v) => TYPE_ZH[v] ?? v)}
@@ -56,7 +56,7 @@ export function renderReadings(root: HTMLElement, t: Topic, params: URLSearchPar
   const draw = () => {
     const q = f.q.toLowerCase();
     const rows = t.readings.filter((r) =>
-      (!f.language || r.language === f.language) && (!f.level || r.level === f.level) && (!f.access || r.access === f.access) &&
+      (!f.language || langKey(r) === f.language) && (!f.level || r.level === f.level) && (!f.access || r.access === f.access) &&
       (!f.type || r.type === f.type) && (!f.tag || r.tags.includes(f.tag)) && (!f.region || r.regions.includes(f.region)) &&
       (!f.pendingOnly || r.pending) && facets.every((_fc, i) => !f.facets[i] || r.tags.includes(f.facets[i])) &&
       (!q || [r.id, r.title, r.authors.join(' '), r.summary, r.source, r.tags.join(' ')].join(' ').toLowerCase().includes(q)));
@@ -74,7 +74,7 @@ export function renderReadings(root: HTMLElement, t: Topic, params: URLSearchPar
           <span class="badge level-${esc(r.level)}">${esc(LEVEL_ZH[r.level] ?? r.level)}</span>
           <span class="badge access-${esc(r.access)}">${esc(ACCESS_ZH[r.access] ?? r.access)}</span>
           <span class="badge ghost">${esc(TYPE_ZH[r.type] ?? r.type)}</span>
-          <span class="badge ghost">${esc(LANG_ZH[r.language] ?? r.language)}</span>
+          <span class="badge ghost">${esc(langName(langKey(r)))}</span>
           ${pendingBadge(r.pending)}
         </div>
         <h3 class="reading-title">${href ? `<a href="${esc(href)}" target="_blank" rel="noopener">${esc(r.title)}</a>` : esc(r.title)}</h3>
@@ -128,3 +128,7 @@ export function facetName(fc: ReadingFacet, v: string): string {
   const s = !name ? v : name.startsWith(v) ? name : `${v} ${name}`;
   return s.length > 34 ? s.slice(0, 33) + '…' : s;
 }
+
+/** 語言：language=other 且有具體語言（langDetail）時，以具體語言分類與顯示 */
+const langKey = (r: Reading) => r.langDetail || r.language;
+const langName = (v: string) => LANG_ZH[v] ?? LANG_DETAIL_ZH[v] ?? v;

@@ -339,3 +339,4 @@ table.ns-cross td.diag { background: var(--surface-2); }
 table.ns-cross td.off { font-weight: 700; color: var(--warning); }
 td.side-north { font-weight: 600; }
 td.side-unknown { color: var(--text-muted); }
+.cgroup { margin: 10px 0 4px; font-size: 0.95em; }

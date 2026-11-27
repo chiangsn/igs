@@ -12,7 +12,7 @@
 |---|---|---|---|---|
 | S1 | History of Global Environmental Justice | `topics/S1-global-env-justice` | `prompts/S1-global-env-justice.md`；`prompts/S1-verification-and-links.md`（第四輪：補查證、試標跨國連結） | 進行中：第四輪任務檔已備妥。三輪完成時有 312 事件、107 讀物（中文 4 筆）、36 概念；177 筆事件只有 Wikipedia 來源，39 列待查證 |
 | S2 | 戰爭與其延伸影響 | `topics/S2-war` | `prompts/S2-war.md` | 第三輪完成：249 事件、174 讀物（中文 30%）、34 概念；無待查證，剩人工核對清單 12 項 |
-| S3 | 科技全球發展史 | `topics/S3-technology-history` | `prompts/S3-technology-history.md` | 第五輪完成：238 事件（逐筆核對）、278 讀物（中文 35.6%、intro 89、公開取得 100）、41 概念；無待查證；尚未上網站 |
+| S3 | 科技全球發展史 | `topics/S3-technology-history` | `prompts/S3-technology-history.md` | 第六輪完成：238 事件全部逐筆核對、待查證 0；295 讀物（中文 37%、intro 103、公開取得 119，intro 摘要全數核對）、41 概念；尚未上網站 |
 | S4 | 永續發展的全球治理史 | `topics/S4-sustainable-development-governance` | `prompts/S4-sustainable-development-governance.md` | 三輪完成並補強東南亞與中東北非：248 事件、148 讀物（中文 16.9%）、40 概念、55 一手文件、14 專題單元；不排課程結構，以專題單元發展 |
 
 ## 綜合任務
@@ -21,7 +21,7 @@
 |---|---|---|---|---|
 | S0 | 技術顧問與助理：撰寫交接檔、維護 `CLAUDE.md`、本表、`狀態摘要.md` | 根目錄 | — | 進行中 |
 | SY | 課程大綱：整理既有大綱與學生蒐集的大綱、發展本院大綱 | `syllabi/` | 尚未撰寫 | 未開始 |
-| SZ | 視覺化網站；專案中唯一做 git commit/push 的 session（GitHub chiangsn/igs → Render Blueprint） | `site/` | `prompts/SZ-visualization-site.md`；`prompts/SZ-S2-visualization.md`（S2 上網站，已完成）；`prompts/SZ-S4-visualization.md`（S4 上網站，已完成）；`prompts/SZ-links-views.md`（跨國連結新視圖） | 進行中：已上線（igs-site.onrender.com），呈現 S1、S2、S4；S3 與跨國連結新視圖尚未做 |
+| SZ | 視覺化網站；專案中唯一做 git commit/push 的 session（GitHub chiangsn/igs → Render Blueprint） | `site/` | `prompts/SZ-visualization-site.md`；`prompts/SZ-S2-visualization.md`（S2 上網站，已完成）；`prompts/SZ-S4-visualization.md`（S4 上網站，已完成）；`prompts/SZ-links-views.md`（跨國連結新視圖，已完成）；`prompts/SZ-S3-visualization.md`（S3 上網站） | 進行中：已上線（igs-site.onrender.com），呈現 S1、S2、S4；跨國連結新視圖已上線（S1 試標 50 條）；S3 尚未上網站 |
 
 ## 預定議題（尚未啟動，使用者通知後才開始蒐集）
 
@@ -44,3 +44,4 @@
 - 2026-11-27：網絡圖難以詮釋，原因是 `linked_ids` 沒有記錄連結的類型和方向。改為另建 `data/links.csv` 記錄跨國連結，分成兩個面向：`flow`（以 Appadurai 的 scapes 為基礎，另外補上「物質」，物質一定要標）和 `mechanism`（12 類，取自世界體系、globalization project、世界社會理論、glocalization、商品鏈、boomerang 等理論）。編碼指南見 `link-typology.md`。視覺化改以跨國流向地圖、區域泳道弧線圖、斷裂圖為主。（使用者決定）
 - 2026-11-27：檢查等級依 meta 標準第 8 節整理，全部屬於第 3 級。網站不標示各主題的審閱狀態：已有「內部用途」說明和「待查證」標記，網站僅供內部使用。（使用者決定）
 - 2026-11-27：採用 meta 標準第 9 節的「收工」規則：使用者說「收工」時，S0 更新 `狀態摘要.md`、本表的決策紀錄與 session 狀態，三行回報。（meta 標準，使用者指示）
+- 2026-11-27：南北分類當成一個議題，G77 成員與世界銀行所得分組兩種並列，網站可切換，並說明兩者的依據與爭議。（使用者在 SZ 決定）

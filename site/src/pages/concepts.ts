@@ -2,13 +2,16 @@
 import * as d3 from 'd3';
 import type { Concept, Topic } from '../data';
 import { regionZh } from '../data';
-import { bindEventRefs, esc, hideTip, linkifyIds, pendingBadge, showTip, sourceHtml, yearText } from '../ui';
+import { bindEventRefs, esc, hideTip, linkifyIds, pendingBadge, showTip, slotVar, sourceHtml, yearText } from '../ui';
 
 const LANES = ['East Asia', 'Southeast Asia', 'South Asia', 'Middle East & North Africa', 'Sub-Saharan Africa', 'Europe', 'North America', 'Latin America & Caribbean', 'Oceania & Pacific', 'Arctic', 'Global'];
 
 export function renderConcepts(root: HTMLElement, t: Topic) {
   if (!t.concepts.length) { root.innerHTML = '<p class="empty">此主題沒有 data/concepts.csv。</p>'; return; }
   let pendingOnly = false; let q = '';
+  // 概念分組（例如 S3 的三個主軸）：圖上以顏色、列表以分組標題呈現
+  const cgroups = t.config.conceptGroups;
+  const grouped = cgroups.length > 0;
   root.innerHTML = `
     <div class="filterbar"><div class="frow wrap">
       <input type="search" id="cq" class="search" placeholder="搜尋概念、提出者、定義…">
@@ -17,6 +20,7 @@ export function renderConcepts(root: HTMLElement, t: Topic) {
     </div></div>
     <div class="card"><h3>概念系譜圖</h3>
       <p class="muted small">橫軸為概念首次提出或制度化的大致年份，縱軸為起源區域。一個概念有多個起源區域時，以垂直線連接。<span class="pending-text">橙色外框＝待查證</span>。點擊看定義。</p>
+      ${cgroups.length ? `<div class="legend">${cgroups.map((g, i) => `<span class="legend-item"><i style="background:${slotVar(i)}"></i>${esc(g.label)}</span>`).join('')}<span class="muted small">（依 topic-config.json 的 conceptGroups，按 concepts.csv 的排列分組）</span></div>` : ''}
       <div id="cchart" class="timeline"></div></div>
     <div class="grid-side">
       <div class="card" id="cdetail"><p class="muted">點選圖上的概念或下方列表查看定義。</p></div>
@@ -92,11 +96,18 @@ export function renderConcepts(root: HTMLElement, t: Topic) {
       const node = g.append('g').attr('class', 'concept-node').attr('transform', `translate(${p.px},${py(p)})`).style('cursor', 'pointer')
         .on('mousemove', (e) => showTip(e, `<div class="tip-title">${esc(c.name)}</div><div>${esc(c.name_zh)}</div><div class="muted">${c.year} · ${esc(c.origin_raw)}</div>${c.pending ? '<div class="pending-text">⚠ 待查證</div>' : ''}`))
         .on('mouseleave', hideTip).on('click', () => { hideTip(); showConcept(c); });
-      node.append('circle').attr('r', 5.5).attr('class', `concept-dot${c.pending ? ' ev-pending' : ''}`);
+      const dot = node.append('circle').attr('r', 5.5).attr('class', `concept-dot${c.pending ? ' ev-pending' : ''}`);
+      if (grouped) dot.style('fill', slotVar(c.group ?? -1));
       if (p.label) node.append('text').attr('x', 9).attr('y', 4).attr('class', 'concept-label').text(labelOf(c));
     }
-    (root.querySelector('#clist') as HTMLElement).innerHTML = `<ul class="clist">${list.slice().sort((a, b) => (a.year ?? 0) - (b.year ?? 0)).map((c) =>
-      `<li><a href="#" data-c="${c.id}">${esc(c.name)}</a> <span class="muted small">${esc(c.name_zh)} · ${c.year ?? '?'} · ${esc(c.regions.map(regionZh).join('、'))}</span> ${pendingBadge(c.pending)}</li>`).join('')}</ul>`;
+    const item = (c: Concept) => `<li><a href="#" data-c="${c.id}">${esc(c.name)}</a> <span class="muted small">${esc(c.name_zh)} · ${c.year ?? '?'} · ${esc(c.regions.map(regionZh).join('、'))}</span> ${pendingBadge(c.pending)}</li>`;
+    const byYear = (a: Concept, b: Concept) => (a.year ?? 0) - (b.year ?? 0);
+    (root.querySelector('#clist') as HTMLElement).innerHTML = grouped
+      ? [...cgroups.map((g, i) => ({ label: g.label, i })), { label: '未分組', i: -1 }].map(({ label, i }) => {
+        const cs = list.filter((c) => (c.group ?? -1) === i).sort(byYear);
+        return cs.length ? `<h4 class="cgroup"><i class="sw" style="background:${slotVar(i)}"></i>${esc(label)}（${cs.length}）</h4><ul class="clist">${cs.map(item).join('')}</ul>` : '';
+      }).join('')
+      : `<ul class="clist">${list.slice().sort(byYear).map(item).join('')}</ul>`;
   };
   root.addEventListener('click', (e) => {
     const a = (e.target as HTMLElement).closest('[data-c]') as HTMLElement | null;

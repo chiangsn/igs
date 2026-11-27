@@ -1,0 +1,42 @@
+concept,origin_region,year,key_authors,definition_zh,sources
+Technology transfer（技術移轉）,Global,1949,Harry S. Truman;UNCTAD,把技術（設備、專利、知識與人員訓練）從一國或一企業移到另一方的過程；戰後被當成發展援助的核心，1970 年代起成為南北談判中權利金、限制條款與自主能力的爭議焦點。Headrick 也用此詞回溯帝國時代的技術輸出。,S3-031 ; S3-T034 ; S3-T103
+Technical assistance（技術援助）,North America;Global,1949,Harry S. Truman;Colombo Plan,以派遣專家、培訓與示範計畫協助「低度開發」地區提高生產力的援助形式；第四點計畫與可倫坡計畫使其制度化，蘇聯與中國也發展出自己的版本。,S3-T034 ; S3-T035 ; S3-T069 ; S3-053
+Modernization theory（現代化理論）,North America,1960,W. W. Rostow,主張所有社會沿著相同階段走向現代工業社會，技術與資本引進是「起飛」的條件；冷戰時期美國援助政策的理論基礎，後被依賴理論與後發展理論批判。,S3-015 ; S3-043 ; S3-009
+Advantages of backwardness（後進優勢）,Europe,1962,Alexander Gerschenkron,後進國家可以跳過先進國家的摸索，直接採用最新技術，但需要國家、銀行等制度動員大規模資本；常被用來解釋德、俄、日與東亞的追趕。,S3-016
+Technology choice（技術選擇）,Europe,1977,Frances Stewart,強調技術並非只有一種「最佳」選項：北方研發的資本密集技術反映北方的要素稟賦，南方應依自身的勞力、資本與需求條件選擇技術。,S3-017
+Technological dependence（技術依附）,Latin America & Caribbean,1970,Fernando Henrique Cardoso;Enzo Faletto;Jorge Sabato,依賴理論在技術上的延伸：邊陲國家透過跨國企業取得技術，須支付權利金、接受限制性條款，研發能力留在核心國，因而難以自主發展。安地斯第 24 號決議與 UNCTAD 準則談判是其政策化。,S3-018 ; S3-T086 ; S3-T103
+Sabato triangle（Sabato 三角）,Latin America & Caribbean,1968,Jorge Sabato;Natalio Botana,主張政府、科技基礎設施（大學與研究機構）與產業三者需緊密連結，拉美才能建立自主的科技能力；常被視為後來「三螺旋」模型的先驅。,S3-T077
+Swadeshi and the charkha（自產自用與手紡車）,South Asia,1909,M. K. Gandhi;J. C. Kumarappa,甘地在《印度自治》中批判機器文明，以手紡車與土布象徵經濟自主與村落自給；被視為適當技術運動的思想淵源之一。（起源：印度）,S3-T023
+Intermediate technology（中間技術）,Europe;South Asia,1965,E. F. Schumacher,介於傳統工具與高度資本密集技術之間、成本低、可由在地維修與控制的技術；Schumacher 受印度經驗啟發提出，1966 年成立 ITDG 推廣。,S3-069 ; S3-T073
+Appropriate technology（適當技術）,Global,1973,E. F. Schumacher;Amulya K. N. Reddy;Ken Darrow,1970 年代興起的運動與概念，主張技術應配合在地需求、資源與文化，小規模、分散、環境友善；在南方與北方反主流文化中各有版本，1980 年代後衰退，但影響了草根創新與節儉創新。,S3-070 ; S3-072 ; S3-082 ; S3-T097
+Grassroots innovation movements（草根創新運動）,Global,2014,Adrian Smith;Mariano Fressoli;Hernán Thomas,由社區、運動與在地網絡發起的技術創新，強調包容、在地知識與社會正義；被視為適當技術運動在當代的延續。,S3-073
+Frugal innovation / jugaad（節儉創新／權宜創新）,South Asia,2012,Navi Radjou;Jaideep Prabhu;Simone Ahuja,在資源有限條件下以低成本、彈性方式解決問題的創新；源於印度的 jugaad 一詞，後被企業管理論述吸收，批評者認為它把貧困浪漫化。,S3-028 ; S3-071
+People's science movement（人民科學運動）,South Asia,1962,Kerala Sastra Sahitya Parishad,主張科學應為大眾服務、以在地語言普及科學並參與發展決策的社會運動；喀拉拉 KSSP 是代表，也介入了 Silent Valley 反壩運動。（起源：印度喀拉拉邦）,S3-T066
+Green revolution（綠色革命）,Global,1968,William Gaud;Norman Borlaug;M. S. Swaminathan,1960 年代起以高產品種、化肥、灌溉與農藥提高糧食產量的計畫，由洛克斐勒、福特基金會與美國援助推動；兼具冷戰「以糧食對抗紅色革命」的政治目的，也帶來不平等與生態代價。（名稱由 USAID 署長 Gaud 於 1968 年提出）,S3-051 ; S3-059 ; S3-026 ; S3-T068
+High modernism（高度現代主義）,North America,1998,James C. Scott,對科學與技術進步改造社會與自然的強烈自信，常與威權國家結合，推動大型簡化計畫（集體化、村莊化、規劃城市），往往忽視在地實作知識而失敗。,S3-010
+Tools of empire（帝國的工具）,North America,1981,Daniel R. Headrick,蒸汽船、奎寧、後膛槍、電報等技術讓 19 世紀歐洲以低成本擴張殖民帝國的論點；後續研究批評它過度強調技術、忽略殖民地人民的使用與抵抗。,S3-030 ; S3-032 ; S3-022
+Machines as the measure of men（以機器衡量文明）,North America,1989,Michael Adas,歐洲人以科學與技術成就作為衡量各民族「文明程度」的標準，並以此為殖民統治與「文明使命」辯護的意識形態。,S3-033
+Technopolitics（科技政治）,Europe,1998,Gabrielle Hecht,設計或使用技術以構成、實現或展現政治目標的策略實作；技術不只是政治的工具，也是政治本身被進行的場域。後被廣泛用於全球史與殖民研究。,S3-001 ; S3-003
+Nuclearity（核性）,Sub-Saharan Africa;Global,2012,Gabrielle Hecht,「什麼東西或地方算是核的」並非固定的物理事實，而是技術、政治與科學分類的結果；非洲鈾礦工人的健康風險常因被排除在「核」之外而被忽視。,S3-101 ; S3-002
+Rule of experts / techno-politics（專家統治）,Middle East & North Africa,2002,Timothy Mitchell,以埃及為例，說明水壩、灌溉、疾病防治與經濟學等專家知識如何共同生產「經濟」與「國家」，非人行動者（河流、蚊子）也參與其中。（起源：埃及研究）,S3-034 ; S3-029
+Sociotechnical imaginaries（社會技術想像）,North America;East Asia,2009,Sheila Jasanoff;Sang-Hyun Kim,集體持有、制度穩定、公開展演的美好未來願景，透過科學與技術的進步來實現，並反過來塑造國家選擇的技術路線；最初以美國與南韓核能比較提出。,S3-007 ; S3-008
+Fluid technology（流動的技術）,Sub-Saharan Africa,2000,Marianne de Laet;Annemarie Mol,技術的邊界與作用在使用中可被改變而仍能運作；以辛巴威手壓泵為例，挑戰「技術必須原封不動移轉」的想像。,S3-021
+Technology-in-use（使用中的技術）,Europe,2006,David Edgerton,主張技術史應關注技術在何處、被誰、如何使用，而非誰先發明；二十世紀大多數人使用的是「舊」技術，使用視角讓南方與日常技術回到歷史中心。,S3-005 ; S3-123 ; S3-036
+Techno-nationalism（科技民族主義）,Global,2007,David Edgerton;Evan Feigenbaum,把科技能力視為國家力量與認同核心、主張自主研發與保護的論述；Edgerton 指出它常與科技全球主義並存且同樣誤導。,S3-006 ; S3-095
+Postcolonial technoscience（後殖民科技研究）,Oceania & Pacific;Global,2002,Warwick Anderson;Ashis Nandy;Sandra Harding,研究科學與技術在殖民與後殖民情境中的生產、流通與混雜，關注不對等交換與南方知識的地位。,S3-020 ; S3-011 ; S3-075
+Circulation（流通）,South Asia;Europe,2007,Kapil Raj,以「流通」取代「由中心向邊陲傳播」的模型，主張現代科學知識是在殖民地與歐洲之間的相遇、協商中共同建構的。,S3-012
+Developmental state（發展型國家）,East Asia,1982,Chalmers Johnson;Alice Amsden;Robert Wade;Peter Evans,以具自主性的技術官僚主導產業政策、引導資本與技術學習的國家形式；用來解釋日本、韓國、台灣的追趕。Evans 補充「鑲嵌自主性」，強調國家與企業的連結。,S3-089 ; S3-086 ; S3-088 ; S3-090
+Flying geese model（雁行理論）,East Asia,1962,Kaname Akamatsu,產業與技術由領先國家依序轉移到後進國家，形成如雁群飛行的區域分工；1930 年代以日文提出、1962 年英文發表，後被用來描述東亞產業轉移。,S3-102 ; S3-T063
+Technological learning（技術學習）,East Asia,1997,Linsu Kim;Alice Amsden;John Mathews,後進國家透過授權、逆向工程、OEM 代工到自主研發逐步累積能力的過程（「從模仿到創新」）；台灣與韓國半導體業是典型案例。,S3-091 ; S3-092 ; S3-093
+Silicon shield（矽盾）,East Asia,2001,Craig Addison,認為台灣半導體產業在全球供應鏈中的關鍵地位，使國際社會有誘因維護台灣安全；此說法在晶片地緣政治中廣受討論，也受到質疑。,S3-027 ; S3-096
+Weaponized interdependence（武器化的相互依賴）,North America;Global,2019,Henry Farrell;Abraham L. Newman,掌握全球金融與資訊網絡樞紐的國家，可以藉監控（全景監獄效應）或切斷（咽喉點效應）來脅迫他國；常用來分析美國對華為與先進晶片的出口管制。,S3-025 ; S3-T151 ; S3-T159
+Digital divide（數位落差）,North America;Global,1995,U.S. NTIA,不同群體在資訊科技近用、使用能力與受益程度上的差距；起初描述美國國內的城鄉與種族差距，後成為國際發展議程（WSIS）的核心概念。早期的 1984 年 Maitland 報告已提出電信「遺失的環節」。,S3-T123 ; S3-T115 ; S3-T131
+ICT4D（資訊通訊科技促進發展）,Global,2000,Richard Heeks,以資訊通訊科技推動發展的研究與實務領域；Heeks 區分以示範計畫為主的 ICT4D 1.0 與重視在地創新與使用者的 2.0。One Laptop per Child 的爭議是常見的反思案例。,S3-108 ; S3-109 ; S3-110 ; S3-111
+Leapfrogging（跳躍式發展）,Sub-Saharan Africa;Global,1985,"Luc Soete;Elise Brezis, Paul Krugman & Daniel Tsiddon",後進地區跳過既有基礎設施階段直接採用新技術的想像，例如非洲跳過固網直接普及手機與行動支付；常被引用於 M-Pesa，但也被批評忽略制度與基礎建設條件。學術上可查證的早期用法見 Soete（1985，World Development）論「技術跳躍」，Brezis、Krugman 與 Tsiddon（1991，NBER 工作論文）則以之解釋國家技術領先地位的更替；確切的首次使用者難以斷定。,S3-T135 ; S3-113
+Biopiracy（生物剽竊）,Global;South Asia,1993,Pat Mooney (RAFI);Vandana Shiva,跨國企業或研究機構以專利取得南方社群長期使用的生物資源與傳統知識；苦楝專利撤銷案是代表。詞彙由加拿大 NGO RAFI（今 ETC Group）的 Pat Mooney 於 1990 年代初提出（一般記為 1993 年，RAFI 1996 年文件則稱 1994 年），後經 Vandana Shiva 等人推廣。,S3-077 ; S3-T124 ; S3-T122
+Information feudalism（資訊封建主義）,Oceania & Pacific;Global,2002,Peter Drahos;John Braithwaite,指智慧財產權的全球擴張（TRIPS）把知識集中到少數企業手中，形成類似封建領主的支配關係；作者為澳洲學者。,S3-078 ; S3-079 ; S3-T118
+Data colonialism（資料殖民主義）,Global,2019,Nick Couldry;Ulises A. Mejias,把人類生活轉化為可被擷取的資料、並由平台企業佔有的新型掠奪，類比歷史殖民主義對土地與資源的佔有。,S3-104 ; S3-103
+Digital colonialism（數位殖民主義）,Sub-Saharan Africa;Global,2019,Michael Kwet,美國科技企業透過軟體、硬體與網路基礎設施的所有權，在全球南方（以南非為例）建立經濟與文化支配。,S3-105 ; S3-107
+Ghost work（幽靈勞動）,North America;Global,2019,Mary L. Gray;Siddharth Suri,支撐 AI 與平台運作、卻被隱藏的人工標註與內容審查勞動，大量外包到全球南方；肯亞內容審查員訴訟是例證。,S3-117 ; S3-T160 ; S3-118
+Brain circulation（人才環流）,North America;East Asia;South Asia,2005,AnnaLee Saxenian,相對於「人才外流」（brain drain），指在矽谷受訓、工作的印度與中國工程師返國或往返兩地，把技術、資本與網絡帶回母國，帶動區域產業升級；與班加羅爾軟體業的發展密切相關。,S3-142 ; S3-T111 ; S3-T172
+Indigenous data sovereignty（原住民族資料主權）,Oceania & Pacific;Global,2016,Te Mana Raraunga,主張原住民族對與其族人、土地與文化相關的資料擁有治理與控制的權利，挑戰資料被國家與平台當成無主資源擷取的邏輯；毛利資料主權網絡 2016 年的憲章是代表。（起源：紐西蘭）,S3-T204 ; S3-104

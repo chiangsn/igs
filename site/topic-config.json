@@ -3,6 +3,41 @@
   "S1": {
     "thesis": { "view": "regions", "label": "區域比較", "focusRegion": "North America" }
   },
+  "S3": {
+    "thesis": {
+      "view": "issues",
+      "label": "三個概念",
+      "claim": "technology transfer（技術移轉）、appropriate technology（適當技術）、technopolitics（科技政治）三個概念相繼出現、彼此批判，但不是依序取代，而是重疊並存（overview.md 第二節）。",
+      "note": "issue 標籤多半是技術領域（例如 aid、semiconductors），不是概念本身；這裡把領域對應到最常用來理解它的概念，分組由 SZ 依 overview.md 第二節與 concepts.csv 的三個主軸擬定（S3 的 data/README.md 沒有分組），待使用者確認。下方「讀物中的三個概念」一圖則直接用 S3 在讀物上標的概念標籤，不經過這個分組。",
+      "compare": [],
+      "groupTrend": true,
+      "groupRegion": true,
+      "readingTagTrend": { "title": "讀物中的三個概念（依出版年代）", "tags": ["technology transfer", "appropriate technology", "technopolitics"],
+        "labels": { "technology transfer": "技術移轉", "appropriate technology": "適當技術", "technopolitics": "科技政治" } }
+    },
+    "issueGroups": [
+      { "key": "transfer", "label": "技術移轉",
+        "keywords": ["technology transfer", "aid", "cold war", "agriculture", "fertilizer", "infrastructure", "transport", "education", "health", "South-South cooperation"] },
+      { "key": "appropriate", "label": "適當技術",
+        "keywords": ["appropriate technology", "water", "food security", "aquaculture", "fisheries", "soil science"] },
+      { "key": "techno", "label": "科技政治",
+        "keywords": ["semiconductors", "data", "AI", "platform", "standards", "IP", "nuclear", "military", "space", "industrial policy", "manufacturing", "ICT", "communications", "colonialism"] }
+    ],
+    "conceptGroups": [
+      { "label": "技術移轉與現代化", "first": "Technology transfer" },
+      { "label": "適當技術", "first": "Swadeshi" },
+      { "label": "科技政治與當代", "first": "High modernism" }
+    ],
+    "otherLanguageTag": true,
+    "readingFacets": [
+      { "label": "三個概念", "pattern": "^(technology transfer|appropriate technology|technopolitics)$",
+        "names": { "technology transfer": "技術移轉", "appropriate technology": "適當技術", "technopolitics": "科技政治" },
+        "order": ["technology transfer", "appropriate technology", "technopolitics"] },
+      { "label": "時期", "pattern": "^(classic|1970s-80s|1990s|2000s|contemporary)$",
+        "names": { "classic": "經典", "1970s-80s": "1970–80 年代", "1990s": "1990 年代", "2000s": "2000 年代", "contemporary": "當代" },
+        "order": ["classic", "1970s-80s", "1990s", "2000s", "contemporary"] }
+    ]
+  },
   "S4": {
     "thesis": {
       "view": "issues",

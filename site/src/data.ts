@@ -28,6 +28,8 @@ export interface Reading {
   id: string; title: string; authors: string[]; year: number | null; type: string; language: string;
   level: string; source: string; url: string; access: string; summary: string; tags: string[];
   regions: string[]; pending: boolean;
+  /** language=other 時的具體語言代號（ja、ko…），來自 tags 第一個標籤 */
+  langDetail?: string;
 }
 
 export interface Concept {
@@ -35,6 +37,8 @@ export interface Concept {
   year: number | null; authors: string[]; definition: string; sources: string[];
   /** 選用欄位（S4）：所屬單元、相關事件 */
   modules: string[]; timeline_ids: string[]; pending: boolean;
+  /** conceptGroups 的索引（沒有分組為 undefined 或 -1） */
+  group?: number;
 }
 
 export interface PrimaryDoc {
@@ -52,12 +56,18 @@ export interface TopicConfig {
     view: 'regions' | 'issues'; label: string; focusRegion: string | null; claim: string; note: string; compare: string[];
     /** issues 視圖：加「群組 × 分期」與「區域 × 分期」 */
     groupTrend: boolean; regionHeat: boolean;
+    /** 群組 × 區域熱圖 */
+    groupRegion: boolean;
+    /** 讀物上的指定標籤依出版年代的分布 */
+    readingTagTrend: { title: string; tags: string[]; labels: Record<string, string> } | null;
   };
   issueGroups: IssueGroup[];
   subdirs: { dir: string; label: string; tab: boolean }[];
   overviewStats: string[];
   timelineLanes: 'region' | 'type' | 'group';
   readingFacets: ReadingFacet[];
+  conceptGroups: { label: string }[];
+  otherLanguageTag: boolean;
 }
 
 /** 讀物標籤篩選：pattern 挑出 tags，values 為實際出現的值，names 為顯示名稱 */
@@ -142,6 +152,10 @@ export const TYPE_ZH: Record<string, string> = {
   book: '書', chapter: '章節', article: '論文', report: '報告', news: '新聞', dataset: '資料集', other: '其他',
 };
 export const LANG_ZH: Record<string, string> = { en: '英文', zh: '中文', other: '其他語言' };
+/** language=other 的具體語言 */
+export const LANG_DETAIL_ZH: Record<string, string> = {
+  ja: '日文', ko: '韓文', es: '西班牙文', pt: '葡萄牙文', fr: '法文', de: '德文', ru: '俄文', ar: '阿拉伯文', id: '印尼文', vi: '越南文', th: '泰文', hi: '印地文', sw: '史瓦希里文', it: '義大利文', nl: '荷蘭文',
+};
 // 跨國連結的詞彙（link-typology.md）
 export const FLOWS = ['people', 'capital', 'technology', 'material', 'media', 'ideas'];
 export const FLOW_ZH: Record<string, string> = { people: '人', capital: '資本', technology: '技術', material: '物質', media: '影像與敘事', ideas: '觀念與規範' };

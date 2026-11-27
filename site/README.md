@@ -91,6 +91,8 @@ npm run data       # 只重跑資料管線（更新 public/data/ 與 data-report
 | `note` | 放在論點下方的說明，例如「分組由 SZ 依 overview 擬定」；有設定時也會列出目前的分組 |
 | `groupTrend` | `issues` 用：`true` 時加一張「各群組在各期的比重」折線圖 |
 | `regionHeat` | `issues` 用：`true` 時加一張「區域 × 分期」熱圖（含 Global 與非 Global 比例），用來呈現不是 issue 詞彙的區域論點（S4 的「南方的回應」） |
+| `groupRegion` | `issues` 用：`true` 時加一張「各群組在各區域的比重」熱圖 |
+| `readingTagTrend` | `issues` 用：`{ "title", "tags": [...], "labels": {...} }`，畫讀物上這些標籤依出版年代（每十年）的分布。直接用主題 session 標的標籤，不經過 issue 分組（S3 的三個概念） |
 
 ### `issueGroups`：issue 關鍵字的群組
 
@@ -118,6 +120,7 @@ npm run data       # 只重跑資料管線（更新 public/data/ 與 data-report
 - `pattern`：正規式（JSON 中反斜線要寫兩次），例如 `^M\d{2}$` 只挑 `M01`–`M99`（不會挑到 `MDGs`）。
 - `names`：標籤的顯示名稱。
 - `namesFrom`：從子資料夾取名稱：標籤 `M05` 對應 `modules/M05-….md` 的標題。找不到對應檔案時寫進 `data-report.md`。
+- `order`：選單的排列順序（例如時期標籤依年代）；沒有設定時依代號排序。
 - 讀物卡片上屬於 facet 的標籤以虛線框顯示（有中文名稱就顯示名稱），點擊會套用該篩選。
 - 每個 facet 的值與涵蓋的讀物數會寫進 `data-report.md` 的「說明」。
 
@@ -143,6 +146,31 @@ npm run data       # 只重跑資料管線（更新 public/data/ 與 data-report
 | `note`、`source`、`url`、`license` | 圖下方的說明、資料來源與授權。**必填**，照主題 `data/sources-stats.md` 寫，授權未核實就照實寫「待查證」 |
 
 統計 CSV 應是主題 session 整理好的小型摘要（不是原始資料庫）。網站只把設定用到的欄位放進 JSON。
+
+### `conceptGroups`：概念分組
+
+`[{ "label": "技術移轉與現代化", "first": "Technology transfer" }, …]`。依 `concepts.csv` 的排列切段：每組從 `first`（概念名稱的開頭）開始，到下一組開始前為止，最後一組延續到檔尾。概念系譜圖依組上色，概念列表依組分段。另可用 `conceptGroupAssign`（`{ "概念名稱開頭": "組名" }`）把個別概念指定到某組。
+
+### `otherLanguageTag`
+
+`true` 時，`language=other` 的讀物若 `tags` 第一個標籤是語言代號（例如 `ja`、`es`），讀物卡片與語言選單就顯示具體語言（日文、西班牙文…）。S3 的慣例。
+
+### 範例：S3 的設定
+
+```json
+"S3": {
+  "thesis": { "view": "issues", "label": "三個概念", "claim": "…重疊並存…", "note": "分組由 SZ 依 overview 擬定…",
+              "compare": [], "groupTrend": true, "groupRegion": true,
+              "readingTagTrend": { "title": "讀物中的三個概念（依出版年代）", "tags": ["technology transfer", "appropriate technology", "technopolitics"], "labels": { … } } },
+  "issueGroups": [ { "key": "transfer", "label": "技術移轉", "keywords": ["aid", "cold war", "…"] }, … ],
+  "conceptGroups": [ { "label": "技術移轉與現代化", "first": "Technology transfer" }, { "label": "適當技術", "first": "Swadeshi" }, { "label": "科技政治與當代", "first": "High modernism" } ],
+  "otherLanguageTag": true,
+  "readingFacets": [
+    { "label": "三個概念", "pattern": "^(technology transfer|appropriate technology|technopolitics)$", "names": { … }, "order": [ … ] },
+    { "label": "時期", "pattern": "^(classic|1970s-80s|1990s|2000s|contemporary)$", "names": { … }, "order": [ … ] }
+  ]
+}
+```
 
 ### 範例：S4 的設定
 

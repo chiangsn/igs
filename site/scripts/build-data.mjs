@@ -254,7 +254,8 @@ function loadConfig() {
 
 function resolveConfig(code, raw, subdirs, events) {
   const c = raw ?? {};
-  const thesis = { view: 'regions', label: '區域比較', focusRegion: null, claim: '', note: '', compare: [], groupTrend: false, regionHeat: false, ...(c.thesis ?? {}) };
+  const thesis = { view: 'regions', label: '區域比較', focusRegion: null, claim: '', note: '', compare: [], groupTrend: false, regionHeat: false,
+    groupRegion: false, readingTagTrend: null, ...(c.thesis ?? {}) };
   if (!['regions', 'issues'].includes(thesis.view)) {
     warn(code, 'site/topic-config.json', `thesis.view「${thesis.view}」不是 regions 或 issues，改用 regions`);
     thesis.view = 'regions';
@@ -278,7 +279,8 @@ function resolveConfig(code, raw, subdirs, events) {
   for (const d of Object.keys(subCfg)) if (!subdirs.includes(d)) warn(code, 'site/topic-config.json', `subdirs 設定了 \`${d}/\`，但主題資料夾中沒有這個子資料夾或其中沒有 .md`);
   const lanes = c.timelineLanes ?? 'region';
   if (!['region', 'type', 'group'].includes(lanes)) warn(code, 'site/topic-config.json', `timelineLanes「${lanes}」不是 region、type 或 group`);
-  return { thesis, issueGroups, subdirs: groups, overviewStats: c.overviewStats ?? [], timelineLanes: lanes, readingFacets: c.readingFacets ?? [] };
+  return { thesis, issueGroups, subdirs: groups, overviewStats: c.overviewStats ?? [], timelineLanes: lanes, readingFacets: c.readingFacets ?? [],
+    conceptGroups: (c.conceptGroups ?? []).map((g) => ({ label: g.label })), otherLanguageTag: !!c.otherLanguageTag };
 }
 
 // ---------- 讀物標籤篩選（readingFacets）----------
@@ -299,7 +301,10 @@ function resolveFacets(code, facets, readings, docs) {
         else warn(code, 'readings.csv', `tag「${tag}」在 \`${f.namesFrom}/\` 中找不到對應檔案`);
       }
     }
-    const values = [...counts.keys()].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+    // 有 order 時照設定的順序（例如時期標籤依年代），否則依代號排序
+    const values = [...counts.keys()].sort((a, b) => (f.order
+      ? (f.order.indexOf(a) + 1 || 999) - (f.order.indexOf(b) + 1 || 999)
+      : a.localeCompare(b, undefined, { numeric: true })));
     note(code, `讀物標籤篩選「${f.label}」：${values.length} 個值，${readings.filter((r) => r.tags.some((t) => re.test(t))).length} / ${readings.length} 筆讀物至少有一個（${values.map((v) => `${v} ${counts.get(v)}`).join('、')}）。`);
     return { label: f.label, pattern: f.pattern, values, names };
   }).filter(Boolean);
@@ -380,6 +385,8 @@ function buildTopic(folder, registry, config) {
       id: r.id, title: r.title, authors: splitList(r.authors), year: toInt(r.year), type: r.type,
       language: r.language, level: r.level, source: r.source, url: r.url, access: r.access,
       summary: r.summary, tags: splitList(r.tags), pending: hasPending(r),
+      // language=other 時，具體語言寫在 tags 的第一個標籤（S3 的慣例，由 otherLanguageTag 開啟）
+      langDetail: config[code]?.otherLanguageTag && r.language === 'other' && /^[a-z]{2,3}$/.test(splitList(r.tags)[0] ?? '') ? splitList(r.tags)[0] : '',
     };
   });
   for (const d of new Set(dup(readings.map((e) => e.id)))) warn(code, 'readings.csv', `id 重複：${d}`);
@@ -401,6 +408,20 @@ function buildTopic(folder, registry, config) {
     };
   });
   for (const c of concepts) for (const id of c.timeline_ids) if (!events.some((e) => e.id === id)) warn(code, `concepts.csv（${c.name}）`, `timeline_ids 指向不存在的事件：${id}`);
+  // 概念分組：conceptGroups 依檔案順序切段，每組從 first 指定的概念開始，到下一組開始前為止
+  const cgs = config[code]?.conceptGroups ?? [];
+  if (cgs.length) {
+    const starts = cgs.map((g) => concepts.findIndex((c) => c.concept.startsWith(g.first)));
+    starts.forEach((st, i) => { if (st < 0) warn(code, 'site/topic-config.json', `conceptGroups「${cgs[i].label}」的起點「${cgs[i].first}」在 concepts.csv 中找不到`); });
+    concepts.forEach((c, i) => {
+      let gi = -1;
+      starts.forEach((st, j) => { if (st >= 0 && i >= st && (gi < 0 || st >= starts[gi])) gi = j; });
+      const extra = Object.entries(config[code]?.conceptGroupAssign ?? {}).find(([k]) => c.concept.startsWith(k));
+      if (extra) gi = cgs.findIndex((g) => g.label === extra[1]);
+      c.group = gi;
+    });
+    note(code, `概念依 topic-config.json 的 conceptGroups 分組：${cgs.map((g, i) => `${g.label} ${concepts.filter((c) => c.group === i).length} 個`).join('、')}${concepts.some((c) => c.group < 0) ? `；未分組 ${concepts.filter((c) => c.group < 0).length} 個` : ''}。`);
+  }
   const nonStd = concepts.filter((c) => c.origin_raw && !REGIONS.includes(c.origin_raw)).length;
   if (nonStd) note(code, `concepts.csv 有 ${nonStd} 筆 \`origin_region\` 不是單一固定分類（含多區域或括號補充），網站以字串中出現的固定分類歸類。CLAUDE.md 未規範此欄，僅供參考。`);
 

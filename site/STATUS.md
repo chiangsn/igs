@@ -2,12 +2,54 @@
 
 最後更新：2026-11-26
 
-## 目前狀態：已上線（S1、S2、S4）；跨國連結視圖已在本機以 S1 真實資料驗證，待 push
+## 目前狀態：已上線（S1、S2、S4，含 S1 跨國連結）；S3 已在本機完成與驗證，待 push
 
 - `npm ci && npm run build`（含 `tsc --noEmit` 型別檢查）在刪除 `node_modules` 後的乾淨環境成功。
 - 用 `vite preview` 預覽 `site/dist/`，所有頁面正常載入，瀏覽器 console 沒有錯誤；已檢查深色、淺色模式與手機寬度（375px，沒有水平捲動）。
 - S1 資料管線結果：282 事件、107 讀物、36 概念、20 份文件，**0 則格式警告**（見 `data-report.md`）。
 - `package-lock.json` 已 commit；`render.yaml` 使用 `npm ci`，Node 24.22.1（與本機相同）。
+
+## 2026-11-27 任務：把 S3 加進網站（`prompts/SZ-S3-visualization.md`）
+
+### 1. 做了什麼
+
+- **S3 設定**（`topic-config.json`）：論點視圖「三個概念」、讀物的兩種分類篩選、概念分組、`language=other` 顯示具體語言。區域報告（`regions/` 11 份，含 `global.md`）照預設放在「文件」的「區域報告」。S3 沒有 `links.csv`，網絡圖照舊。
+- **論點視圖「三個概念」**：頁首論點照 overview 第二節（三個概念不是依序取代，而是重疊並存），並註明分組由 SZ 擬定、待確認。內容：
+  - 關鍵字出現次數、各群組在各期的比重（折線）、**新增**各群組在各區域的比重（熱圖）、關鍵字 × 分期、關鍵字 × 區域。
+  - **新增**「讀物中的三個概念（依出版年代）」：直接用 S3 在讀物上標的三個概念標籤，不經過 issue 分組，作為分組草案的對照。
+- **讀物**：`readingFacets` 加「三個概念」與「時期」（依年代排序：經典、1970–80 年代、1990 年代、2000 年代、當代）。新增通用設定 `otherLanguageTag`：S3 的 32 筆其他語言讀物顯示為日文 8、西班牙文 8、韓文 7、葡萄牙文 5、法文 4，語言選單也照此分類。
+- **概念頁**：新增通用設定 `conceptGroups`，依 `concepts.csv` 的排列分成三個主軸：技術移轉與現代化 7、適當技術 7、科技政治與當代 27（第二輪接在檔尾的 Brain circulation、Indigenous data sovereignty 落在最後一組）。概念系譜圖依組上色，列表依組分段。
+- **讀物選單排序**：`readingFacets` 新增 `order`。
+- **論點視圖的分期軸**：期數多、圖窄時，原本的期名與年份會重疊，改為窄時只標期數。
+- **S1 的跨國連結**：S3 上網站後，S1 連到 S3 的 4 條連結自動出現（S1 共 50 條）。
+
+### 2. 怎麼確認是對的
+
+- 以只含 S1–S4 的資料夾（與這次上線內容相同）在刪除 `node_modules` 後跑 `npm ci && npm run build`：型別檢查通過，4 個主題、2 則警告（見第 4 節）；S3 分期解析出 6 期。
+- 預覽檢查：S3 分頁（總覽、時間軸與地圖〔6 期色帶〕、網絡圖、三個概念、概念系譜、讀物、文件〔含區域報告〕）；讀物選單的兩種分類與語言（選「日文」→ 8 筆）；概念列表分三組。
+- 回歸：S1 跨國連結 50 條、S2 延伸影響頁首不變（233 vs 150）、S4 三條線索的折線與熱圖仍在、S4 沒有多出新圖；首頁四張主題卡數字正確。
+- 淺色、深色模式；手機寬度 375px 量 10 個頁面的 `scrollWidth` 都是 375；瀏覽器 console 沒有錯誤。
+
+### 3. 結論
+
+S3 已可上網站。這次新增的設定（`groupRegion`、`readingTagTrend`、`conceptGroups`、`otherLanguageTag`、facet `order`）都是通用的。
+
+### 4. 未解問題
+
+- `data-report.md` 的 2 則警告：S3 的 `STATUS.md` 與 `data/README.md` 提到已移除的 `S3-146`（說明它被移除）。這是說明文字，不是錯誤引用；可請 S3 改寫成不像 id 的形式（例如「146 號」），或忽略。
+- issue 分組有 10 個標籤沒有歸組（finance、trade、labor、energy、environment、mining、climate、conflict、diplomacy、industrialization），論點視圖不計入，列在報告的說明中。
+- S3 的簡體中文讀物仍標 `language=zh`（S3 的決定），網站照樣顯示為中文。
+
+### 5. 要交給誰／需要使用者決定的事
+
+- **使用者確認三個概念的 issue 分組草案**（依 overview 第二節與 concepts.csv 的三個主軸擬定）：
+  - **技術移轉**：technology transfer、aid、cold war、agriculture、fertilizer、infrastructure、transport、education、health、South-South cooperation
+  - **適當技術**：appropriate technology、water、food security、aquaculture、fisheries、soil science
+  - **科技政治**：semiconductors、data、AI、platform、standards、IP、nuclear、military、space、industrial policy、manufacturing、ICT、communications、colonialism
+  - **不歸組**：finance、trade、labor、energy、environment、mining、climate、conflict、diplomacy、industrialization
+  - 需要判斷的地方：issue 標籤多半是技術領域，不是概念本身。例如 colonialism 放在科技政治，是依 concepts.csv 把 Tools of empire、High modernism 放在第三主軸；industrial policy、manufacturing 放在科技政治，是依 Developmental state、Flying geese 在第三主軸。確認後網站拿掉「待確認」。
+- **使用者**：同意 push（檔案清單見對話）；部署後確認 Render 成功並看 S3 頁面。
+- **轉告 S3**：`S3-146` 的寫法（見第 4 節）。若 S3 想讓 issue 分組成為正式定義，可寫進 `data/README.md`。
 
 ## 2026-11-27 任務：跨國連結的新視圖（`prompts/SZ-links-views.md`）
 

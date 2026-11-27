@@ -1,6 +1,6 @@
 # 資料品質報告
 
-> 由 `site/scripts/build-data.mjs` 於 build 時自動產生（2026-11-27 03:58 UTC）。請勿手動編輯；資料問題請轉告對應的主題 session 修正 `topics/` 下的檔案。
+> 由 `site/scripts/build-data.mjs` 於 build 時自動產生（2026-11-27 04:08 UTC）。請勿手動編輯；資料問題請轉告對應的主題 session 修正 `topics/` 下的檔案。
 
 ## 總覽
 
@@ -8,6 +8,7 @@
 |---|---|---|---|---|---|---|---|
 | S1 History of Global Environmental Justice | 312 | 107 | 36 | 0 | 20 | 24／7／8／0 | 0 |
 | S2 戰爭與其延伸影響 | 249 | 174 | 34 | 0 | 20 | 0／0／0／0 | 0 |
+| S3 科技全球發展史 | 238 | 295 | 41 | 0 | 18 | 0／0／0／0 | 2 |
 | S4 永續發展的全球治理史 | 248 | 148 | 40 | 55 | 21 | 0／0／0／0 | 0 |
 
 ## S1：History of Global Environmental Justice
@@ -23,11 +24,10 @@
 - concepts.csv 有 9 筆 `origin_region` 不是單一固定分類（含多區域或括號補充），網站以字串中出現的固定分類歸類。CLAUDE.md 未規範此欄，僅供參考。
 - 歷史分期：名稱取自 `overview.md` 的「第 N 期」標題，年份邊界取自 `data/README.md` 的分期分布（6 期）。
 - linked_ids 有 228 條只單向記錄；網絡圖一律合併為無向邊。
-- 文件引用了還沒放上網站的主題的 id（不檢查、不連結）：S3-T009、S3-T052、S3-T102、S3-T231。
-- links.csv 有 4 條連到還沒放上網站的主題，暫不顯示：S1-L018（S3-T009）、S1-L020（S3-T102）、S1-L024（S3-T231）、S1-L028（S3-T052）。該主題上網站後會自動出現。
-- 南北分類（G77 成員）無法判斷的國家或地區：French Polynesia、Taiwan、Hong Kong；含這些國家的事件歸「無法判斷」。
-- 南北分類：連結兩端涉及 48 個國家或地區，其中 7 個在不同分類下歸屬不同；兩種分類對連結的判斷有 9 條不一致。
-- links.csv：50 列，網站使用 46 條。主要 flow：ideas 20、material 14、capital 4、people 4、technology 2、media 2。mechanism：scale_up 10、commodity_chain 5、boomerang 5、colonial 4、litigation 4、memory 4、burden_shifting 3、geopolitical 3、diffusion 3、translation 2、template 2、imposition 1。跨主題 3 條。
+- 南北分類（G77 成員）無法判斷的國家或地區：French Polynesia、Taiwan、Western Sahara、Hong Kong；含這些國家的事件歸「無法判斷」。
+- 南北分類（世界銀行所得分組）無法判斷的國家或地區：Western Sahara；含這些國家的事件歸「無法判斷」。
+- 南北分類：連結兩端涉及 53 個國家或地區，其中 8 個在不同分類下歸屬不同；兩種分類對連結的判斷有 10 條不一致。
+- links.csv：50 列，網站使用 50 條。主要 flow：ideas 20、material 16、capital 4、technology 4、people 4、media 2。mechanism：scale_up 10、commodity_chain 7、colonial 5、boomerang 5、geopolitical 4、litigation 4、memory 4、burden_shifting 3、diffusion 3、translation 2、template 2、imposition 1。跨主題 7 條。
 
 ### 待查證項目
 
@@ -88,6 +88,31 @@
 - concepts.csv 有 2 筆 `origin_region` 不是單一固定分類（含多區域或括號補充），網站以字串中出現的固定分類歸類。CLAUDE.md 未規範此欄，僅供參考。
 - 歷史分期：名稱取自 `overview.md` 的「第 N 期」標題，年份邊界取自 `data/README.md` 的分期分布（6 期）。
 - linked_ids 有 36 條只單向記錄；網絡圖一律合併為無向邊。
+
+### 待查證項目
+
+- （無）
+
+## S3：科技全球發展史
+
+資料夾：`topics/S3-technology-history`
+
+### 警告（2）
+
+| 位置 | 問題 |
+|---|---|
+| STATUS.md | 文件引用了不存在的 id：S3-146 |
+| data/README.md | 文件引用了不存在的 id：S3-146 |
+
+### 說明
+
+- 概念依 topic-config.json 的 conceptGroups 分組：技術移轉與現代化 7 個、適當技術 7 個、科技政治與當代 27 個。
+- concepts.csv 有 15 筆 `origin_region` 不是單一固定分類（含多區域或括號補充），網站以字串中出現的固定分類歸類。CLAUDE.md 未規範此欄，僅供參考。
+- 歷史分期：名稱取自 `overview.md` 的「第 N 期」標題，年份邊界取自 `data/README.md` 的分期分布（6 期）。
+- issue 欄位有 10 個關鍵字不在 topic-config.json 的 issueGroups 中，論點視圖不計入：finance（23）、trade（51）、labor（16）、energy（30）、environment（15）、mining（4）、conflict（1）、diplomacy（1）、climate（3）、industrialization（1）。
+- 讀物標籤篩選「三個概念」：3 個值，103 / 295 筆讀物至少有一個（technology transfer 52、appropriate technology 26、technopolitics 56）。
+- 讀物標籤篩選「時期」：5 個值，82 / 295 筆讀物至少有一個（classic 23、1970s-80s 19、1990s 6、2000s 3、contemporary 40）。
+- linked_ids 有 130 條只單向記錄；網絡圖一律合併為無向邊。
 
 ### 待查證項目
 
